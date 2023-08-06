@@ -1,0 +1,6 @@
+[submodule "web/src"]
+	path = web/src
+	url = git@github.com:driveindex/driveindex-web-vue.git
+[submodule "server"]
+	path = server
+	url = git@github.com:driveindex/driveindex-boot.git
