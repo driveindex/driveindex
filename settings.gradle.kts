@@ -12,3 +12,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "driveindex-fullstack"
+
+include("driveindex")
+include("hiui-kotlin")
+include("hiui-core-kotlin")
