@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
@@ -11,7 +11,4 @@ dependencyResolutionManagement {
     }
 }
 
-
-rootProject.name = "driveindex-boot"
-
-include("server")
+rootProject.name = "driveindex-fullstack"

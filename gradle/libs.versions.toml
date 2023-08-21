@@ -1,0 +1,75 @@
+[versions]
+spring-boot = "3.0.9"
+spring-dependency-management = "1.1.2"
+
+kotlin = "1.9.0"
+kotlin-wrappers = "1.0.0-pre.619"
+kotlinx-serialization-json = "1.5.1"
+
+springdoc-openapi-security = "1.6.11"
+spring-cloud-openfeign = "4.0.1"
+
+knife4j-openapi3-jakarta = "4.0.0"
+flyway = "9.19.1"
+
+ini4j = "0.5.4"
+
+jjwt = "0.11.5"
+
+[libraries]
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlinx-serialization-json-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json-jvm", version.ref = "kotlinx-serialization-json" }
+kotlinx-serialization-json-js = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json-js", version.ref = "kotlinx-serialization-json" }
+
+kotlinw-wrappers-bom = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-wrappers-bom", version.ref = "kotlin-wrappers" }
+kotlinw-node = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-node" }
+kotlinw-typescript = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-typescript" }
+kotlinw-emotion = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-emotion" }
+kotlinw-react = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-react" }
+kotlinw-react-dom = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-react-dom" }
+kotlinw-react-router-dom = { group = "org.jetbrains.kotlin-wrappers", name = "kotlin-react-router-dom" }
+
+spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-test" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
+
+spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-starter-websocket = { group = "org.springframework.boot", name = "spring-boot-starter-websocket" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+
+spring-cloud-starter-openfeign = { group = "org.springframework.cloud", name = "spring-cloud-starter-openfeign", version.ref = "spring-cloud-openfeign" }
+
+mariadb-java-client = { group = "org.mariadb.jdbc", name = "mariadb-java-client" }
+
+flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway" }
+flyway-mysql = { group = "org.flywaydb", name = "flyway-mysql", version.ref = "flyway" }
+flyway-sqlserver = { group = "org.flywaydb", name = "flyway-sqlserver", version.ref = "flyway" }
+
+knife4j-openapi3-jakarta-spring-boot-starter = { group = "com.github.xiaoymin", name = "knife4j-openapi3-jakarta-spring-boot-starter", version.ref = "knife4j-openapi3-jakarta" }
+springdoc-openapi-security = { group = "org.springdoc", name = "springdoc-openapi-security", version.ref = "springdoc-openapi-security" }
+ini4j = { group = "org.ini4j", name = "ini4j", version.ref = "ini4j" }
+
+jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "ini4j" }
+jjwt-gson = { group = "io.jsonwebtoken", name = "jjwt-gson", version.ref = "ini4j" }
+
+
+[plugins]
+org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+io-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[bundles]
+

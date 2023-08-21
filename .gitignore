@@ -1,11 +1,14 @@
-HELP.md
 .gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+build
 
-### STS ###
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out
+
+### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
@@ -13,28 +16,22 @@ build/
 .settings
 .springBeans
 .sts4-cache
-bin/
-.bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+bin
 
 ### NetBeans ###
 /nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+nbbuild
+dist
+nbdist
+.nb-gradle
 
 ### VS Code ###
-/.vscode/
+.vscode
 
-/.idea/
+### Mac OS ###
+.DS_Store
+
+
+### DriveIndex ###
+/log/
+config.ini
