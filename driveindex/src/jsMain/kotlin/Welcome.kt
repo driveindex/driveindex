@@ -1,6 +1,7 @@
 import react.FC
 import react.Props
 import emotion.react.css
+import hi_ui.button.Button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.input
 import react.useState
@@ -21,6 +22,9 @@ val Welcome = FC<WelcomeProps> { props ->
             color = rgb(56, 246, 137)
         }
         +"Hello, $name"
+    }
+    Button {
+
     }
     input {
         css {

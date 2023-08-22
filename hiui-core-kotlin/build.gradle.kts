@@ -2,12 +2,12 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kfc.library)
-
-    `hiui-core-declarations`
 }
 
 dependencies {
     jsMainImplementation(npmv("@hi-ui/core"))
 
     jsMainImplementation(enforcedPlatform(libs.kotlinw.wrappers.bom))
+    jsMainImplementation(libs.kotlinw.react)
+    jsMainImplementation(libs.kotlinw.react.dom)
 }

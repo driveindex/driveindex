@@ -109,6 +109,8 @@ kotlin {
 
                 implementation(libs.kotlin.stdlib.js)
                 implementation(libs.kotlinx.serialization.json.js)
+
+                implementation(project(":hiui-kotlin"))
             }
         }
         val jsTest by getting
