@@ -1,0 +1,15 @@
+.dirveindex-profile-drive .hi-v4-card__header {
+    margin-bottom: 0;
+}
+
+.dirveindex-profile-drive .hi-v4-card__body {
+    padding: 0;
+}
+
+.dirveindex-profile-drive .hi-v4-loading__wrapper {
+    flex: 1;
+}
+
+.dirveindex-profile-drive-account .hi-v4-list-item {
+    flex: 1;
+}

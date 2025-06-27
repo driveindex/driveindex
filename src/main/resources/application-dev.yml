@@ -1,0 +1,12 @@
+server:
+  port: 11511
+
+springdoc:
+  swagger-ui:
+    path: /openapi/index.html
+    disable-swagger-default-url: true
+    try-it-out-enabled: true
+  api-docs:
+    path: /openapi/doc
+  packages-to-scan:
+    - io.github.driveindex.controller

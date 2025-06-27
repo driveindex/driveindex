@@ -1,22 +1,29 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
 dependencyResolutionManagement {
     repositories {
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
     }
 }
 
 
-rootProject.name = "driveindex-deploy"
-
-include(":server")
-project(":server").run {
-    projectDir = File(rootDir, "./server/server")
-}
-include(":web")
-include(":docker")
+rootProject.name = "DriveIndex"
