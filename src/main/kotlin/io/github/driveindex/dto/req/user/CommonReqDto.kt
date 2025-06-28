@@ -4,12 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.UUID
 
 
-data class CommonSettingsReqDto(
-    @JsonProperty("nick")
-    val nick: String? = null,
-    @JsonProperty("cors_origin")
-    val corsOrigin: String? = null,
-)
+class CommonSettingsReqDto()
 
 data class AccountDeleteReqDto(
     @JsonProperty("account_id")

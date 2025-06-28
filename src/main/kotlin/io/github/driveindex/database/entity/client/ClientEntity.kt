@@ -1,35 +1,29 @@
-package io.github.driveindex.database.entity
+package io.github.driveindex.database.entity.client
 
 import com.fasterxml.jackson.databind.node.ObjectNode
+import io.github.driveindex.client.ClientType
 import io.github.driveindex.core.util.Json
-import io.github.driveindex.security.UserRole
+import io.github.driveindex.database.entity.AttributeEntity
+import io.github.driveindex.database.entity.IdEntity
+import io.github.driveindex.database.entity.TimeEntity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "driveindex_user")
-data class UserEntity(
+@Table(name = "driveindex_client")
+data class ClientEntity(
     @Id
     @Column(name = "id")
     override val id: Int = 0,
 
-    @Column(name = "username")
-    var username: String,
+    @Column(name = "name")
+    var name: String,
 
-    @Column(name = "pwd_hash")
-    var passwordHash: String,
-
-    @Column(name = "pwd_salt")
-    var passwordSalt: String,
-
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    var role: UserRole = UserRole.USER,
+    val type: ClientType,
 
-    @Column(name = "enable")
-    var enable: Boolean = true,
-
-    @Column(name = "permission")
-    var permission: Int = 0,
+    @Column(name = "support_delta")
+    val supportDelta: Boolean = false,
 
     @Column(name = "create_at")
     override val createAt: Long = System.currentTimeMillis(),

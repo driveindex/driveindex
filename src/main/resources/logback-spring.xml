@@ -4,7 +4,7 @@
 
     <contextName>driveindex</contextName>
     <!--自定义日志转换规则，添加颜色高亮支持-->
-    <conversionRule conversionWord="colored" converterClass="io.github.driveindex.core.logback.converter.ColoredConverter"/>
+    <conversionRule conversionWord="colored" class="io.github.driveindex.core.logback.converter.ColoredConverter"/>
 
     <!--输出到控制台的 appender-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

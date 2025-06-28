@@ -37,7 +37,6 @@ class AdminController(
         userDao.save(UserEntity(
             username = dto.username.checkUsername(),
             password = dto.password,
-            nick = dto.nick.checkNick(),
             role = dto.role,
             enable = dto.enable,
         ))
@@ -50,10 +49,8 @@ class AdminController(
             CommonSettingsUserItemRespDto(
                 id = it.id,
                 username = it.username,
-                nick = it.nick,
                 role = it.role,
                 enable = it.enable,
-                corsOrigin = it.corsOrigin,
             )
         }
     }
@@ -64,16 +61,12 @@ class AdminController(
         val user = userDao.findById(dto.id).getOrNull()
             ?: throw FailedResult.AdminUser.UserNotFound
         user.run {
-            dto.nick?.let {
-                nick = it.checkNick()
-            }
             dto.username?.let {
                 username = it.checkUsername()
             }
             dto.password?.let { password = it }
             dto.role?.let { role = it }
             dto.enable?.let { enable = it }
-            dto.corsOrigin?.let { corsOrigin = it }
         }
         userDao.save(user)
     }

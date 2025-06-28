@@ -6,7 +6,7 @@ import io.github.driveindex.database.dao.AccountsDao
 import io.github.driveindex.database.dao.FileDao
 import io.github.driveindex.database.dao.getTopUserFile
 import io.github.driveindex.database.dao.getUserFile
-import io.github.driveindex.database.dao.onedrive.OneDriveFileDao
+import io.github.driveindex.database.dao.attributes.OneDriveFileDao
 import io.github.driveindex.database.entity.FileEntity
 import io.github.driveindex.dto.req.user.CreateDirReqDto
 import io.github.driveindex.dto.req.user.CreateLinkReqDto
@@ -56,7 +56,7 @@ class UserDirController(
 
     @PostMapping("/api/user/file/link")
     fun createLink(@RequestBody dto: CreateLinkReqDto) {
-        val target = fileDao.findByUUID(dto.target)
+        val target = fileDao.findById(dto.target)
             ?: throw FailedResult.Dir.TargetNotFound
         val dir = fileDao.getUserFile(dto.parent, current.User.id)
 
@@ -101,7 +101,7 @@ class UserDirController(
             val findUserFileByPath = fileDao.findFileByPathIntern(path.pathSha256, current.User.id, false)
             if (findUserFileByPath != null) {
                 if (findUserFileByPath.linkTarget != null) {
-                    val linkTarget = fileDao.findByUUID(findUserFileByPath.linkTarget)
+                    val linkTarget = fileDao.findById(findUserFileByPath.linkTarget)
                         ?: throw FailedResult.Dir.TargetNotFound
                     if (!linkTarget.isDir) {
                         throw FailedResult.Dir.NotADir
@@ -114,7 +114,7 @@ class UserDirController(
                 }
             } else {
                 val top = fileDao.getTopUserFile(path, current.User.id)
-                val linkTarget = fileDao.findByUUID(top.linkTarget!!)
+                val linkTarget = fileDao.findById(top.linkTarget!!)
                     ?: throw FailedResult.Dir.TargetNotFound
                 if (!linkTarget.isDir) {
                     throw FailedResult.Dir.NotADir

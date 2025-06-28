@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.plugin.spring)
     alias(libs.plugins.kotlin.plugin.jpa)
     alias(libs.plugins.vaadin)
-    alias(libs.plugins.node)
 }
 
 kotlin {
@@ -20,7 +19,6 @@ dependencies {
     implementation(libs.vaadin.spring.boot.starter)
     implementation(libs.spring.boot.starter.security)
 
-    implementation(libs.bundles.jjwt)
     implementation(libs.ini4j)
     implementation(libs.openfeign)
 
@@ -35,13 +33,8 @@ dependencies {
 
 vaadin {
     pnpmEnable = true
-}
-
-node {
-    isDownload = true
-    isGlobal = false
-    setNodeVersion("22.16.0")
-    setNodeDir(file("node"))
+    nodeVersion = "v22.17.0"
+    nodeAutoUpdate = true
 }
 
 allOpen {
@@ -49,11 +42,4 @@ allOpen {
         "com.vaadin.hilla.Endpoint",
         "com.vaadin.hilla.BrowserCallable",
     )
-}
-
-tasks {
-    val vaadinPrepareFrontend by getting {
-        mustRunAfter(downloadNode)
-        dependsOn(downloadNode)
-    }
 }

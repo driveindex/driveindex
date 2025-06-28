@@ -35,6 +35,7 @@ class Application: AppShellConfigurator {
     companion object {
         const val APPLICATION_BASE_NAME = "DriveIndex"
         const val APPLICATION_BASE_NAME_LOWER = "driveindex"
+        const val APPLICATION_GROUP = "io.github.driveindex"
 
         private lateinit var context: ApplicationContext
         val Context: ApplicationContext get() = context
@@ -94,7 +95,7 @@ private class Bootstrap(clazz: Class<*>) {
     ): Bootstrap {
         properties["spring.datasource.username"] = dbUsername
         properties["spring.datasource.password"] = dbPassword
-        properties["spring.datasource.url"] = "jdbc:mariadb://$dbHost/$dbDatabase"
+        properties["spring.datasource.url"] = "jdbc:$dbType://${if (dbType != "sqlite") "$dbHost/" else ""}$dbDatabase"
         return this
     }
 

@@ -26,7 +26,7 @@ class ClientModule(
     private fun realSetup() {
         log.trace("变更追踪开始！")
         for (client in client.listIfSupportDelta()) {
-            for (accountId in account.selectIdByClient(client.id)) {
+            for (accountId in account.selectIdByClient(client.clientId)) {
                 try {
                     if (client.type.needDelta(accountId)) {
                         client.type.delta(accountId)

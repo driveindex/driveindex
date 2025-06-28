@@ -4,8 +4,8 @@ import io.github.driveindex.client.ClientType
 import io.github.driveindex.core.util.SHA1
 import io.github.driveindex.database.dao.AccountsDao
 import io.github.driveindex.database.dao.ClientsDao
-import io.github.driveindex.database.dao.onedrive.OneDriveAccountDao
-import io.github.driveindex.database.dao.onedrive.OneDriveClientDao
+import io.github.driveindex.database.dao.attributes.OneDriveAttributeDao
+import io.github.driveindex.database.dao.attributes.OneDriveClientDao
 import io.github.driveindex.dto.req.user.*
 import io.github.driveindex.dto.resp.*
 import io.github.driveindex.exception.FailedResult
@@ -28,7 +28,7 @@ class UserConfController(
     private val accountsDao: AccountsDao,
 
     private val onedriveClientDao: OneDriveClientDao,
-    private val onedriveAccountDao: OneDriveAccountDao,
+    private val onedriveAccountDao: OneDriveAttributeDao,
 
     private val deletionModule: DeletionModule,
 ) {
@@ -55,10 +55,7 @@ class UserConfController(
     @GetMapping("/api/user/common")
     fun getCommonSettings(): CommonSettingsRespDto {
         val config = current.User
-        return CommonSettingsRespDto(
-            nick = config.nick,
-            corsOrigin = config.corsOrigin,
-        )
+        return CommonSettingsRespDto()
     }
 
     @Operation(summary = "常规设置")
@@ -67,15 +64,7 @@ class UserConfController(
         @RequestBody dto: CommonSettingsReqDto
     ) {
         current.User = current.User.also {
-            dto.nick?.let { nick ->
-                if (nick.length > 50) {
-                    throw FailedResult.User.NickInvalid
-                }
-                it.nick = nick
-            }
-            dto.corsOrigin?.let { corsOrigin ->
-                it.corsOrigin = corsOrigin
-            }
+
         }
     }
 
@@ -86,14 +75,14 @@ class UserConfController(
         val list: ArrayList<ClientsDto> = ArrayList()
         for (entity in clientsDao.listByUser(current.User.id)) {
             list.add(ClientsDto(
-                id = entity.id,
+                id = entity.clientId,
                 name = entity.name,
                 type = entity.type,
                 createAt = entity.createAt,
                 modifyAt = entity.modifyAt,
                 detail = when (entity.type) {
                     ClientType.OneDrive ->
-                        onedriveClientDao.getClient(entity.id).let {
+                        onedriveClientDao.getClient(entity.clientId).let {
                             return@let ClientsDto.OneDriveClientDetail(
                                 clientId = it.clientId,
                                 tenantId = it.tenantId,
@@ -112,7 +101,7 @@ class UserConfController(
         val client = clientsDao.getClient(clientId)
             ?: throw FailedResult.Client.NotFound
         val list: ArrayList<AccountsDto> = ArrayList()
-        for (entity in accountsDao.listByClient(client.id)) {
+        for (entity in accountsDao.listByClient(client.clientId)) {
             list.add(AccountsDto(
                 id = entity.id,
                 displayName = entity.displayName,
@@ -158,7 +147,7 @@ class UserConfController(
     fun deleteClient(@RequestBody dto: ClientDeleteReqDto) {
         val client = clientsDao.getClient(dto.clientId)
             ?: throw FailedResult.Client.NotFound
-        deletionModule.doClientDeleteAction(client.id)
+        deletionModule.doClientDeleteAction(client.clientId)
     }
 }
 

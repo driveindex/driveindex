@@ -1,9 +1,7 @@
-package io.github.driveindex.feigh.onedrive
+package io.github.driveindex.client.onedrive
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
-import com.fasterxml.jackson.databind.node.ValueNode
 import feign.Response
 import feign.codec.DecodeException
 import feign.codec.ErrorDecoder

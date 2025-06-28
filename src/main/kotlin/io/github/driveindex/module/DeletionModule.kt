@@ -1,10 +1,7 @@
 package io.github.driveindex.module
 
-import io.github.driveindex.core.util.log
 import io.github.driveindex.database.dao.*
-import jakarta.persistence.EntityManagerFactory
 import jakarta.transaction.Transactional
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Component
 import java.lang.IllegalStateException
 import java.util.*
@@ -31,7 +28,7 @@ class DeletionModule(
     private fun doRealUserDeleteAction(userId: UUID) {
         userDao.deleteByUUID(userId)
         for (clientsEntity in clientsDao.listByUser(userId)) {
-            doRealClientDeleteAction(clientsEntity.id)
+            doRealClientDeleteAction(clientsEntity.clientId)
         }
     }
 
@@ -57,7 +54,7 @@ class DeletionModule(
     }
 
     private fun doRealAccountDeleteAction(accountId: UUID) {
-        accountsDao.deleteByUUID(accountId)
+        accountsDao.deleteById(accountId)
         for (accountsEntity in accountsDao.listByClient(accountId)) {
             for (fileEntity in fileDao.listByAccount(accountsEntity.id)) {
                 doRealFileDeleteAction(fileEntity.id)
@@ -76,7 +73,7 @@ class DeletionModule(
     }
 
     private fun doRealFileDeleteAction(fileId: UUID) {
-        fileDao.deleteByUUID(fileId)
+        fileDao.deleteById(fileId)
     }
 
     @Transactional

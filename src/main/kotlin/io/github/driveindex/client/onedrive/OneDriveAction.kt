@@ -1,27 +1,23 @@
 package io.github.driveindex.client.onedrive
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.client.AbsClientAction
 import io.github.driveindex.client.ClientType
 import io.github.driveindex.core.ConfigManager
 import io.github.driveindex.core.util.*
-import io.github.driveindex.database.dao.onedrive.OneDriveAccountDao
-import io.github.driveindex.database.dao.onedrive.OneDriveClientDao
-import io.github.driveindex.database.dao.onedrive.OneDriveFileDao
-import io.github.driveindex.database.entity.AccountsEntity
-import io.github.driveindex.database.entity.ClientsEntity
-import io.github.driveindex.database.entity.FileEntity
-import io.github.driveindex.database.entity.onedrive.OneDriveAccountEntity
-import io.github.driveindex.database.entity.onedrive.OneDriveClientEntity
-import io.github.driveindex.database.entity.onedrive.OneDriveFileEntity
+import io.github.driveindex.database.dao.attributes.OneDriveAttributeDao
+import io.github.driveindex.database.dao.attributes.OneDriveClientDao
+import io.github.driveindex.database.dao.attributes.OneDriveFileDao
+import io.github.driveindex.database.entity.account.attributes.OneDriveAccountAttribute
+import io.github.driveindex.database.entity.client.attributes.OneDriveClientAttribute
+import io.github.driveindex.database.entity.file.FileEntity
+import io.github.driveindex.database.entity.readAttribute
+import io.github.driveindex.database.entity.withAttribute
+import io.github.driveindex.database.entity.writeAttribute
 import io.github.driveindex.dto.feign.AzureGraphDtoV2_Me_Drive_Root_Delta
 import io.github.driveindex.dto.resp.AccountCreateRespDto
 import io.github.driveindex.exception.FailedResult
-import io.github.driveindex.feigh.onedrive.AzureAuthClient
-import io.github.driveindex.feigh.onedrive.getToken
-import io.github.driveindex.feigh.onedrive.withCheckedToken
 import jakarta.transaction.Transactional
 import org.aspectj.weaver.tools.cache.SimpleCacheFactory
 import org.springframework.web.bind.annotation.*
@@ -31,16 +27,17 @@ import java.util.*
 @RestController
 class OneDriveAction(
     private val oneDriveClientDao: OneDriveClientDao,
-    private val oneDriveAccountDao: OneDriveAccountDao,
+    private val oneDriveAccountDao: OneDriveAttributeDao,
     private val oneDriveFileDao: OneDriveFileDao,
 ): AbsClientAction(ClientType.OneDrive) {
     @GetMapping("/api/user/login/url/onedrive")
     override fun loginUri(
-        @RequestParam("client_id", required = true) clientId: UUID,
+        @RequestParam("client_id", required = true) clientId: Int,
         @RequestParam("redirect_uri", required = true) redirectUri: String
     ): AccountCreateRespDto {
         val client = getClient(clientId)
         oneDriveClientDao.getClient(clientId).let { entity ->
+            val attribute: OneDriveClientAttribute = entity.readAttribute()
             val state = linkedMapOf<String, Any>(
                 "id" to clientId,
                 "ts" to System.currentTimeMillis(),
@@ -48,8 +45,8 @@ class OneDriveAction(
                 "redirect_uri" to redirectUri,
             )
             state["sign"] = "${state.joinToSortedString("&")}${ConfigManager.TokenSecurityKey}".MD5_FULL
-            return AccountCreateRespDto("${entity.endPoint.LoginHosts}/${entity.tenantId}/oauth2/v2.0/authorize?" +
-                "client_id=${entity.clientId}" +
+            return AccountCreateRespDto("${attribute.endPoint.LoginHosts}/${attribute.tenantId}/oauth2/v2.0/authorize?" +
+                "client_id=${attribute.clientId}" +
                 "&response_type=code" +
                 "&redirect_uri=${URLEncoder.encode(redirectUri, Charsets.UTF_8)}" +
                 "&response_mode=query" +
@@ -79,7 +76,7 @@ class OneDriveAction(
         }
 
         val clientId = try {
-            UUID.fromString(param["id"])
+            param["id"]!!.toInt()
         } catch (e: Exception) {
             throw FailedResult.Auth.IllegalRequest
         }
@@ -106,48 +103,47 @@ class OneDriveAction(
 
         val client = clientDao.getClient(clientId)
             ?: throw FailedResult.Auth.IllegalRequest
+        val clientAttribute = client.readAttribute<OneDriveClientAttribute>()
         param["type"]?.let type@{
             return@type ClientType.valueOf(it)
         }?.takeIf {
             client.type == it
         } ?: throw FailedResult.Auth.IllegalRequest
-        val onedriveClient = oneDriveClientDao.getClient(client.id)
 
-        val token = onedriveClient.endPoint.Auth.getToken(
-            onedriveClient.tenantId,
+        val token = clientAttribute.endPoint.Auth.getToken(
+            clientAttribute.tenantId,
             dto.code,
-            onedriveClient.clientId,
-            onedriveClient.clientSecret,
+            clientAttribute.clientId,
+            clientAttribute.clientSecret,
             redirectUri
         )
 
-        val me = onedriveClient.endPoint.Graph.Me("${token.tokenType} ${token.accessToken}")
+        val me = clientAttribute.endPoint.Graph.Me("${token.tokenType} ${token.accessToken}")
 
         // 允许账号失效后重新登录
         oneDriveAccountDao.findByAzureId(
-            accountDao.selectIdByClient(client.id), me.id
-        )?.apply {
-            tokenType = token.tokenType
-            accessToken = token.accessToken
-            refreshToken = token.refreshToken
-            tokenExpire = token.expires
-            oneDriveAccountDao.save(this)
+            accountDao.selectIdByClient(clientAttribute.clientId), me.id
+        )?.withAttribute { entity, attr: OneDriveAccountAttribute ->
+            attr.tokenType = token.tokenType
+            attr.accessToken = token.accessToken
+            attr.refreshToken = token.refreshToken
+            attr.tokenExpire = token.expires
+            entity.writeAttribute(attr)
+            oneDriveAccountDao.save(entity)
 
-            accountDao.getAccount(id)?.let {
+            accountDao.getAccount(entity.id)?.let {
                 it.accountExpired = false
                 accountDao.save(it)
             }
-
-            return
         }
 
         // TODO 重名时自动重命名
-        accountDao.findByName(client.id, me.displayName)?.let {
+        accountDao.findByName(clientAttribute.clientId, me.displayName)?.let {
             throw FailedResult.Client.DuplicateAccountName(it.displayName, it.id)
         }
 
-        val entity = AccountsEntity(
-            parentClientId = client.id,
+        val entity = AccountEntity(
+            parentClientId = client.clientId,
             displayName = me.displayName,
             createBy = current.User.id,
             userPrincipalName = me.userPrincipalName,
@@ -194,7 +190,7 @@ class OneDriveAction(
             throw FailedResult.Client.DuplicateClientInfo(name, it.id)
         }
 
-        val client = ClientsEntity(
+        val client = ClientEntity(
             name = name,
             type = ClientType.OneDrive,
             createBy = user,
@@ -203,7 +199,7 @@ class OneDriveAction(
         clientDao.save(client)
         oneDriveClientDao.save(
             OneDriveClientEntity(
-                id = client.id,
+                id = client.clientId,
                 clientId = creation.azureClientId,
                 clientSecret = creation.azureClientSecret,
                 tenantId = creation.tenantId,
@@ -213,7 +209,7 @@ class OneDriveAction(
     }
 
     @Transactional
-    override fun edit(params: ObjectNode, clientId: UUID) {
+    override fun edit(params: ObjectNode, clientId: Int) {
         getClient(clientId)
         val edition: ClientEditOneDrive = Json.treeToValue(params)
 
@@ -275,7 +271,9 @@ class OneDriveAction(
         )
         do {
             delta = endPoint.Graph.withCheckedToken(
-                oneDriveAccountDao, oneDriveAccount, client
+                oneDriveAccountDao,
+                oneDriveAccount,
+                client
             ) { token ->
                 if (delta.nextToken.isBlank()) {
                     log.debug("新的 delta")
@@ -292,7 +290,7 @@ class OneDriveAction(
                 val duplicateCheck = oneDriveFileDao.findByAzureFileId(item.id, account.id)
                 if (duplicateCheck != null && item.deleted != null) {
                     log.info("delta 删除文件：${duplicateCheck}")
-                    fileDao.deleteByUUID(duplicateCheck.id)
+                    fileDao.deleteById(duplicateCheck.id)
                     oneDriveFileDao.deleteByUUID(duplicateCheck.id)
                     continue
                 }
@@ -306,24 +304,26 @@ class OneDriveAction(
                     log.info("delta 新增或修改文件：${item}")
                 }
                 val path = if (parent?.id != null) {
-                    fileDao.findByUUID(parent.id)!!
+                    fileDao.findById(parent.id)!!
                         .path.append(item.name)
                 } else {
                     CanonicalPath.ROOT
                 }
-                fileDao.save(FileEntity(
-                    id = newId,
-                    accountId = account.id,
-                    name = item.name,
-                    parentId = parent?.id,
-                    isDir = item.folder != null,
-                    createBy = null,
-                    path = path,
-                    pathHash = path.pathSha256,
-                    clientType = type,
-                    isRemote = true,
-                    size = item.size,
-                ))
+                fileDao.save(
+                    FileEntity(
+                        id = newId,
+                        accountId = account.id,
+                        name = item.name,
+                        parentId = parent?.id,
+                        isDir = item.folder != null,
+                        createBy = null,
+                        path = path,
+                        pathHash = path.pathSha256,
+                        clientType = type,
+                        isRemote = true,
+                        size = item.size,
+                    )
+                )
                 oneDriveFileDao.save(OneDriveFileEntity(
                     id = newId,
                     accountId = account.id,

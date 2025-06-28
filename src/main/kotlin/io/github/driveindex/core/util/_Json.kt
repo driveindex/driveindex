@@ -2,6 +2,7 @@ package io.github.driveindex.core.util
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.Application
 
@@ -32,7 +33,14 @@ object Json {
         return mapper.writeValueAsString(value)
     }
 
-    fun objectNodeOf(vararg pairs: Pair<String, Any>): ObjectNode {
-        return mapper.valueToTree(pairs.toMap())
+    fun <T: Any> valueToTree(value: T, clazz: Class<T>): ObjectNode {
+        return mapper.valueToTree(value)
+    }
+    inline fun <reified T: Any> valueToTree(value: T): ObjectNode {
+        return valueToTree(value, T::class.java)
+    }
+
+    fun <T: Any> newObjectNode(vararg pairs: Pair<String, T>): ObjectNode {
+        return valueToTree(pairs.toMap())
     }
 }

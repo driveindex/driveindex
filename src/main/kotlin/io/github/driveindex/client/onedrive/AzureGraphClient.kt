@@ -1,9 +1,13 @@
-package io.github.driveindex.feigh.onedrive
+package io.github.driveindex.client.onedrive
 
 import io.github.driveindex.core.util.log
-import io.github.driveindex.database.dao.onedrive.OneDriveAccountDao
-import io.github.driveindex.database.entity.onedrive.OneDriveAccountEntity
-import io.github.driveindex.database.entity.onedrive.OneDriveClientEntity
+import io.github.driveindex.database.dao.attributes.OneDriveAttributeDao
+import io.github.driveindex.database.entity.account.AccountEntity
+import io.github.driveindex.database.entity.account.attributes.OneDriveAccountAttribute
+import io.github.driveindex.database.entity.client.ClientEntity
+import io.github.driveindex.database.entity.client.attributes.OneDriveClientAttribute
+import io.github.driveindex.database.entity.readAttribute
+import io.github.driveindex.database.entity.writeAttribute
 import io.github.driveindex.dto.feign.AzureGraphDtoV2_Me
 import io.github.driveindex.dto.feign.AzureGraphDtoV2_Me_Drive_Root_Delta
 import io.github.driveindex.exception.AzureDecodeException
@@ -32,39 +36,43 @@ interface AzureGraphClient {
 }
 
 fun <T> AzureGraphClient.withCheckedToken(
-    oneDriveAccountDao: OneDriveAccountDao,
-    target: OneDriveAccountEntity,
-    oneDriveClientEntity: OneDriveClientEntity,
+    oneDriveAccountDao: OneDriveAttributeDao,
+    account: AccountEntity,
+    client: ClientEntity,
     block: AzureGraphClient.(String) -> T,
 ): T {
+    val accountAttribute: OneDriveAccountAttribute = account.readAttribute()
+    val clientAttribute: OneDriveClientAttribute = client.readAttribute()
+
     var refreshActionInvoked = false
     val refreshAction = {
         val newToken = try {
-            oneDriveClientEntity.endPoint.Auth.refreshToken(
-                oneDriveClientEntity.tenantId, oneDriveClientEntity.clientId,
-                oneDriveClientEntity.clientSecret, target.refreshToken
+            clientAttribute.endPoint.Auth.refreshToken(
+                clientAttribute.tenantId, clientAttribute.clientId,
+                clientAttribute.clientSecret, accountAttribute.refreshToken
             )
         } catch (e: AzureDecodeException) {
             log.warn("刷新 Azure 账号 token 失败", e)
             throw e
         }
-        target.accessToken = newToken.accessToken
-        target.refreshToken = newToken.refreshToken
-        target.tokenExpire = newToken.expires
-        target.tokenType = newToken.tokenType
-        oneDriveAccountDao.save(target)
+        accountAttribute.accessToken = newToken.accessToken
+        accountAttribute.refreshToken = newToken.refreshToken
+        accountAttribute.tokenExpire = newToken.expires
+        accountAttribute.tokenType = newToken.tokenType
+        account.writeAttribute(accountAttribute)
+        oneDriveAccountDao.save(account)
         refreshActionInvoked = true
     }
     return try {
-        if (target.tokenExpire < System.currentTimeMillis()) {
+        if (accountAttribute.tokenExpire < System.currentTimeMillis()) {
             refreshAction.invoke()
         }
-        block.invoke(this, target.accessToken)
+        block.invoke(this, accountAttribute.accessToken)
     } catch (e: AzureDecodeException) {
         if (e.code != "InvalidAuthenticationToken" || refreshActionInvoked) {
             throw e
         }
         refreshAction.invoke()
-        block.invoke(this, target.accessToken)
+        block.invoke(this, accountAttribute.accessToken)
     }
 }

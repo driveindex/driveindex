@@ -8,7 +8,7 @@ import feign.codec.Encoder
 import feign.slf4j.Slf4jLogger
 import io.github.driveindex.Application
 import io.github.driveindex.core.ConfigManager
-import io.github.driveindex.feigh.onedrive.AzureErrorDecoder
+import io.github.driveindex.client.onedrive.AzureErrorDecoder
 import org.springframework.cloud.openfeign.FeignClientsConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

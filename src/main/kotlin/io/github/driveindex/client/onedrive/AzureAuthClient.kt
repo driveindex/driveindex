@@ -1,4 +1,4 @@
-package io.github.driveindex.feigh.onedrive
+package io.github.driveindex.client.onedrive
 
 import feign.form.FormProperty
 import io.github.driveindex.dto.feign.AzurePortalDtoV1_Token

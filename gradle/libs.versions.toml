@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.1.21"
 
-spring-boot = "3.3.4"
+spring-boot = "3.5.3"
 spring-deps = "1.1.6"
 
 vaadin = "24.8.0"
@@ -10,7 +10,6 @@ node = "8.1.2"
 autoservice = "1.1.1"
 ini4j = "0.5.4"
 jjwt = "0.12.3"
-liquibase = "4.32.0"
 openfeign = "4.3.0"
 kotlinx-json = "1.6.2"
 
@@ -52,9 +51,9 @@ vaadin-spring-boot-starter = { group = "com.vaadin", name = "vaadin-spring-boot-
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
 jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
 
-liquibase = { group = "org.liquibase", name = "liquibase-core", version.ref = "liquibase" }
+liquibase = { group = "org.liquibase", name = "liquibase-core" }
 
 [bundles]
 jjwt = [ "jjwt-api", "jjwt-impl" ]
 spring-boot-data-jpa = [ "spring-boot-starter-data-jpa", "spring-boot-starter-validation" ]
-jdbc = [ "jdbc-mariadb", "jdbc-postgresql", "jdbc-sqlite" ]
+jdbc = [ "jdbc-postgresql" ]

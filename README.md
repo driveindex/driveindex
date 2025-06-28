@@ -20,4 +20,4 @@ java -jar driveindex.jar --config="./config/driveindex.ini"
 
 + IDE：JetBrains IDEA Ultimate 2025.1
 + Java：JDK 21.0.2
-+ Database：MariaDB 10.7.8
++ Database：Postgresql 16

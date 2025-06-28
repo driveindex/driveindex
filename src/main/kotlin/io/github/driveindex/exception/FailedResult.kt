@@ -24,7 +24,7 @@ class FailedResult private constructor(
         val MissingBody get() = FailedResult(-4002, "参数缺失")
         fun MissingBody(name: String, type: String) =
             FailedResult(-4002, "参数缺失",
-                Json.objectNodeOf("name" to name, "type" to type))
+                Json.newObjectNode("name" to name, "type" to type))
 
         val BadArgument get() = FailedResult(-4003, "参数格式错误")
         val AnonymousDenied get() = FailedResult(-4050, "请登陆后再试")
@@ -38,7 +38,7 @@ class FailedResult private constructor(
         val BadGateway get() = FailedResult(-5020, "上游服务器响应错误，请查阅日志")
         fun BadGateway(message: String) =
             FailedResult(-5020, "上游服务器响应错误，请查阅日志",
-                Json.objectNodeOf("message" to message))
+                Json.newObjectNode("message" to message))
     }
 
     fun resp(): SampleRespResult {
@@ -69,13 +69,13 @@ class FailedResult private constructor(
         val TypeNotMatch get() = FailedResult(-120102, "Client 类型不匹配")
 
         val DuplicateClientName get() = FailedResult(-120201, "Client 名称已存在")
-        fun DuplicateClientInfo(name: String, id: UUID) =
+        fun DuplicateClientInfo(name: String, id: Int) =
             FailedResult(-100301, "此 Client 信息与“$name”相同",
-                Json.objectNodeOf("name" to name, "id" to id))
+                Json.newObjectNode("name" to name, "id" to id))
 
-        fun DuplicateAccountName(name: String, id: UUID) =
+        fun DuplicateAccountName(name: String, id: Int) =
             FailedResult(-100301, "账号名称已存在：$name",
-                Json.objectNodeOf("name" to name, "id" to id))
+                Json.newObjectNode("name" to name, "id" to id))
 
         val DeleteFailed get() = FailedResult(-120301, "Client 删除失败")
     }
