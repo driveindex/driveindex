@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 'changelog-2.0-clean.yaml'
+      relativeToChangelogFile: true

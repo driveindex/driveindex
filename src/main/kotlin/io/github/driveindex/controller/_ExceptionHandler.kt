@@ -1,5 +1,6 @@
 package io.github.driveindex.controller
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import io.github.driveindex.core.util.log
 import io.github.driveindex.dto.resp.SampleRespResult
 import io.github.driveindex.exception.AzureDecodeException
@@ -49,17 +50,10 @@ class _ExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun handleHttpMessageNotReadableException(e: HttpMessageNotReadableException): SampleRespResult {
+    @ExceptionHandler(MismatchedInputException::class)
+    fun handleMismatchedInputException(e: MismatchedInputException): SampleRespResult {
         log.trace("参数缺失", e)
         return FailedResult.MissingBody.resp()
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MissingServletRequestParameterException::class)
-    fun handleMissingServletRequestParameterException(e: MissingServletRequestParameterException): SampleRespResult {
-        log.trace("参数缺失", e)
-        return FailedResult.MissingBody(e.parameterName, e.parameterType).resp()
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

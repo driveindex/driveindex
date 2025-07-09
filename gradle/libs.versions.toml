@@ -1,17 +1,20 @@
 [versions]
-kotlin = "2.1.21"
+kotlin = "2.2.0"
 
 spring-boot = "3.5.3"
 spring-deps = "1.1.6"
 
-vaadin = "24.8.0"
+vaadin = "24.8.3"
 node = "8.1.2"
 
 autoservice = "1.1.1"
 ini4j = "0.5.4"
 jjwt = "0.12.3"
 openfeign = "4.3.0"
-kotlinx-json = "1.6.2"
+exposed = "1.0.0-beta-4"
+exposed-pagination = "1.0.11"
+kotlinx-serialization-json = "1.9.0"
+kotlinx-serialization-yaml = "0.83.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -29,7 +32,9 @@ node = { id = "com.liferay.node", version.ref = "node" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-compiler = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-json" }
+
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlinx-serialization-yaml = { group = "com.charleskorn.kaml", name = "kaml", version.ref = "kotlinx-serialization-yaml" }
 
 autoservice = { group = "com.google.auto.service", name = "auto-service", version.ref = "autoservice" }
 openfeign = { group = "org.springframework.cloud", name = "spring-cloud-starter-openfeign", version.ref = "openfeign" }
@@ -38,15 +43,29 @@ ini4j = { group = "org.ini4j", name = "ini4j", version.ref = "ini4j" }
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
-spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-security-oauth2-jose = { group = "org.springframework.security", name = "spring-security-oauth2-jose" }
+spring-security-oauth2-resource-server = { group = "org.springframework.security", name = "spring-security-oauth2-resource-server" }
+
+spring-boot-starter-exposed = { group = "org.jetbrains.exposed", name = "exposed-spring-boot-starter", version.ref = "exposed" }
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
+exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+exposed-kotlin-datetime = { group = "org.jetbrains.exposed", name = "exposed-kotlin-datetime", version.ref = "exposed" }
+exposed-json = { group = "org.jetbrains.exposed", name = "exposed-json", version.ref = "exposed" }
+exposed-pagination = { group = "io.github.perracodex", name = "exposed-pagination", version.ref = "exposed-pagination" }
+exposed-migration = { group = "org.jetbrains.exposed", name = "exposed-migration", version.ref = "exposed" }
 
 jdbc-mariadb = { group = "org.mariadb.jdbc", name = "mariadb-java-client" }
 jdbc-mysql = { group = "mysql", name = "mysql-connector-java" }
 jdbc-sqlite = { group = "org.xerial", name = "sqlite-jdbc" }
 jdbc-postgresql = { group = "org.postgresql", name = "postgresql" }
+jdbc-postgresql-ng = { group = "com.impossibl.pgjdbc-ng", name = "pgjdbc-ng" }
 
 vaadin-spring-boot-starter = { group = "com.vaadin", name = "vaadin-spring-boot-starter", version.ref = "vaadin" }
+jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
 
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
 jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
@@ -55,5 +74,19 @@ liquibase = { group = "org.liquibase", name = "liquibase-core" }
 
 [bundles]
 jjwt = [ "jjwt-api", "jjwt-impl" ]
+spring-boot-security = [
+    "spring-boot-starter-security",
+    "spring-security-oauth2-jose",
+    "spring-security-oauth2-resource-server",
+]
 spring-boot-data-jpa = [ "spring-boot-starter-data-jpa", "spring-boot-starter-validation" ]
+spring-boot-data-exposed = [
+    "spring-boot-starter-exposed",
+    "exposed-core",
+    "exposed-dao",
+    "exposed-jdbc",
+    "exposed-json",
+    "exposed-kotlin-datetime",
+    "exposed-pagination",
+]
 jdbc = [ "jdbc-postgresql" ]

@@ -1,48 +1,21 @@
 package io.github.driveindex.database.entity
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.core.util.Json
+import io.github.driveindex.Application
+import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
+import io.github.driveindex.security.UserPermission
 import io.github.driveindex.security.UserRole
-import jakarta.persistence.*
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.EnumerationColumnType
+import org.jetbrains.exposed.v1.core.EnumerationNameColumnType
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
-@Entity
-@Table(name = "driveindex_user")
-data class UserEntity(
-    @Id
-    @Column(name = "id")
-    override val id: Int = 0,
-
-    @Column(name = "username")
-    var username: String,
-
-    @Column(name = "pwd_hash")
-    var passwordHash: String,
-
-    @Column(name = "pwd_salt")
-    var passwordSalt: String,
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    var role: UserRole = UserRole.USER,
-
-    @Column(name = "enable")
-    var enable: Boolean = true,
-
-    @Column(name = "permission")
-    var permission: Int = 0,
-
-    @Column(name = "create_at")
-    override val createAt: Long = System.currentTimeMillis(),
-
-    @Column(name = "create_by")
-    override val createBy: Int,
-
-    @Column(name = "modify_at")
-    override val modifyAt: Long = System.currentTimeMillis(),
-
-    @Column(name = "modify_by")
-    override val modifyBy: Int,
-
-    @Column(name = "attribute")
-    override val attribute: ObjectNode = Json.newObjectNode<Any>(),
-): IdEntity, TimeEntity, AttributeEntity
+object UserEntity: IntIdTable("${Application.BASE_NAME_LOWER}_user"),
+    EnabledEntity, AttributeEntity<Unit> {
+    val username = varchar("username", length = 64)
+    val passwordHash = text("pwd_hash")
+    val passwordSalt = text("pwd_salt")
+    val role = enumerationByName("role", 16, UserRole::class)
+    override val enabled = enabled()
+    val permission = array("permission", EnumerationNameColumnType(UserPermission::class, 32))
+    override val attribute: Column<Unit> = attribute()
+}

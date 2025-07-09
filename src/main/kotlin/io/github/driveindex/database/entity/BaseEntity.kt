@@ -1,28 +1,40 @@
 package io.github.driveindex.database.entity
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.core.util.Json
+import io.github.driveindex.core.util.JsonKt
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.datetime.CurrentTimestamp
+import org.jetbrains.exposed.v1.datetime.timestamp
+import org.jetbrains.exposed.v1.json.jsonb
 
-interface IdEntity {
-    val id: Int
-}
-
-interface AttributeEntity {
-    val attribute: ObjectNode
-}
-inline fun <reified T: Any> AttributeEntity.writeAttribute(obj: T) {
-    attribute.setAll<ObjectNode>(Json.valueToTree(obj))
-}
-inline fun <reified T: Any> AttributeEntity.readAttribute(): T {
-    return Json.treeToValue<T>(attribute)
-}
-inline fun <EntT: AttributeEntity, reified AttT: Any> EntT.withAttribute(crossinline block: (EntT, AttT) -> Unit) {
-    block(this, readAttribute())
+interface IdEntity<IdT: Any> {
+    val id: IdT
 }
 
-interface TimeEntity {
-    val createAt: Long
-    val createBy: Int
-    val modifyAt: Long
-    val modifyBy: Int
+interface AttributeEntity<T: Any> {
+    val attribute: Column<T>
+    companion object {
+        inline fun <reified AttT: Any> Table.attribute() = jsonb<AttT>("attribute", JsonKt)
+    }
+}
+
+interface VersionControlEntity {
+    val createAt: Column<Instant>
+    fun Table.createAt() = timestamp("create_at").defaultExpression(CurrentTimestamp)
+
+    val createBy: Column<Int>
+    fun Table.createBy() = integer("create_by")
+
+    val modifyAt: Column<Instant>
+    fun Table.modifyAt() = timestamp("modify_at").clientDefault { Clock.System.now() }
+
+    val modifyBy: Column<Int>
+    fun Table.modifyBy() = integer("modify_by")
+}
+
+interface EnabledEntity {
+    val enabled: Column<Boolean>
+    fun Table.enabled() = bool("enabled").default(false)
 }

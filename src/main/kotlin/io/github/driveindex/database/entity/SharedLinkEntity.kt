@@ -1,38 +1,31 @@
 package io.github.driveindex.database.entity
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.core.util.Json
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
-import java.util.*
+import io.github.driveindex.Application
+import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
 /**
  * @author sgpublic
  * @Date 8/5/23 1:42 PM
  */
-@Entity
-@Table(name = "driveindex_shared_link")
-data class SharedLinkEntity(
-    @Id
-    @Column(name = "id")
-    override val id: Int = 0,
+object SharedLinkEntity: IntIdTable("${Application.BASE_NAME_LOWER}_shared_link"),
+    EnabledEntity, VersionControlEntity, AttributeEntity<SharedLinkEntity.Attribute> {
+    val target = integer(name = "target")
+    val needPassword = bool(name = "need_pwd").default(false)
+    val expireTime = long(name = "expired_time").default(-1)
+    override val enabled = enabled()
+    override val createAt = createAt()
+    override val createBy = createBy()
+    override val modifyAt = modifyAt()
+    override val modifyBy = modifyBy()
+    override val attribute: Column<Attribute> = attribute()
 
-    @Column(name = "root_target")
-    val rootTarget: Int,
-
-    @Column(name = "password")
-    val password: String,
-
-    @Column(name = "parent_account")
-    val parentAccount: Int,
-
-    @Column(name = "expired_time")
-    val expireTime: Long = -1,
-
-    @Column(name = "attribute")
-    override val attribute: ObjectNode = Json.newObjectNode<Any>(),
-): IdEntity, AttributeEntity
+    @Serializable
+    data class Attribute(
+        @SerialName("password")
+        val password: String = "",
+    )
+}

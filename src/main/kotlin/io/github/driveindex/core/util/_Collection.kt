@@ -23,14 +23,22 @@ fun <T> Collection<T>?.contains(element: T?): Boolean {
  */
 fun <T> MutableCollection<T>?.exchange(element: T?) {
     if (this == null || element == null) return
-    contains(element).take({ remove(element) }, { add(element) })
+    if (contains(element)) {
+        remove(element)
+    } else {
+        add(element)
+    }
 }
 
 /**
  * MutableCollection 扩展函数，如果列出的元素全部存在则删除，否则全部添加，空指针冗余
  */
 fun <T> MutableCollection<T>?.exchangeAll(list: Collection<T>?) {
-    containsAll(list).take({ removeAll(list) }, { addAll(list) })
+    if (containsAll(list)) {
+        removeAll(list)
+    } else {
+        addAll(list)
+    }
 }
 
 /**
@@ -46,7 +54,11 @@ fun <T> MutableCollection<T>?.removeAll(list: Collection<T>?) {
  */
 fun <T> MutableCollection<T>?.addAll(list: Collection<T>?) {
     if (this == null || list == null) return
-    list.forEach { contains(it).take { add(it) } }
+    list.forEach {
+        if (contains(it)) {
+            add(it)
+        }
+    }
 }
 
 fun <T> List<T>.advSub(factor: Int): List<T> {

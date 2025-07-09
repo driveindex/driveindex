@@ -1,46 +1,23 @@
 package io.github.driveindex.database.entity.account
 
-import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.core.util.Json
+import io.github.driveindex.Application
 import io.github.driveindex.database.entity.AttributeEntity
-import io.github.driveindex.database.entity.IdEntity
-import io.github.driveindex.database.entity.TimeEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
+import io.github.driveindex.database.entity.EnabledEntity
+import io.github.driveindex.database.entity.VersionControlEntity
+import io.github.driveindex.database.entity.account.attributes.AccountAttribute
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
-@Entity
-@Table(name = "driveindex_account")
-data class AccountEntity(
-    @Id
-    @Column(name = "id")
-    override val id: Int = 0,
-
-    @Column(name = "client_id")
-    val parentClientId: Int,
-
-    @Column(name = "display_name")
-    var displayName: String,
-
-    @Column(name = "user_principal_name")
-    val userPrincipalName: String,
-
-    @Column(name = "expired")
-    var accountExpired: Boolean = false,
-
-    @Column(name = "create_at")
-    override val createAt: Long = System.currentTimeMillis(),
-
-    @Column(name = "create_by")
-    override val createBy: Int,
-
-    @Column(name = "modify_at")
-    override val modifyAt: Long = System.currentTimeMillis(),
-
-    @Column(name = "modify_by")
-    override val modifyBy: Int,
-
-    @Column(name = "attribute")
-    override val attribute: ObjectNode = Json.newObjectNode<Any>(),
-): IdEntity, TimeEntity, AttributeEntity
+object AccountEntity: IntIdTable("${Application.BASE_NAME_LOWER}_account"),
+    EnabledEntity, VersionControlEntity, AttributeEntity<AccountAttribute> {
+    val name = varchar("name", length = 64)
+    val clientId = integer(name = "client_id")
+    val expired = bool("expired").default(false)
+    override val enabled = enabled()
+    override val createAt = createAt()
+    override val createBy = createBy()
+    override val modifyAt = modifyAt()
+    override val modifyBy = modifyBy()
+    override val attribute: Column<AccountAttribute> = attribute()
+}

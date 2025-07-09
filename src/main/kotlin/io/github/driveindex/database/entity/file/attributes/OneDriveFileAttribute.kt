@@ -1,27 +1,33 @@
 package io.github.driveindex.database.entity.file.attributes
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.*
+import io.github.driveindex.client.ClientType
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
+@SerialName("onedrive")
 data class OneDriveFileAttribute(
-    @JsonProperty("azure_account_id")
-    val accountId: UUID,
+    @SerialName("type")
+    override val type: ClientType,
 
-    @JsonProperty("file_id")
+    @SerialName("account_id")
+    override val accountId: Int,
+
+    @SerialName("azure_file_id")
     val fileId: String,
 
-    @JsonProperty("web_url")
+    @SerialName("web_url")
     val webUrl: String,
 
-    @JsonProperty("mime_type")
+    @SerialName("mime_type")
     val mimeType: String,
 
-    @JsonProperty("quick_xor_hash")
+    @SerialName("quick_xor_hash")
     val quickXorHash: String? = null,
 
-    @JsonProperty("sha1_hash")
+    @SerialName("sha1_hash")
     val sha1Hash: String? = null,
 
-    @JsonProperty("sha256_hash")
+    @SerialName("sha256_hash")
     val sha256Hash: String? = null,
-): FileAttribute
+): RemoteFileAttribute

@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets
  * @Date 2022/8/14 19:18
  */
 @Component
-class AzureErrorDecoder : ErrorDecoder {
+class AzureErrorDecoder: ErrorDecoder {
     private val defaultDecoder: ErrorDecoder.Default = ErrorDecoder.Default()
     override fun decode(s: String, response: Response): Exception {
         try {

@@ -1,13 +1,15 @@
 package io.github.driveindex
 
+import com.charleskorn.kaml.Yaml
 import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.theme.Theme
 import io.github.driveindex.configuration.FeignClientConfig
-import io.github.driveindex.core.ConfigManager
-import io.github.driveindex.core.util.CanonicalPath
+import io.github.driveindex.core.ConfigDto
 import jakarta.annotation.PostConstruct
+import org.jetbrains.exposed.v1.spring.boot.autoconfigure.ExposedAutoConfiguration
 import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.context.ApplicationContext
@@ -21,7 +23,8 @@ import kotlin.reflect.KClass
 @EnableScheduling
 @EnableAsync
 @SpringBootApplication
-@Theme("${Application.APPLICATION_BASE_NAME_LOWER}-app")
+@ImportAutoConfiguration(ExposedAutoConfiguration::class)
+@Theme("${Application.BASE_NAME_LOWER}-app")
 class Application: AppShellConfigurator {
     override fun configurePage(settings: AppShellSettings) {
 
@@ -33,46 +36,44 @@ class Application: AppShellConfigurator {
     }
 
     companion object {
-        const val APPLICATION_BASE_NAME = "DriveIndex"
-        const val APPLICATION_BASE_NAME_LOWER = "driveindex"
-        const val APPLICATION_GROUP = "io.github.driveindex"
+        const val BASE_NAME = "DriveIndex"
+        const val BASE_NAME_LOWER = "driveindex"
+        const val GROUP = "io.github.${BASE_NAME_LOWER}"
 
         private lateinit var context: ApplicationContext
-        val Context: ApplicationContext get() = context
+        private val Context: ApplicationContext get() = context
+
+        private var configPath: String = "./config.yaml"
+        val Config: ConfigDto by lazy {
+            Yaml.default.decodeFromString(ConfigDto.serializer(), File(configPath).readText())
+        }
 
         @JvmStatic
         fun main(args: Array<String>) {
             setupConfig(args)
             context = Bootstrap(Application::class.java)
-                .setPort(ConfigManager.Port)
+                .setPort(Config.system.port)
                 .setDatasource(
-                        ConfigManager.SqlType,
-                        ConfigManager.SqlDatabaseHost,
-                        ConfigManager.SqlDatabaseName,
-                        ConfigManager.SqlUsername,
-                        ConfigManager.SqlPassword,
+                    Config.sql.host,
+                    Config.sql.database,
+                    Config.sql.username,
+                    Config.sql.password,
                 )
-                .setDebug(ConfigManager.Debug)
-                .setLogPath(ConfigManager.LogPath)
+                .setDebug(Config.system.debug)
+                .setLogPath(Config.system.logDir)
                 .run(args)
         }
 
         private fun setupConfig(args: Array<String>) {
-            var configPath: String? = null
             for (arg in args) {
                 if (arg.startsWith("--config=")) {
                     configPath = arg.substring(9)
-                    return
+                    break
                 }
             }
             System.getenv("DRIVEINDEX_CONFIG")
                     ?.takeIf { it.isNotBlank() }
                     ?.let { configPath = it }
-            ConfigManager.setConfigFile(configPath)
-        }
-
-        inline fun <reified T> getBean(): T {
-            return Context.getBean(T::class.java)
         }
 
         val <T: Any> KClass<T>.Bean: T get() {
@@ -87,7 +88,6 @@ private class Bootstrap(clazz: Class<*>) {
     private val properties: MutableMap<String, Any> = HashMap()
 
     fun setDatasource(
-        dbType: String,
         dbHost: String,
         dbDatabase: String,
         dbUsername: String,
@@ -95,7 +95,7 @@ private class Bootstrap(clazz: Class<*>) {
     ): Bootstrap {
         properties["spring.datasource.username"] = dbUsername
         properties["spring.datasource.password"] = dbPassword
-        properties["spring.datasource.url"] = "jdbc:$dbType://${if (dbType != "sqlite") "$dbHost/" else ""}$dbDatabase"
+        properties["spring.datasource.url"] = "jdbc:postgresql://$dbHost/$dbDatabase"
         return this
     }
 

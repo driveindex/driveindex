@@ -1,6 +1,7 @@
 package io.github.driveindex.core.util
 
-import io.github.driveindex.core.ConfigManager
+import io.github.driveindex.Application.Companion.Config
+import io.github.driveindex.core.ConfigDto
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import java.util.*
@@ -62,27 +63,19 @@ val String.MD5_FULL_UPPER: String get() {
 }
 
 fun String.toJwtTag(time: Long): String {
-    return "$this,${ConfigManager.TokenSecurityKey},${time / 1000 * 1000}".MD5_FULL
+    return "$this,${Config.token.jwtSecurity},${time / 1000 * 1000}".MD5_FULL
 }
 
-private val sha1: MessageDigest get() = MessageDigest.getInstance("SHA1")
-
-val String.SHA1: String get() {
-    val digest = sha1.digest(toByteArray())
-    return StringBuffer().run {
-        for (b in digest) {
-            val i :Int = b.toInt() and 0xff
-            var hexString = Integer.toHexString(i)
-            if (hexString.length < 2) {
-                hexString = "0$hexString"
-            }
-            append(hexString)
-        }
-        toString()
-    }
+/**
+ * SHA256
+ */
+private val sha256: MessageDigest get() = MessageDigest.getInstance("SHA-256")
+val String.SHA_256: String get() {
+    return sha256.digest(toByteArray())
+        .fold("", { str, it -> str + "%02x".format(it) })
 }
-val String.SHA1_UPPER: String get() {
-    return SHA1.uppercase()
+val String.SHA_256_UPPER: String get() {
+    return SHA_256.uppercase()
 }
 
 

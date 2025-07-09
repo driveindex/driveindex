@@ -6,24 +6,24 @@ import io.github.driveindex.client.ClientType
 import java.util.UUID
 
 data class ClientCreateReqDto(
-    @JsonProperty("name")
+    @param:JsonProperty("name")
     val name: String,
-    @JsonProperty("type")
+    @param:JsonProperty("type")
     val type: ClientType,
-    @JsonProperty("data")
+    @param:JsonProperty("data")
     val data: ObjectNode,
 )
 
 data class ClientEditReqDto(
-    @JsonProperty("client_id")
+    @param:JsonProperty("client_id")
     val clientId: UUID,
-    @JsonProperty("client_type")
+    @param:JsonProperty("client_type")
     val clientType: ClientType,
-    @JsonProperty("data")
+    @param:JsonProperty("data")
     val data: ObjectNode,
 )
 
 data class ClientDeleteReqDto(
-    @JsonProperty("client_id")
+    @param:JsonProperty("client_id")
     val clientId: UUID,
 )

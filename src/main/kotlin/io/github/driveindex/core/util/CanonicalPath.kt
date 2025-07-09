@@ -21,7 +21,7 @@ import java.util.*
  */
 @JsonSerialize(using = CanonicalPathSerializer::class)
 @JsonDeserialize(using = CanonicalPathDeserializer::class)
-class CanonicalPath : Cloneable {
+class CanonicalPath : Cloneable, Iterable<String> {
     /** CanonicalPath 不可变，同 String  */
     private val pathStack: Stack<String>
     val length: Int get() = pathStack.size
@@ -174,6 +174,10 @@ class CanonicalPath : Cloneable {
         return CanonicalPath(Stack<String>().also {
             it.addAll(pathStack.subList(start, end))
         })
+    }
+
+    override fun iterator(): Iterator<String> {
+        return pathStack.iterator()
     }
 
     companion object {

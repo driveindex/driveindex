@@ -22,49 +22,59 @@ sealed interface BaseRespResult<T: Any> {
 }
 
 data class SampleRespResult(
-    @Nonnull
     override val code: Int = 200,
-    @Nonnull
     override val message: String = "success.",
-    @Nullable
     override val params: ObjectNode? = null,
 ): BaseRespResult<Unit>
 
-data class DataRespResult<T: RespResultData>(
-    @Nonnull
+data class ObjRespResult<T: RespResultData>(
     override val code: Int = 200,
-    @Nonnull
     override val message: String = "success.",
-    @Nullable
     override val params: ObjectNode? = null,
-    @Nullable
     override val data: T?
 ): BaseRespResult<T>
 
 data class ListRespResult<T: Any>(
-    @Nonnull
     override val code: Int = 200,
-    @Nonnull
     override val message: String = "success.",
-    @Nullable
     override val params: ObjectNode? = null,
-    @Nullable
     override val data: Collection<T>?
 ): BaseRespResult<Collection<T>>
 
-fun Resp(block: () -> Unit): SampleRespResult {
-    block()
-    return SampleRespResult()
+fun Resp(
+    catch: (e: Exception) -> Exception = { it },
+    block: () -> Unit,
+): SampleRespResult {
+    try {
+        block()
+        return SampleRespResult()
+    } catch (e: Exception) {
+        throw catch(e)
+    }
 }
 
-fun <T: Any> ListResp(block: () -> Collection<T>): ListRespResult<T> {
-    val list = block()
-    return ListRespResult(data = list)
+fun <T: Any> ListResp(
+    catch: (e: Exception) -> Exception = { it },
+    block: () -> Collection<T>,
+): ListRespResult<T> {
+    try {
+        val list = block()
+        return ListRespResult(data = list)
+    } catch (e: Exception) {
+        throw catch(e)
+    }
 }
 
-fun <T: RespResultData> DataResp(block: () -> T?): DataRespResult<T> {
-    val list = block()
-    return DataRespResult(data = list)
+fun <T: RespResultData> ObjResp(
+    catch: (e: Exception) -> Exception = { it },
+    block: () -> T?,
+): ObjRespResult<T> {
+    try {
+        val list = block()
+        return ObjRespResult(data = list)
+    } catch (e: Exception) {
+        throw catch(e)
+    }
 }
 
 sealed interface RespResultData
@@ -73,7 +83,7 @@ inline fun <reified T: RespResultData> HttpServletResponse.write(result: T) {
     characterEncoding = StandardCharsets.UTF_8.name()
     addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     writer.use {
-        it.write(Json.writeValueAsString(DataRespResult(data = result)))
+        it.write(Json.writeValueAsString(ObjRespResult(data = result)))
         it.flush()
     }
 }

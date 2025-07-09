@@ -10,24 +10,24 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 data class LoginRespDto(
     @field:Schema(description = "用户名")
-    @JsonProperty("username")
+    @param:JsonProperty("username")
     val username: String,
 
     @field:Schema(description = "用户昵称")
-    @JsonProperty("nick")
+    @param:JsonProperty("nick")
     val nick: String,
 
     @field:Schema(description = "认证相关信息")
-    @JsonProperty("auth")
+    @param:JsonProperty("auth")
     val auth: Auth,
 ): RespResultData {
     data class Auth (
         @field:Schema(example = "a5c2bca1aaz3...")
-        @JsonProperty("token")
+        @param:JsonProperty("token")
         val token: String,
 
         @field:Schema(description = "用户角色", example = "ADMIN")
-        @JsonProperty("role")
+        @param:JsonProperty("role")
         val role: UserRole,
     )
 }

@@ -5,7 +5,8 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import io.github.driveindex.Application
-import io.github.driveindex.core.ConfigManager
+import io.github.driveindex.Application.Companion.Config
+import io.github.driveindex.core.ConfigDto
 
 /**
  * @author sgpublic
@@ -16,9 +17,9 @@ class ConsoleFilter : Filter<ILoggingEvent>() {
     private val out: Level
 
     init {
-        val check = !ConfigManager.Debug
-        self = if (check) Level.INFO else if (ConfigManager.Trace) Level.TRACE else Level.DEBUG
-        out = if (check) Level.WARN else if (ConfigManager.Trace) Level.DEBUG else Level.INFO
+        val check = !Config.system.debug
+        self = if (check) Level.INFO else if (Config.system.trace) Level.TRACE else Level.DEBUG
+        out = if (check) Level.WARN else if (Config.system.trace) Level.DEBUG else Level.INFO
     }
 
     override fun decide(event: ILoggingEvent): FilterReply {

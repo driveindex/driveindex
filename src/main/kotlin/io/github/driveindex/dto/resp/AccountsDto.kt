@@ -1,32 +1,29 @@
 package io.github.driveindex.dto.resp
 
 import java.util.UUID
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 
 data class AccountsDto(
-    @JsonProperty("id")
     val id: UUID,
-    @JsonProperty("display_name")
     val displayName: String,
-    @JsonProperty("user_principal_name")
     val userPrincipalName: String,
-    @JsonProperty("create_at")
     val createAt: Long,
-    @JsonProperty("modify_at")
     val modifyAt: Long?,
-    @JsonProperty("detail")
     val detail: Detail,
 ): RespResultData {
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+    @JsonSubTypes(
+        JsonSubTypes.Type(value = OneDriveAccountDetail::class, name = "onedrive"),
+    )
     sealed interface Detail
 
     data class OneDriveAccountDetail(
-            @JsonProperty("azure_user_id")
             val azureUserId: String,
     ): Detail
 }
 
 data class AccountCreateRespDto(
-    @JsonProperty("redirect_url")
     val redirectUrl: String,
 ): RespResultData

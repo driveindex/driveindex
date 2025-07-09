@@ -52,14 +52,14 @@ const Index: FC = () => {
                     newPassword: "",
                     newPasswordConfirm: "",
                 }}
-                onValuesChange={(_, allValue) => setFormData(allValue)}>
+                onValuesChange={(_: any, allValue: any) => setFormData(allValue)}>
                 <FormItem
                     label={<h3>{t("profile_password_current")}</h3>}
                     field={"currentPassword"}
                     valueType={"string"}
                     rules={[
                         {
-                            validator: (rule, value, callback) => {
+                            validator: (rule: any, value: any, callback: (arg0?: string) => void) => {
                                 if (!value) {
                                     callback(t("profile_password_error_current_empty"))
                                 } else {
@@ -79,7 +79,7 @@ const Index: FC = () => {
                     valueType={"string"}
                     rules={[
                         {
-                            validator: (rule, value, callback) => {
+                            validator: (rule: any, value: string, callback: (arg0?: string) => void) => {
                                 const passwordReg = /^(?![^a-zA-Z]+$)(?!D+$).{8,16}$/
                                 if (!value) {
                                     callback(t("profile_password_error_empty"))
@@ -99,7 +99,7 @@ const Index: FC = () => {
                     valueType={"string"}
                     rules={[
                         {
-                            validator: (rule, value, callback) => {
+                            validator: (rule: any, value: any, callback: (arg0?: string) => void) => {
                                 if (!value) {
                                     callback(t("profile_password_error_conform_empty"))
                                 } else if (value !== formData.newPassword) {
@@ -113,7 +113,7 @@ const Index: FC = () => {
                     <Input type={"password"} disabled={loginDoing} />
                 </FormItem>
                 <FormSubmit
-                    onClick={(value, _) => {
+                    onClick={(value: any, _: any) => {
                         if (value == null) {
                             return
                         }

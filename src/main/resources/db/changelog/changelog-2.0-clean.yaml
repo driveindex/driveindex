@@ -1,0 +1,232 @@
+databaseChangeLog:
+  - changeSet:
+      id: changelog-2.0-clean
+      author: sgpublic - sgpublic2002@gmail.com
+      changes:
+        - createTable:
+            tableName: driveindex_user
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pwd_hash
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pwd_salt
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValue: '1'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permission
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attribute
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: driveindex_account
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_type
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expired
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValue: '1'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attribute
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: driveindex_client
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValue: '1'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attribute
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: driveindex_file
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: type
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attribute
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: driveindex_shared_link
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: root_target
+                  type: longtext
+                  constraints:
+                    nullable: false

@@ -1,14 +1,17 @@
 package io.github.driveindex.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
+import com.vaadin.hilla.BrowserCallable
+import io.github.driveindex.annotation.AllOpen
+import io.github.driveindex.dto.resp.Resp
+import jakarta.annotation.security.PermitAll
 
 /**
  * @author sgpublic
  * @Date 2023/8/6 14:39
  */
-@RestController
+@AllOpen
+//@BrowserCallable
 class HealthCheck {
-    @GetMapping("/api/health")
-    fun checkHealth() { }
+    @PermitAll
+    fun checkHealth() = Resp {  }
 }

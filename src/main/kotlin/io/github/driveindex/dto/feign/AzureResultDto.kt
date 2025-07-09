@@ -4,57 +4,57 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.regex.Pattern
 
 data class AzureFailedResultDtoA(
-    @JsonProperty("error")
+    @param:JsonProperty("error")
     val error: String,
-    @JsonProperty("errorDescription")
+    @param:JsonProperty("errorDescription")
     val errorDescription: String,
-    @JsonProperty("errorCodes")
+    @param:JsonProperty("errorCodes")
     val errorCodes: List<Int>,
-    @JsonProperty("timestamp")
+    @param:JsonProperty("timestamp")
     val timestamp: String,
-    @JsonProperty("traceId")
+    @param:JsonProperty("traceId")
     val traceId: String,
-    @JsonProperty("correlationId")
+    @param:JsonProperty("correlationId")
     val correlationId: String,
 )
 
 data class AzureFailedResultDtoB(
-    @JsonProperty("code")
+    @param:JsonProperty("code")
     val code: String,
-    @JsonProperty("message")
+    @param:JsonProperty("message")
     val message: String,
 )
 
 data class AzurePortalDtoV1_Token(
-    @JsonProperty("token_type")
+    @param:JsonProperty("token_type")
     val tokenType: String,
-    @JsonProperty("expires_in")
+    @param:JsonProperty("expires_in")
     private val expiresIn: Long,
-    @JsonProperty("scope")
+    @param:JsonProperty("scope")
     val scope: String,
-    @JsonProperty("access_token")
+    @param:JsonProperty("access_token")
     val accessToken: String,
-    @JsonProperty("refresh_token")
+    @param:JsonProperty("refresh_token")
     val refreshToken: String,
 ) {
     val expires: Long get() = System.currentTimeMillis() + expiresIn * 1000
 }
 
 data class AzureGraphDtoV2_Me(
-    @JsonProperty("displayName")
+    @param:JsonProperty("displayName")
     val displayName: String,
-    @JsonProperty("id")
+    @param:JsonProperty("id")
     val id: String,
-    @JsonProperty("userPrincipalName")
+    @param:JsonProperty("userPrincipalName")
     val userPrincipalName: String,
 )
 
 data class AzureGraphDtoV2_Me_Drive_Root_Delta(
-    @JsonProperty("@odata.nextLink")
+    @param:JsonProperty("@odata.nextLink")
     private val nextLink: String? = null,
-    @JsonProperty("@odata.deltaLink")
+    @param:JsonProperty("@odata.deltaLink")
     private val deltaLink: String? = null,
-    @JsonProperty("value")
+    @param:JsonProperty("value")
     val value: List<Value>
 ) {
     val nextToken: String get() = nextLink?.getToken() ?: ""
@@ -67,39 +67,39 @@ data class AzureGraphDtoV2_Me_Drive_Root_Delta(
         .also { it.find() }.group().substring(6)
 
     data class Value(
-        @JsonProperty("id")
+        @param:JsonProperty("id")
         val id: String,
-        @JsonProperty("name")
+        @param:JsonProperty("name")
         val name: String,
-        @JsonProperty("size")
+        @param:JsonProperty("size")
         val size: Long,
-        @JsonProperty("webUrl")
+        @param:JsonProperty("webUrl")
         val webUrl: String? = null,
-        @JsonProperty("parentReference")
+        @param:JsonProperty("parentReference")
         val parentReference: ParentReference? = null,
-        @JsonProperty("folder")
+        @param:JsonProperty("folder")
         val folder: Unit? = null,
-        @JsonProperty("file")
+        @param:JsonProperty("file")
         val file: File? = null,
-        @JsonProperty("deleted")
+        @param:JsonProperty("deleted")
         val deleted: Unit? = null,
     ) {
         data class ParentReference(
-            @JsonProperty("id")
+            @param:JsonProperty("id")
             val id: String
         )
         data class File(
-            @JsonProperty("mimeType")
+            @param:JsonProperty("mimeType")
             val mimeType: String,
-            @JsonProperty("hashes")
+            @param:JsonProperty("hashes")
             val hashes: Hashes? = null
         ) {
             data class Hashes(
-                @JsonProperty("quickXorHash")
+                @param:JsonProperty("quickXorHash")
                 val quickXorHash: String? = null,
-                @JsonProperty("sha1Hash")
+                @param:JsonProperty("sha1Hash")
                 val sha1Hash: String? = null,
-                @JsonProperty("sha256Hash")
+                @param:JsonProperty("sha256Hash")
                 val sha256Hash: String? = null,
             )
         }

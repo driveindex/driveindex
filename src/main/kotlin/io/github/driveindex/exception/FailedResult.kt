@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.Application
 import io.github.driveindex.core.util.Json
 import io.github.driveindex.dto.resp.SampleRespResult
-import java.util.UUID
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -61,7 +60,7 @@ class FailedResult private constructor(
 
         val IllegalRequest get() = FailedResult(-110201, "无效的登录验证请求")
         val AuthTimeout get() = FailedResult(-110202, "登录超时，请重试")
-        val DuplicateAccount get() = FailedResult(-110203, "此账户已登录到 ${Application.APPLICATION_BASE_NAME}")
+        val DuplicateAccount get() = FailedResult(-110203, "此账户已登录到 ${Application.BASE_NAME}")
     }
 
     object Client {

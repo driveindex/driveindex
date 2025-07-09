@@ -9,10 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema
  */
 data class LoginReqDto(
     @field:Schema(description = "用户密码", required = true)
-    @JsonProperty("username")
+    @param:JsonProperty("username")
     val username: String,
 
     @field:Schema(description = "用户员密码", required = true)
-    @JsonProperty("password")
+    @param:JsonProperty("password")
     val password: String,
 )

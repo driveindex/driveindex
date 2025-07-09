@@ -1,16 +1,15 @@
 package io.github.driveindex.security
 
-import com.nimbusds.jose.JWSAlgorithm
 import com.vaadin.flow.spring.security.VaadinWebSecurity
 import com.vaadin.hilla.route.RouteUtil
 import io.github.driveindex.Application
-import io.github.driveindex.core.ConfigManager
+import io.github.driveindex.Application.Companion.Config
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.oauth2.jose.jws.JwsAlgorithms
 import javax.crypto.spec.SecretKeySpec
-import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
@@ -33,12 +32,17 @@ class SecurityConfig(
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }
 
+        setLoginView(http, "/login", "/login")
+
         setStatelessAuthentication(
             http,
-            SecretKeySpec(Base64.decode(ConfigManager.TokenSecurityKey), JWSAlgorithm.HS256.name),
-            Application.APPLICATION_GROUP
+            SecretKeySpec(Config.token.jwtSecurity.toByteArray(), JwsAlgorithms.HS256),
+            Application.GROUP,
+            Config.token.expired,
         )
     }
+
+
 
     companion object {
         const val ROLE_ADMIN = "ROLE_ADMIN"

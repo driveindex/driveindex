@@ -6,12 +6,8 @@ spring:
   web:
     resources:
       add-mappings: false
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    database-platform: org.hibernate.dialect.MariaDBDialect
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-  flyway:
-    locations: classpath:/flyway
+    driver-class-name: org.postgresql.Driver
+vaadin:
+  bun:
+    enable: true

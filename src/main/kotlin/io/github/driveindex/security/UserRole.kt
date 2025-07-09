@@ -16,3 +16,7 @@ enum class UserRole(
     )),
     ;
 }
+
+enum class UserPermission {
+
+}

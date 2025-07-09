@@ -2,13 +2,31 @@ package io.github.driveindex.core.util
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.Application
+import com.fasterxml.jackson.databind.ser.std.UUIDSerializer
+import io.github.driveindex.Application.Companion.Bean
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
+import java.util.UUID
+
+val JsonKt = Json {
+    prettyPrint = false
+    classDiscriminator = "attr_type"
+}
 
 object Json {
     private val mapper: ObjectMapper by lazy {
-        Application.Context.getBean(ObjectMapper::class.java)
+        ObjectMapper::class.Bean
     }
 
     fun readTree(json: String): JsonNode {
@@ -42,5 +60,19 @@ object Json {
 
     fun <T: Any> newObjectNode(vararg pairs: Pair<String, T>): ObjectNode {
         return valueToTree(pairs.toMap())
+    }
+}
+
+typealias UuidKt = @Serializable(with = UuidAsStringSerializer::class) UUID
+object UuidAsStringSerializer : KSerializer<UUID> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(UUID::class.java.packageName, PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: UUID) {
+        encoder.encodeString(value.toString())
+    }
+
+    override fun deserialize(decoder: Decoder): UUID {
+        val string = decoder.decodeString()
+        return UUID.fromString(string)
     }
 }
