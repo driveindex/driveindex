@@ -169,8 +169,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -185,8 +184,21 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
-                  name: type
-                  type: varchar(32)
+                  name: is_remote
+                  type: boolean
+                  defaultValue: '0'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_mount
+                  type: boolean
+                  defaultValue: '0'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_root
+                  type: boolean
+                  defaultValue: '0'
                   constraints:
                     nullable: false
               - column:

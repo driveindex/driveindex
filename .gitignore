@@ -55,8 +55,6 @@ src/main/bundles/
 src/main/frontend/themes/hilla-react-app/theme-editor.css
 
 node/
-# use bun instead of npm
-package-lock.json
 
 # DriveInde
 /config.yaml

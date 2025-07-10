@@ -5,7 +5,6 @@ import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
 import io.github.driveindex.security.UserPermission
 import io.github.driveindex.security.UserRole
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.EnumerationColumnType
 import org.jetbrains.exposed.v1.core.EnumerationNameColumnType
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 

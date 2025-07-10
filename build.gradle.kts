@@ -29,6 +29,14 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs = listOf(
+            "-Xcontext-parameters",
+        )
+    }
+}
+
 val nodeVer = "22.17.0"
 
 node {
@@ -41,9 +49,6 @@ node {
 
 vaadin {
     bunEnable = true
-    nodeVersion = "v$nodeVer"
-    nodeAutoUpdate = true
-    runNpmInstall = false
     applicationProperties = file("src/main/resources/application.yml")
 }
 
@@ -56,7 +61,7 @@ allOpen {
 }
 
 tasks {
-    val vaadinPrepareFrontend by getting {
+    vaadinPrepareFrontend {
         mustRunAfter(downloadNode)
         dependsOn(downloadNode)
     }

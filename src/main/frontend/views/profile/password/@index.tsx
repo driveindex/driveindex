@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Alert, Form, FormHelpers, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
 import {TFunction} from "i18next";
@@ -6,7 +6,7 @@ import {DriveIndexAPI} from "Frontend/driveindex/axios";
 import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/driveindex/hooks/useLoginExpiredDialog";
 import {useNavigate} from "react-router-dom";
 
-const Index: FC = () => {
+const Index = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
 
@@ -52,14 +52,14 @@ const Index: FC = () => {
                     newPassword: "",
                     newPasswordConfirm: "",
                 }}
-                onValuesChange={(_: any, allValue: any) => setFormData(allValue)}>
+                onValuesChange={(_, allValue) => setFormData(allValue)}>
                 <FormItem
                     label={<h3>{t("profile_password_current")}</h3>}
                     field={"currentPassword"}
                     valueType={"string"}
                     rules={[
                         {
-                            validator: (rule: any, value: any, callback: (arg0?: string) => void) => {
+                            validator: (rule, value, callback) => {
                                 if (!value) {
                                     callback(t("profile_password_error_current_empty"))
                                 } else {
@@ -79,7 +79,7 @@ const Index: FC = () => {
                     valueType={"string"}
                     rules={[
                         {
-                            validator: (rule: any, value: string, callback: (arg0?: string) => void) => {
+                            validator: (rule, value, callback) => {
                                 const passwordReg = /^(?![^a-zA-Z]+$)(?!D+$).{8,16}$/
                                 if (!value) {
                                     callback(t("profile_password_error_empty"))
@@ -99,7 +99,7 @@ const Index: FC = () => {
                     valueType={"string"}
                     rules={[
                         {
-                            validator: (rule: any, value: any, callback: (arg0?: string) => void) => {
+                            validator: (rule, value, callback) => {
                                 if (!value) {
                                     callback(t("profile_password_error_conform_empty"))
                                 } else if (value !== formData.newPassword) {

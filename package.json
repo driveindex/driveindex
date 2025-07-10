@@ -1,10 +1,10 @@
 {
-  "name": "driveindex",
+  "name": "no-name",
   "license": "GPL-3.0",
   "type": "module",
   "dependencies": {
     "@hi-ui/core": "^4.0.9",
-    "@hi-ui/hiui": "^4.13.0",
+    "@hi-ui/hiui": "^4.14.0",
     "@polymer/polymer": "3.5.2",
     "@vaadin-component-factory/vcf-nav": "1.1.0",
     "@vaadin/bundles": "24.8.3",
@@ -34,7 +34,8 @@
     "react-dom": "18.3.1",
     "react-i18next": "^15.5.3",
     "react-modern-drawer": "^1.4.0",
-    "react-router": "7.6.1"
+    "react-router": "7.6.1",
+    "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
     "@babel/preset-react": "7.27.1",
@@ -162,7 +163,8 @@
     "@vaadin/upload": "24.8.3",
     "@vaadin/router": "2.0.0",
     "@vaadin/vertical-layout": "24.8.3",
-    "@vaadin/virtual-list": "24.8.3"
+    "@vaadin/virtual-list": "24.8.3",
+    "react-router-dom": "$react-router-dom"
   },
   "vaadin": {
     "dependencies": {
@@ -224,6 +226,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "cfc26d5f2033c910289b6a61d4ab3112a3f2c81479da3de03543ff47b0510453"
+    "hash": "291f3a8b5c153b598090ca5a3f925f158ea5653de9dab935e33422c2ebf61b89"
   }
 }

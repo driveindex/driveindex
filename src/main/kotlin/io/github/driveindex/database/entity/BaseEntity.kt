@@ -3,8 +3,10 @@ package io.github.driveindex.database.entity
 import io.github.driveindex.core.util.JsonKt
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.serialization.json.JsonObject
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.statements.InsertStatement
 import org.jetbrains.exposed.v1.datetime.CurrentTimestamp
 import org.jetbrains.exposed.v1.datetime.timestamp
 import org.jetbrains.exposed.v1.json.jsonb
@@ -15,8 +17,11 @@ interface IdEntity<IdT: Any> {
 
 interface AttributeEntity<T: Any> {
     val attribute: Column<T>
+
     companion object {
-        inline fun <reified AttT: Any> Table.attribute() = jsonb<AttT>("attribute", JsonKt)
+        context(table: Table)
+        inline fun <reified T: Any> AttributeEntity<T>.attribute() =
+            table.jsonb<T>("attribute", JsonKt)
     }
 }
 
@@ -32,6 +37,17 @@ interface VersionControlEntity {
 
     val modifyBy: Column<Int>
     fun Table.modifyBy() = integer("modify_by")
+
+    fun <T: Any> InsertStatement<T>.createBy(userId: Int) {
+        this[createBy] = userId
+        this[createAt] = Clock.System.now()
+        this[modifyBy] = userId
+        this[modifyAt] = Clock.System.now()
+    }
+    fun <T: Any> InsertStatement<T>.modifyBy(userId: Int) {
+        this[modifyBy] = userId
+        this[modifyAt] = Clock.System.now()
+    }
 }
 
 interface EnabledEntity {
