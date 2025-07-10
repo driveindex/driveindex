@@ -1,25 +1,32 @@
-import React, {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {UserPref} from "Frontend/driveindex/prefs/UserPref";
+import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useTranslation} from "react-i18next";
 import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, message, Modal, Row, Scrollbar} from "@hi-ui/hiui";
 import {PlusOutlined, LinkOutlined} from "@hi-ui/icons"
 import {BreadcrumbContainer, FileList} from "Frontend/components/home/FileList";
-import {useQuery} from "Frontend/driveindex/hooks/useQuery";
-import useBreadcrumb from "Frontend/driveindex/hooks/useBreadcrumb";
-import {useBreakpointDown, useBreakpointUp} from "Frontend/driveindex/hooks/useViewport";
-import {DriveIndexAPI} from "Frontend/driveindex/axios";
-import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/driveindex/hooks/useLoginExpiredDialog";
+import {useQuery} from "Frontend/core/hooks/useQuery";
+import useBreadcrumb from "Frontend/core/hooks/useBreadcrumb";
+import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
+import {DriveIndexAPI} from "Frontend/core/axios";
+import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLoginExpiredDialog";
 import {TFunction} from "i18next";
 import {CommonHeader} from "Frontend/components/home/CommonHeader";
+import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
 
-const Index = () => {
+export const config: ViewConfig = {
+    menu: {
+        title: 'Main page',
+    },
+};
+
+export default function MainView() {
     const navigate = useNavigate()
-    useEffect(() => {
-        if (!UserPref.Login) {
-            navigate("/login")
-        }
-    }, [navigate]);
+    // useEffect(() => {
+    //     if (!UserPref.Login) {
+    //         navigate("/login")
+    //     }
+    // }, [navigate]);
     const { t } = useTranslation()
 
     const query = useQuery()
@@ -27,13 +34,13 @@ const Index = () => {
 
     const showLoginExpiredDialog = useLoginExpiredDialog()
     const [ fileList, setFileList ] = useState<{}[] | undefined>(undefined)
-    useEffect(() => {
-        if (path == null) {
-            navigate("/?path=%2F")
-        } else {
-            getFileListByPath(path, setFileList, showLoginExpiredDialog, t)
-        }
-    }, [path])
+    // useEffect(() => {
+    //     if (path == null) {
+    //         navigate("/?path=%2F")
+    //     } else {
+    //         getFileListByPath(path, setFileList, showLoginExpiredDialog, t)
+    //     }
+    // }, [path])
 
     const isMdUp = useBreakpointUp("md")
     const showAsMobile = useBreakpointDown("sm")
@@ -183,5 +190,3 @@ function createDir(
 ) {
 
 }
-
-export default Index

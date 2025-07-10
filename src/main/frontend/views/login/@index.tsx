@@ -4,9 +4,9 @@ import {Form, Card, FormItem, Input, FormSubmit, FormHelpers, Alert} from "@hi-u
 import logo from "Frontend/static/drawable/logo.svg"
 import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
-import {NavigateFunction} from "react-router/dist/lib/hooks";
+import {NavigateFunction} from "react-router";
 import {TFunction} from "i18next";
-import {DriveIndexAPI} from "Frontend/driveindex/axios";
+import {DriveIndexAPI} from "Frontend/core/axios";
 
 const Index: FC = () => {
     const { t } = useTranslation()

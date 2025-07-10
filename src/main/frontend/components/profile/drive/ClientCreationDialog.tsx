@@ -13,12 +13,10 @@ import {
     Select,
     useModal
 } from "@hi-ui/hiui";
-import {SelectMergedItem} from "@hi-ui/select/lib/types/types";
-import {FormRuleModel} from "@hi-ui/form/lib/types/types";
+import {FormRuleModel} from "@hi-ui/form";
 import {TFunction} from "i18next";
 import {ClientCreationForm, OneDriveClientCreationContent} from "./client/OneDriveCreation";
-import {DriveIndexAPI} from "Frontend/driveindex/axios";
-import {UserPref} from "Frontend/driveindex/prefs/UserPref";
+import {DriveIndexAPI} from "Frontend/core/axios";
 
 
 export type ClientType = "OneDrive"

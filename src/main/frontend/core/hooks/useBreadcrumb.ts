@@ -1,5 +1,5 @@
 import {TFunction} from "i18next";
-import {BreadcrumbDataItem} from "@hi-ui/breadcrumb/lib/types/types";
+import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 
 const useBreadcrumb = (t: TFunction<"translation", undefined>, pathStr: string | null) => {
     const data: (BreadcrumbDataItem & { link: string })[] = [{

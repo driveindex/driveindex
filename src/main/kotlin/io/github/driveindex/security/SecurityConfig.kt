@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
 import javax.crypto.spec.SecretKeySpec
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -25,6 +26,14 @@ class SecurityConfig(
     override fun configure(http: HttpSecurity) {
         http.authorizeHttpRequests {
             it.requestMatchers(route::isRouteAllowed).permitAll()
+            it.requestMatchers(
+                PathPatternRequestMatcher.withDefaults()
+                    .matcher("/login"),
+                PathPatternRequestMatcher.withDefaults()
+                    .matcher("/share"),
+                PathPatternRequestMatcher.withDefaults()
+                    .matcher("/"),
+            ).permitAll()
         }
         super.configure(http)
 
@@ -32,7 +41,7 @@ class SecurityConfig(
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }
 
-        setLoginView(http, "/login", "/login")
+        setLoginView(http, "/login")
 
         setStatelessAuthentication(
             http,
@@ -41,8 +50,6 @@ class SecurityConfig(
             Config.token.expired,
         )
     }
-
-
 
     companion object {
         const val ROLE_ADMIN = "ROLE_ADMIN"

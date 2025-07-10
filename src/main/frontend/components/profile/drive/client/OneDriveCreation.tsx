@@ -1,7 +1,7 @@
 import {TFunction} from "i18next";
-import {FormRuleModel} from "@hi-ui/form/lib/types/types";
+import {FormRuleModel, FormItem} from "@hi-ui/form";
 import React from "react";
-import {FormItem, Input, Select} from "@hi-ui/hiui";
+import {Input, Select} from "@hi-ui/hiui";
 import {ClientCreationContentProp, ClientType} from "../ClientCreationDialog";
 import {useTranslation} from "react-i18next";
 

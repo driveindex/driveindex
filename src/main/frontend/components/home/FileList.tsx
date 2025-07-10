@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {useTranslation} from "react-i18next";
 import {Col, EmptyState, Loading, Row} from "@hi-ui/hiui";
-import RespLayoutProps from "Frontend/driveindex/props/RespLayoutProps";
+import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
 
 export enum FileListSortBy {
     NAME, SIZE, CREATE_TIME, MODIFIED_TIME

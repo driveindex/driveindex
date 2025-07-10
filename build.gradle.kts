@@ -49,6 +49,7 @@ node {
 
 vaadin {
     bunEnable = true
+    reactEnable = true
     applicationProperties = file("src/main/resources/application.yml")
 }
 

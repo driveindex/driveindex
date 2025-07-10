@@ -1,13 +1,13 @@
 import {Avatar, Button, Popover} from "@hi-ui/hiui";
 import React, {FC} from "react";
-import {NavigateFunction} from "react-router/dist/lib/hooks";
-import {UserPref} from "Frontend/driveindex/prefs/UserPref";
+import {NavigateFunction} from "react-router";
+import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import logo from "../../static/drawable/logo.svg";
 import {MoveOutlined} from "@hi-ui/icons"
-import RespLayoutProps from "Frontend/driveindex/props/RespLayoutProps";
-import {asInitials} from "Frontend/driveindex/util/_String";
+import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
+import {asInitials} from "Frontend/core/util/_String";
 
 export interface CommonHeaderProps {
     isShowInProfile: boolean

@@ -1,13 +1,15 @@
 package io.github.driveindex.core.util
 
-fun <T> T?.takeOr(def: T): T {
-    return this ?: def
-}
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
-fun CharSequence?.takeOr(def: String): String {
-    return if (this != null && "$this".isNotBlank()) {
-        "$this"
-    } else {
-        def
+@OptIn(ExperimentalContracts::class)
+inline fun <T: Any> T?.runIfNotNull(block: (T) -> Unit) {
+    contract {
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+    }
+    if (this != null) {
+        block(this)
     }
 }

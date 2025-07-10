@@ -1,24 +1,24 @@
 package io.github.driveindex.module
 
-import io.github.driveindex.database.entity.UserEntity
+import io.github.driveindex.security.DriveIndexUserDetails
+import io.github.driveindex.security.ReadonlyDriveIndexUserDetails
+import io.github.driveindex.security.DriveIndexUserDetailsManager
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
-import java.lang.IllegalArgumentException
 
 @Component
 class Current {
-    val User: UserEntity
-        get() = SecurityContextHolder.getContext().authentication.details as UserEntity
+    val User: DriveIndexUserDetails
+        get() = SecurityContextHolder.getContext().authentication.details as DriveIndexUserDetails
 }
 
 @Component
-class MutableCurrent(): Current() {
-    override var User: UserEntity
+class MutableCurrent(
+    private val userManager: DriveIndexUserDetailsManager,
+): Current() {
+    override var User: DriveIndexUserDetails
         get() = super.User
         set(value) {
-            if (User.id != value.id) {
-                throw IllegalArgumentException("不允许修改 ID")
-            }
-//            user.save(value)
+            userManager.updateCustomUser(value)
         }
 }

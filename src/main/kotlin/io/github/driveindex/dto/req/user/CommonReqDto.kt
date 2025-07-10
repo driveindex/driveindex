@@ -1,14 +1,15 @@
 package io.github.driveindex.dto.req.user
 
-import java.util.*
 
-
-class CommonSettingsReqDto()
+data class CommonSettingsReqDto(
+    val username: String? = null,
+    val nickname: String? = null,
+)
 
 data class AccountDeleteReqDto(
-    val accountId: UUID
+    val accountId: Int
 )
 
 data class ClientListReqDto(
-    val clientId: UUID
+    val clientId: Int
 )

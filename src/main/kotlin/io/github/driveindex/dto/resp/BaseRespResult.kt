@@ -27,7 +27,7 @@ data class SampleRespResult(
     override val params: ObjectNode? = null,
 ): BaseRespResult<Unit>
 
-data class ObjRespResult<T: RespResultData>(
+data class ObjRespResult<T: Any>(
     override val code: Int = 200,
     override val message: String = "success.",
     override val params: ObjectNode? = null,
@@ -65,7 +65,7 @@ fun <T: Any> ListResp(
     }
 }
 
-fun <T: RespResultData> ObjResp(
+fun <T: Any> ObjResp(
     catch: (e: Exception) -> Exception = { it },
     block: () -> T?,
 ): ObjRespResult<T> {
@@ -77,9 +77,7 @@ fun <T: RespResultData> ObjResp(
     }
 }
 
-sealed interface RespResultData
-
-inline fun <reified T: RespResultData> HttpServletResponse.write(result: T) {
+inline fun <reified T: Any> HttpServletResponse.write(result: T) {
     characterEncoding = StandardCharsets.UTF_8.name()
     addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     writer.use {

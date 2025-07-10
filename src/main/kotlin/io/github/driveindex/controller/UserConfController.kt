@@ -2,28 +2,25 @@ package io.github.driveindex.controller
 
 import com.vaadin.hilla.BrowserCallable
 import io.github.driveindex.annotation.AllOpen
-import io.github.driveindex.client.ClientType
-import io.github.driveindex.core.util.SHA_256
-import io.github.driveindex.database.dao.attributes.OneDriveAccountAttributeDao
-import io.github.driveindex.database.dao.attributes.OneDriveClientAttributeDao
-import io.github.driveindex.database.entity.client.attributes.OneDriveClientAttribute
+import io.github.driveindex.core.util.runIfNotNull
+import io.github.driveindex.database.entity.UserEntity
 import io.github.driveindex.dto.req.user.*
 import io.github.driveindex.dto.resp.*
-import io.github.driveindex.dto.resp.client.OneDriveClientDetail
 import io.github.driveindex.exception.FailedResult
-import io.github.driveindex.module.file.FileModel
 import io.github.driveindex.module.MutableCurrent
+import io.github.driveindex.module.file.FileModel
+import io.github.driveindex.security.ReadonlyDriveIndexUserDetails
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.web.bind.annotation.*
-import java.util.*
+import org.springframework.web.bind.annotation.RequestBody
+import java.util.HashSet
 
 /**
  * @author sgpublic
  * @Date 2023/2/7 13:42
  */
 @AllOpen
-//@BrowserCallable
+@BrowserCallable
 @Tag(name = "用户接口")
 class UserConfController(
     private val current: MutableCurrent,
@@ -48,17 +45,27 @@ class UserConfController(
     }
 
     @Operation(summary = "常规设置")
-    fun getCommonSettings() = ObjResp {
-        val config = current.User
-        CommonSettingsRespDto()
+    fun getUserInfo() = ObjResp {
+        val user = current.User
+        return@ObjResp UserInfoRespDto(
+            username = user[UserEntity.username],
+            nickname = user[UserEntity.attribute].nickname,
+            role = user[UserEntity.role],
+            permission = user[UserEntity.permission]
+        )
     }
 
     @Operation(summary = "常规设置")
     fun setCommonSettings(
         dto: CommonSettingsReqDto
     ) = Resp {
-        current.User = current.User.also {
-
+        current.User = (current.User as ReadonlyDriveIndexUserDetails).asMutable { user ->
+            dto.username.runIfNotNull {
+                user[username] = it
+            }
+            dto.nickname.runIfNotNull {
+                user[attribute].nickname = it.checkNick()
+            }
         }
     }
 
@@ -90,7 +97,7 @@ class UserConfController(
     }
 
     @Operation(summary = "枚举 Client 下登录的账号")
-    fun listAccount(clientId: Int) = ListResp<AccountsDto> {
+    fun listAccount(clientId: Int) = ListResp<AccountDto> {
         TODO()
 //        val client = clientDao.getClient(clientId)
 //            ?: throw FailedResult.Client.NotFound

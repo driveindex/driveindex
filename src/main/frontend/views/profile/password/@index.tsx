@@ -2,8 +2,8 @@ import React, {Dispatch, SetStateAction, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Alert, Form, FormHelpers, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
 import {TFunction} from "i18next";
-import {DriveIndexAPI} from "Frontend/driveindex/axios";
-import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/driveindex/hooks/useLoginExpiredDialog";
+import {DriveIndexAPI} from "Frontend/core/axios";
+import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLoginExpiredDialog";
 import {useNavigate} from "react-router-dom";
 
 const Index = () => {

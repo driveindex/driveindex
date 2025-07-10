@@ -1,11 +1,10 @@
 import React, {FC, useState} from "react";
 import {CommonHeader} from "Frontend/components/home/CommonHeader";
-import {useBreakpointDown} from "Frontend/driveindex/hooks/useViewport";
+import {useBreakpointDown} from "Frontend/core/hooks/useViewport";
 import {Outlet, useLocation, useNavigate} from "react-router-dom"
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import {Menu} from "@hi-ui/hiui";
-import {MenuDataItem} from "@hi-ui/menu/lib/types/types";
+import {Menu, MenuDataItem} from "@hi-ui/hiui";
 import {useTranslation} from "react-i18next";
 import "./@layout.css"
 

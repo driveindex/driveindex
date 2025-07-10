@@ -11,4 +11,4 @@ data class ClientDto(
     val createAt: Long,
     val modifyAt: Long?,
     val detail: ClientDetail,
-): RespResultData, IdEntity<Int>
+): IdEntity<Int>

@@ -10,3 +10,6 @@ springdoc:
     path: /openapi/doc
   packages-to-scan:
     - io.github.driveindex.controller
+vaadin:
+  frontend:
+    hotdeploy: true
