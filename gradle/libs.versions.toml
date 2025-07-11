@@ -8,11 +8,13 @@ vaadin = "24.8.3"
 node = "8.1.2"
 
 autoservice = "1.1.1"
-ini4j = "0.5.4"
 jjwt = "0.12.3"
 openfeign = "4.3.0"
+caffeine = "3.2.1"
+
 exposed = "1.0.0-beta-4"
 exposed-pagination = "1.0.11"
+
 kotlinx-serialization-json = "1.9.0"
 kotlinx-serialization-yaml = "0.83.0"
 
@@ -38,7 +40,7 @@ kotlinx-serialization-yaml = { group = "com.charleskorn.kaml", name = "kaml", ve
 
 autoservice = { group = "com.google.auto.service", name = "auto-service", version.ref = "autoservice" }
 openfeign = { group = "org.springframework.cloud", name = "spring-cloud-starter-openfeign", version.ref = "openfeign" }
-ini4j = { group = "org.ini4j", name = "ini4j", version.ref = "ini4j" }
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
 
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }

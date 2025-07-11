@@ -6,10 +6,10 @@ import io.github.driveindex.Application
 import io.github.driveindex.Application.Companion.Config
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms
-import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
 import javax.crypto.spec.SecretKeySpec
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -27,12 +27,12 @@ class SecurityConfig(
         http.authorizeHttpRequests {
             it.requestMatchers(route::isRouteAllowed).permitAll()
             it.requestMatchers(
-                PathPatternRequestMatcher.withDefaults()
-                    .matcher("/login"),
-                PathPatternRequestMatcher.withDefaults()
-                    .matcher("/share"),
-                PathPatternRequestMatcher.withDefaults()
-                    .matcher("/"),
+                "/login",
+                "/share",
+                "/",
+            ).permitAll()
+            it.requestMatchers(
+                "/drawable/**",
             ).permitAll()
         }
         super.configure(http)
@@ -54,5 +54,6 @@ class SecurityConfig(
     companion object {
         const val ROLE_ADMIN = "ROLE_ADMIN"
         const val ROLE_USER = "ROLE_USER"
+        const val ROLE_GUEST = "ROLE_GUEST"
     }
 }

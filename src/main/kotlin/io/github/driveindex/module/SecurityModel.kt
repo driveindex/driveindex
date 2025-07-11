@@ -1,7 +1,6 @@
 package io.github.driveindex.module
 
 import io.github.driveindex.security.DriveIndexUserDetails
-import io.github.driveindex.security.ReadonlyDriveIndexUserDetails
 import io.github.driveindex.security.DriveIndexUserDetailsManager
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component

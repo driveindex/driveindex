@@ -16,7 +16,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.yaml)
 
-    implementation(libs.ini4j)
+    implementation(libs.caffeine)
     implementation(libs.openfeign)
 
     runtimeOnly(libs.spring.boot.devtools)

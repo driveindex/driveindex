@@ -19,6 +19,7 @@
     "@vaadin/hilla-react-signals": "24.8.2",
     "@vaadin/polymer-legacy-adapter": "24.8.3",
     "@vaadin/react-components": "24.8.3",
+    "@vaadin/router": "^2.0.0",
     "@vaadin/vaadin-development-mode-detector": "2.0.7",
     "@vaadin/vaadin-lumo-styles": "24.8.3",
     "@vaadin/vaadin-material-styles": "24.8.3",
@@ -226,6 +227,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "291f3a8b5c153b598090ca5a3f925f158ea5653de9dab935e33422c2ebf61b89"
+    "hash": "7fb7b676a176696e8d7a7b341176c55195d625dcf6c91db5e04a4dbfd9720c57"
   }
 }

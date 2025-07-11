@@ -17,12 +17,12 @@ import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLo
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import "./@index.css"
 import {BarsOutlined, PlusOutlined} from "@hi-ui/icons"
-import Ic_OneDrive from "Frontend/static/drawable/drive/onedrive.svg"
-import Ic_Unknown from "Frontend/static/drawable/drive/unknown.svg"
+import Ic_OneDrive from "../../../../resources/META-INF/resources/drawable/drive/onedrive.svg"
+import Ic_Unknown from "../../../../resources/META-INF/resources/drawable/drive/unknown.svg"
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
 import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
 import {asInitials} from "Frontend/core/util/_String";
-import ClientCreationDialog from "Frontend/components/profile/drive/ClientCreationDialog";
+import ClientCreationDialog from "Frontend/views/_component/profile/drive/ClientCreationDialog";
 import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 import message from "@hi-ui/message";
 

@@ -1,7 +1,6 @@
 import {Dispatch, FC, SetStateAction, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Form, Card, FormItem, Input, FormSubmit, FormHelpers, Alert} from "@hi-ui/hiui";
-import logo from "Frontend/static/drawable/logo.svg"
 import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
 import {NavigateFunction} from "react-router";
@@ -24,7 +23,7 @@ const Index: FC = () => {
             height: "100vh",
         }}>
             <img
-                src={logo}
+                src={"/drawable/logo.svg"}
                 alt={"logo"}
                 style={{
                     width: 60,

@@ -1,4 +1,4 @@
-import {CommonHeader} from "Frontend/components/home/CommonHeader";
+import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
 import {EmptyState} from "@hi-ui/hiui";
 import {useTranslation} from "react-i18next";
 

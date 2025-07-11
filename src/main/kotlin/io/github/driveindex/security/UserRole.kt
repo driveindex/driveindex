@@ -7,16 +7,29 @@ enum class UserRole(
     val roleName: String,
     val authorities: Collection<GrantedAuthority>,
 ) {
-    USER(SecurityConfig.ROLE_ADMIN, listOf(
+    GUEST(SecurityConfig.ROLE_GUEST, listOf(
+        SimpleGrantedAuthority(SecurityConfig.ROLE_GUEST),
+    )),
+    USER(SecurityConfig.ROLE_USER, listOf(
         SimpleGrantedAuthority(SecurityConfig.ROLE_USER),
+        SimpleGrantedAuthority(SecurityConfig.ROLE_GUEST),
     )),
     ADMIN(SecurityConfig.ROLE_ADMIN, listOf(
         SimpleGrantedAuthority(SecurityConfig.ROLE_ADMIN),
         SimpleGrantedAuthority(SecurityConfig.ROLE_USER),
+        SimpleGrantedAuthority(SecurityConfig.ROLE_GUEST),
     )),
     ;
 }
 
-enum class UserPermission {
+enum class UserPermission: GrantedAuthority {
+    PERMISSION_CREATE_MOUNT,
+    PERMISSION_MANAGE_LOCAL_FILE,
+    PERMISSION_ACCESS_HIDDEN_FILE,
+    PERMISSION_ACCESS_SHARED_WITHOUT_PASSWORD,
+    ;
 
+    override fun getAuthority(): String {
+        return name
+    }
 }

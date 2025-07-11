@@ -3,6 +3,7 @@ package io.github.driveindex
 import com.charleskorn.kaml.Yaml
 import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.server.AppShellSettings
+import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
 import io.github.driveindex.configuration.FeignClientConfig
 import io.github.driveindex.core.ConfigDto
@@ -25,6 +26,7 @@ import kotlin.reflect.KClass
 @SpringBootApplication
 @ImportAutoConfiguration(ExposedAutoConfiguration::class)
 @Theme("${Application.BASE_NAME_LOWER}-app")
+@PWA(name = Application.BASE_NAME, shortName = Application.BASE_NAME)
 class Application: AppShellConfigurator {
     override fun configurePage(settings: AppShellSettings) {
 

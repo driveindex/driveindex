@@ -1,16 +1,21 @@
 package io.github.driveindex.security
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import io.github.driveindex.database.dao.clone
+import io.github.driveindex.database.dao.findById
 import io.github.driveindex.database.entity.UserEntity
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.core.Expression
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.time.Duration
 import java.util.HashSet
 
-sealed class DriveIndexUserDetails(
-    protected val details: ResultRow
-): UserDetails {
+abstract class DriveIndexUserDetails: UserDetails {
+    protected abstract val details: ResultRow
+
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return details[UserEntity.role].authorities
     }
@@ -32,13 +37,22 @@ sealed class DriveIndexUserDetails(
     }
 }
 
-class ReadonlyDriveIndexUserDetails(details: ResultRow): DriveIndexUserDetails(details) {
-    constructor(): this(ResultRow.createAndFillDefaults(UserEntity.columns))
-    constructor(init: UserEntity.(ResultRow) -> Unit): this() {
-        UserEntity.init(details)
+class ReadonlyDriveIndexUserDetails(
+    private val initRow: ResultRow
+): DriveIndexUserDetails() {
+    private val userId: Int = initRow[UserEntity.id].value
+
+    init {
+        cache.put(userId, initRow)
     }
 
+    override val details: ResultRow
+        get() = cache.get(initRow[UserEntity.id].value)!!
+
     val asMutable: MutableDriveIndexUserDetails get() {
+        runBlocking {
+            cache.refresh(userId).await()
+        }
         return MutableDriveIndexUserDetails(details.clone())
     }
 
@@ -47,12 +61,29 @@ class ReadonlyDriveIndexUserDetails(details: ResultRow): DriveIndexUserDetails(d
         UserEntity.block(mutable)
         return mutable
     }
+
+    companion object {
+        private val cache = Caffeine.newBuilder()
+            .refreshAfterWrite(Duration.ofMinutes(1))
+            .expireAfterWrite(Duration.ofMinutes(1))
+            .build<Int, ResultRow?> { key ->
+                UserEntity.findById(key)
+            }
+    }
 }
 
-class MutableDriveIndexUserDetails internal constructor(details: ResultRow): DriveIndexUserDetails(details) {
+class MutableDriveIndexUserDetails(
+    override val details: ResultRow
+): DriveIndexUserDetails() {
+    constructor(
+        block: UserEntity.(ResultRow) -> Unit
+    ): this(
+        ResultRow.createAndFillDefaults(UserEntity.columns)
+    ) {
+        UserEntity.block(details)
+    }
+
     operator fun <T> set(expression: Expression<T>, value: T) {
         details[expression] = value
     }
 }
-
-

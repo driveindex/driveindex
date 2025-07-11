@@ -10,8 +10,8 @@ import jakarta.annotation.security.PermitAll
  * @Date 2023/8/6 14:39
  */
 @AllOpen
-//@BrowserCallable
+@BrowserCallable
 class HealthCheck {
     @PermitAll
-    fun checkHealth() = Resp {  }
+    fun checkHealth() = ""
 }

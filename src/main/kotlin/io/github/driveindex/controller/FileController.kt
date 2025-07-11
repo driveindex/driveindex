@@ -28,7 +28,7 @@ import kotlin.uuid.ExperimentalUuidApi
  */
 @AllOpen
 @OptIn(ExperimentalUuidApi::class)
-//@BrowserCallable
+@BrowserCallable
 @Tag(name = "用户文件接口")
 class FileController(
     private val current: Current,

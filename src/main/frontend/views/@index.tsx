@@ -4,15 +4,16 @@ import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useTranslation} from "react-i18next";
 import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, message, Modal, Row, Scrollbar} from "@hi-ui/hiui";
 import {PlusOutlined, LinkOutlined} from "@hi-ui/icons"
-import {BreadcrumbContainer, FileList} from "Frontend/components/home/FileList";
+import {BreadcrumbContainer, FileList} from "Frontend/views/_component/home/FileList";
 import {useQuery} from "Frontend/core/hooks/useQuery";
 import useBreadcrumb from "Frontend/core/hooks/useBreadcrumb";
 import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
 import {DriveIndexAPI} from "Frontend/core/axios";
 import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLoginExpiredDialog";
 import {TFunction} from "i18next";
-import {CommonHeader} from "Frontend/components/home/CommonHeader";
+import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
 import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
+import "./@index.css"
 
 export const config: ViewConfig = {
     menu: {

@@ -7,6 +7,7 @@ import io.github.driveindex.core.util.log
 import io.github.driveindex.database.entity.UserEntity
 import io.github.driveindex.security.ReadonlyDriveIndexUserDetails
 import io.github.driveindex.security.DriveIndexUserDetailsManager
+import io.github.driveindex.security.MutableDriveIndexUserDetails
 import io.github.driveindex.security.UserRole
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -36,7 +37,7 @@ class DBSetupModule(
         val pwd = Config.app.defaultPassword
         val pwdSalt = UUID.randomUUID().toString().MD5
         log.info("create default user, username: $newUsername, password: $pwd")
-        userManager.createCustomUser(ReadonlyDriveIndexUserDetails {
+        userManager.createCustomUser(MutableDriveIndexUserDetails {
             it[username] = newUsername
             it[passwordHash] = "${pwd}${pwdSalt}".SHA_256
             it[passwordSalt] = pwdSalt
