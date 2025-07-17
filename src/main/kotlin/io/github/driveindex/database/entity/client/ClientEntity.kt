@@ -1,7 +1,7 @@
 package io.github.driveindex.database.entity.client
 
 import io.github.driveindex.Application
-import io.github.driveindex.client.ClientType
+import io.github.driveindex.core.client.ClientType
 import io.github.driveindex.database.entity.AttributeEntity
 import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
 import io.github.driveindex.database.entity.EnabledEntity

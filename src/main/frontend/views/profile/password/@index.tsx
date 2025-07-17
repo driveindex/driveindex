@@ -6,7 +6,7 @@ import {DriveIndexAPI} from "Frontend/core/axios";
 import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLoginExpiredDialog";
 import {useNavigate} from "react-router-dom";
 
-const Index = () => {
+export default function PasswordPage(){
     const { t } = useTranslation()
     const navigate = useNavigate()
 
@@ -162,5 +162,3 @@ function submitPasswordChange(
         })
     }, 200)
 }
-
-export default Index

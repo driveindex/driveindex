@@ -27,6 +27,7 @@
     "@vaadin/vaadin-usage-statistics": "2.1.3",
     "classnames": "^2.3.2",
     "construct-style-sheets-polyfill": "3.1.0",
+    "crypto-js": "^4.2.0",
     "date-fns": "2.29.3",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -165,7 +166,8 @@
     "date-fns": "$date-fns",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
-    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles"
+    "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
+    "crypto-js": "$crypto-js"
   },
   "vaadin": {
     "dependencies": {
@@ -227,6 +229,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "7fb7b676a176696e8d7a7b341176c55195d625dcf6c91db5e04a4dbfd9720c57"
+    "hash": "7b4dc648b48f51450a94c5245d94a50cf5344841a0f4bd14412106a92df16d7d"
   }
 }

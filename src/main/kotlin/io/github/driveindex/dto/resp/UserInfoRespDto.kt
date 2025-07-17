@@ -19,5 +19,5 @@ data class UserInfoRespDto(
     val role: UserRole,
 
     @field:Schema(description = "用户权限")
-    val permission: List<UserPermission>,
+    val permission: Set<UserPermission>,
 )

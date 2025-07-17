@@ -1,16 +1,12 @@
-package io.github.driveindex.client.onedrive
+package io.github.driveindex.core.client.onedrive
 
 import feign.form.FormProperty
-import io.github.driveindex.core.util.log
 import io.github.driveindex.database.dao.attributes.OneDriveAccountAttributeDao
 import io.github.driveindex.database.entity.account.AccountEntity
-import io.github.driveindex.database.entity.account.attributes.OneDriveAccountAttribute
 import io.github.driveindex.database.entity.client.ClientEntity
-import io.github.driveindex.database.entity.client.attributes.OneDriveClientAttribute
 import io.github.driveindex.dto.feign.AzureGraphDtoV2_Me
 import io.github.driveindex.dto.feign.AzureGraphDtoV2_Me_Drive_Root_Delta
 import io.github.driveindex.dto.feign.AzurePortalDtoV1_Token
-import io.github.driveindex.exception.AzureDecodeException
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

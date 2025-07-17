@@ -1,7 +1,7 @@
 package io.github.driveindex.dto.resp.client
 
 import com.fasterxml.jackson.annotation.JsonTypeName
-import io.github.driveindex.client.onedrive.OneDriveEndpoint
+import io.github.driveindex.core.client.onedrive.OneDriveEndpoint
 
 @JsonTypeName("onedrive")
 data class OneDriveClientDetail(

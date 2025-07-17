@@ -1,10 +1,6 @@
 package io.github.driveindex.module.file
 
-import io.github.driveindex.database.dao.*
-import io.github.driveindex.database.entity.file.FileEntity
-import io.github.driveindex.database.entity.file.attributes.LocalLinkAttribute
 import io.github.driveindex.dto.req.user.CreateDirReqDto
-import io.github.driveindex.exception.FailedResult
 import org.springframework.stereotype.Component
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

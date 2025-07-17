@@ -6,7 +6,6 @@ import io.github.driveindex.Application
 import io.github.driveindex.Application.Companion.Config
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms
@@ -27,9 +26,7 @@ class SecurityConfig(
         http.authorizeHttpRequests {
             it.requestMatchers(route::isRouteAllowed).permitAll()
             it.requestMatchers(
-                "/login",
                 "/share",
-                "/",
             ).permitAll()
             it.requestMatchers(
                 "/drawable/**",

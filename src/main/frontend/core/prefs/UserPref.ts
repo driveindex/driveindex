@@ -13,13 +13,6 @@ export class UserPref {
         localStorage["Username"] = value
     }
 
-    static get AccessToken(): string {
-        return UserPref.getStrOrDef("AccessToken", "")
-    }
-    static set AccessToken(value: string) {
-        localStorage["AccessToken"] = value
-    }
-
     static get Role(): "ADMIN" | "USER" | undefined {
         const role = UserPref.getStrOrDef("Nick", "")
         if (role === "ADMIN" || role === "USER") {
@@ -32,11 +25,11 @@ export class UserPref {
         localStorage["Role"] = value
     }
 
-    static get Nick(): string {
-        return UserPref.getStrOrDef("Nick", "")
+    static get Nickname(): string {
+        return UserPref.getStrOrDef("Nickname", "")
     }
-    static set Nick(value: string)  {
-        localStorage["Nick"] = value
+    static set Nickname(value: string)  {
+        localStorage["Nickname"] = value
     }
 
     private static getStrOrDef(key: string, def: string): string {

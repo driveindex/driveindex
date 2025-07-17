@@ -17,7 +17,7 @@ object UserEntity: IntIdTable("${Application.BASE_NAME_LOWER}_user"),
     val passwordSalt = text("pwd_salt")
     val role = enumerationByName("role", 16, UserRole::class)
     override val enabled = enabled()
-    val permission = array("permission", EnumerationNameColumnType(UserPermission::class, 32))
+    val permission: Column<Set<UserPermission>> = jsonb("permission")
     override val attribute: Column<UserAttribute> = attribute()
 }
 

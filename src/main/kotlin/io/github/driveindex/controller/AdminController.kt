@@ -1,7 +1,7 @@
 package io.github.driveindex.controller
 
 import com.vaadin.hilla.BrowserCallable
-import io.github.driveindex.annotation.AllOpen
+import io.github.driveindex.core.annotation.AllOpen
 import io.github.driveindex.dto.req.admin.UserCreateRequestDto
 import io.github.driveindex.dto.req.admin.UserDeleteRequestDto
 import io.github.driveindex.dto.resp.FullSettingsRespDto

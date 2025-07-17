@@ -1,6 +1,5 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useTranslation} from "react-i18next";
 import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, message, Modal, Row, Scrollbar} from "@hi-ui/hiui";
 import {PlusOutlined, LinkOutlined} from "@hi-ui/icons"
@@ -16,9 +15,7 @@ import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
 import "./@index.css"
 
 export const config: ViewConfig = {
-    menu: {
-        title: 'Main page',
-    },
+    loginRequired: true,
 };
 
 export default function MainView() {

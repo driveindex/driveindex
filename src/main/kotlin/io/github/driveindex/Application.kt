@@ -5,7 +5,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator
 import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
-import io.github.driveindex.configuration.FeignClientConfig
+import io.github.driveindex.core.configuration.FeignClientConfig
 import io.github.driveindex.core.ConfigDto
 import jakarta.annotation.PostConstruct
 import org.jetbrains.exposed.v1.spring.boot.autoconfigure.ExposedAutoConfiguration

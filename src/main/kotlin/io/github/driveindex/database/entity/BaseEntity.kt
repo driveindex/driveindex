@@ -15,13 +15,16 @@ interface IdEntity<IdT: Any> {
     val id: IdT
 }
 
+inline fun <reified T: Any> Table.jsonb(name: String) =
+    jsonb<T>(name, JsonKt)
+
 interface AttributeEntity<T: Any> {
     val attribute: Column<T>
 
     companion object {
         context(table: Table)
         inline fun <reified T: Any> AttributeEntity<T>.attribute() =
-            table.jsonb<T>("attribute", JsonKt)
+            table.jsonb<T>("attribute")
     }
 }
 

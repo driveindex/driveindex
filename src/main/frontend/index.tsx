@@ -10,17 +10,19 @@
  *     - `index.js` is also supported if you don't want to use TypeScript.
  ******************************************************************************/
 
-import { Suspense, createElement } from 'react';
-import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router';
-import { router } from 'Frontend/generated/routes.js';
-import { ViewportProvider } from './core/hooks/useViewport';
+import {Suspense, createElement, useEffect} from 'react';
+import {createRoot} from 'react-dom/client';
+import {RouterProvider} from 'react-router';
+import {router} from 'Frontend/generated/routes.js';
+import {ViewportProvider} from './core/hooks/useViewport';
 import {Loading} from "@hi-ui/hiui";
 import {LoadingCover} from "Frontend/core/hooks/useLoading";
 import i18next from "i18next";
 import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 import {initReactI18next} from "react-i18next";
 import {resources} from "Frontend/i18next/resources";
+import {AuthProvider} from "Frontend/core/security/auth"
+import {useNavigate} from "react-router-dom";
 
 i18next.use(I18nextBrowserLanguageDetector)
     .use(initReactI18next)
@@ -35,7 +37,9 @@ function App() {
         <ViewportProvider>
             <Suspense fallback={<Loading full={true}/>}>
                 <LoadingCover>
-                    <RouterProvider router={router} />
+                    <AuthProvider>
+                        <RouterProvider router={router}/>
+                    </AuthProvider>
                 </LoadingCover>
             </Suspense>
         </ViewportProvider>

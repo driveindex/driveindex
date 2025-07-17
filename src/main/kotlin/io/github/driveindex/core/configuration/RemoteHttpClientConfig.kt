@@ -1,4 +1,4 @@
-package io.github.driveindex.configuration
+package io.github.driveindex.core.configuration
 
 import feign.Contract
 import feign.Feign

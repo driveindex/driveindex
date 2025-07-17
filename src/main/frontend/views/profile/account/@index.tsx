@@ -1,4 +1,4 @@
-const Index = () => {
+export default function AccountPage() {
     return (
         <>
             <div>
@@ -7,5 +7,3 @@ const Index = () => {
         </>
     )
 }
-
-export default Index

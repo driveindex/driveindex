@@ -1,7 +1,5 @@
-const Index = () => {
+export default function SharePage() {
     return (
         <div></div>
     )
 }
-
-export default Index

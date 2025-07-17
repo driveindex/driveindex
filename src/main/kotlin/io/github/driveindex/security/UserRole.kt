@@ -32,4 +32,9 @@ enum class UserPermission: GrantedAuthority {
     override fun getAuthority(): String {
         return name
     }
+
+    companion object {
+        val GROUP_ADMIN = entries.toSet()
+        val GROUP_USER = setOf(PERMISSION_CREATE_MOUNT, PERMISSION_MANAGE_LOCAL_FILE)
+    }
 }

@@ -1,17 +1,16 @@
 package io.github.driveindex.controller
 
 import com.vaadin.hilla.BrowserCallable
-import io.github.driveindex.annotation.AllOpen
-import io.github.driveindex.core.util.runIfNotNull
-import io.github.driveindex.database.entity.UserEntity
+import io.github.driveindex.core.annotation.AllOpen
+import io.github.driveindex.core.exception.FailedResult
 import io.github.driveindex.dto.req.user.*
 import io.github.driveindex.dto.resp.*
-import io.github.driveindex.exception.FailedResult
-import io.github.driveindex.module.MutableCurrent
+import io.github.driveindex.module.UserModel
 import io.github.driveindex.module.file.FileModel
-import io.github.driveindex.security.ReadonlyDriveIndexUserDetails
+import io.github.driveindex.security.SecurityConfig
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.web.bind.annotation.RequestBody
 
 /**
@@ -21,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody
 @AllOpen
 @BrowserCallable
 @Tag(name = "用户接口")
+@RolesAllowed(SecurityConfig.ROLE_USER)
 class UserConfController(
-    private val current: MutableCurrent,
+    private val userModel: UserModel,
     private val fileModel: FileModel,
 ) {
     @Operation(summary = "修改密码")
@@ -45,27 +45,14 @@ class UserConfController(
 
     @Operation(summary = "常规设置")
     fun getUserInfo() = ObjResp {
-        val user = current.User
-        return@ObjResp UserInfoRespDto(
-            username = user[UserEntity.username],
-            nickname = user[UserEntity.attribute].nickname,
-            role = user[UserEntity.role],
-            permission = user[UserEntity.permission]
-        )
+        userModel.getUser()
     }
 
     @Operation(summary = "常规设置")
     fun setCommonSettings(
         dto: CommonSettingsReqDto
     ) = Resp {
-        current.User = (current.User as ReadonlyDriveIndexUserDetails).asMutable { user ->
-            dto.username.runIfNotNull {
-                user[username] = it
-            }
-            dto.nickname.runIfNotNull {
-                user[attribute].nickname = it.checkNick()
-            }
-        }
+        userModel.updateUser(dto)
     }
 
 

@@ -1,6 +1,6 @@
 package io.github.driveindex.database.entity.file.attributes
 
-import io.github.driveindex.client.ClientType
+import io.github.driveindex.core.client.ClientType
 import kotlinx.serialization.Serializable
 
 @Serializable

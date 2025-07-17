@@ -1,4 +1,4 @@
-package io.github.driveindex.exception
+package io.github.driveindex.core.exception
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.Application
@@ -92,7 +92,7 @@ class FailedResult private constructor(
     }
 
     object User {
-        val UserFound get() = FailedResult(-150101, "用户名已存在")
+        val UserExist get() = FailedResult(-150101, "用户名已存在")
         val UserInvalid get() = FailedResult(-150102, "用户名不符合规则")
         val NickInvalid get() = FailedResult(-150102, "用户昵称不符合规则")
     }

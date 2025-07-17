@@ -41,7 +41,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: permission
-                  type: varchar(32)
+                  type: jsonb
                   constraints:
                     nullable: false
               - column:

@@ -1,6 +1,6 @@
 package io.github.driveindex.database.entity.client.attributes
 
-import io.github.driveindex.client.onedrive.OneDriveEndpoint
+import io.github.driveindex.core.client.onedrive.OneDriveEndpoint
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

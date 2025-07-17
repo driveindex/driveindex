@@ -62,10 +62,6 @@ val String.MD5_FULL_UPPER: String get() {
     return MD5_FULL.uppercase()
 }
 
-fun String.toJwtTag(time: Long): String {
-    return "$this,${Config.token.jwtSecurity},${time / 1000 * 1000}".MD5_FULL
-}
-
 /**
  * SHA256
  */

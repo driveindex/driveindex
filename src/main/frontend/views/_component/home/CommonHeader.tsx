@@ -84,8 +84,7 @@ export const UserMenu: FC<CommonHeaderProps> = (props) => {
 
 function doLogout(navigate: NavigateFunction) {
     UserPref.Role = ""
-    UserPref.AccessToken = ""
-    UserPref.Nick = ""
+    UserPref.Nickname = ""
     UserPref.Login = false
     navigate("/login")
 }

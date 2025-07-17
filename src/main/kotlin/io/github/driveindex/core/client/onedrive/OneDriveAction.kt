@@ -1,16 +1,16 @@
-package io.github.driveindex.client.onedrive
+package io.github.driveindex.core.client.onedrive
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.Application.Companion.Config
-import io.github.driveindex.client.AbsClientAction
-import io.github.driveindex.client.ClientType
+import io.github.driveindex.core.client.AbsClientAction
+import io.github.driveindex.core.client.ClientType
 import io.github.driveindex.core.util.*
 import io.github.driveindex.database.dao.use
 import io.github.driveindex.database.entity.client.ClientEntity
 import io.github.driveindex.database.entity.client.attributes.OneDriveClientAttribute
 import io.github.driveindex.dto.resp.AccountCreateRespDto
-import io.github.driveindex.exception.FailedResult
+import io.github.driveindex.core.exception.FailedResult
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.RequestBody
 import java.net.URLEncoder

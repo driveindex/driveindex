@@ -1,4 +1,4 @@
-package io.github.driveindex.client.onedrive
+package io.github.driveindex.core.client.onedrive
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.TextNode
@@ -9,7 +9,7 @@ import io.github.driveindex.core.util.Json
 import io.github.driveindex.core.util.log
 import io.github.driveindex.dto.feign.AzureFailedResultDtoA
 import io.github.driveindex.dto.feign.AzureFailedResultDtoB
-import io.github.driveindex.exception.AzureDecodeException
+import io.github.driveindex.core.exception.AzureDecodeException
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 

@@ -1,19 +1,37 @@
-import {Dispatch, FC, SetStateAction, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Form, Card, FormItem, Input, FormSubmit, FormHelpers, Alert} from "@hi-ui/hiui";
 import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
-import {NavigateFunction} from "react-router";
-import {TFunction} from "i18next";
-import {DriveIndexAPI} from "Frontend/core/axios";
+import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
+import {useAuth} from "Frontend/core/security/auth"
+import {asSha256} from "Frontend/core/util/_String";
 
-const Index: FC = () => {
+export const config: ViewConfig = {
+
+};
+
+export default function LoginPage() {
     const { t } = useTranslation()
     const navigate = useNavigate()
 
     const formRef = useRef<FormHelpers>(null)
-    const [ loginDoing, setLoginDoing] = useState(false)
+    const [ loginDoing, setLoginDoing ] = useState(false)
     const [ alert, setAlert ] = useState<string | null>(null)
+
+    const { login } = useAuth()
+    const doLogin = async (username: string, password: string) => {
+        const result = await login(username, asSha256(password), {
+            loginProcessingUrl: "/login",
+            onSuccess: () => {
+                navigate("/")
+            },
+        })
+        if (result.error) {
+            const errorMsg = result.errorTitle!.replaceAll(".", "").replaceAll(" ", "_").toLowerCase()
+            setAlert(t("login_failed") + t(`login_failed_${errorMsg}`))
+        }
+    }
 
     return (
         <div style={{
@@ -53,7 +71,7 @@ const Index: FC = () => {
                     marginTop: alert ? 0 : 24,
                 }}>
                 <Form
-                    initialValues={{ username: UserPref.Username, password: process.env.REACT_APP_ADMIN_PASSWORD ?? "" }}
+                    initialValues={{ username: UserPref.Username, password: "" }}
                     labelWidth={80}
                     rules={{
                         username: [
@@ -93,11 +111,7 @@ const Index: FC = () => {
                                 if (value == null) {
                                     return
                                 }
-                                doLogin(
-                                    value["username"], value["password"],
-                                    setAlert, setLoginDoing,
-                                    t, navigate
-                                )
+                                doLogin(value["username"], value["password"])
                             }}
                             style={{
                                 width: "100%"
@@ -112,38 +126,3 @@ const Index: FC = () => {
         </div>
     )
 }
-
-function doLogin(
-    username: string, password: string,
-    showAlert: Dispatch<SetStateAction<string | null>>,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-    t: TFunction<"translation", undefined>,
-    navigate: NavigateFunction,
-) {
-    setLoading(true)
-    setTimeout(() => {
-        DriveIndexAPI.post("/api/login", {
-            username: username,
-            password: password,
-        }).then(value => {
-            if (value.data["code"] !== 200) {
-                showAlert(t("login_failed") + value.data["message"])
-                return
-            }
-            const data = value.data["data"]
-            UserPref.Login = true
-            UserPref.AccessToken = data["auth"]["token"]
-            UserPref.Role = data["auth"]["role"]
-            UserPref.Username = data["username"]
-            UserPref.Nick = data["nick"]
-            setLoading(false)
-            navigate("/home")
-        }).catch(error => {
-            showAlert(t("login_failed") + error.message)
-        }).finally(() => {
-            setLoading(false)
-        })
-    }, 500)
-}
-
-export default Index

@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 
 export function asInitials(full: string | undefined): string {
     if (full === undefined) {
@@ -9,4 +10,8 @@ export function asInitials(full: string | undefined): string {
         result += list[1].charAt(0).toUpperCase()
     }
     return result
+}
+
+export function asSha256(str: string): string {
+    return CryptoJS.SHA256(str).toString(CryptoJS.enc.Hex)
 }

@@ -9,7 +9,7 @@ export const DriveIndexAPI =  axios.create({
 DriveIndexAPI.interceptors.request.use(
     (req) => {
         if (req.url !== "/api/login") {
-            req.headers["Authorization"] = "Bearer " + UserPref.AccessToken
+            req.headers["Authorization"] = "Bearer "
         }
         return req
     }

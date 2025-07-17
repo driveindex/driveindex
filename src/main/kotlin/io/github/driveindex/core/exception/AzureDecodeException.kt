@@ -1,4 +1,4 @@
-package io.github.driveindex.exception
+package io.github.driveindex.core.exception
 
 import feign.Request;
 import feign.codec.DecodeException

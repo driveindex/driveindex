@@ -1,10 +1,9 @@
-package io.github.driveindex.client.onedrive
+package io.github.driveindex.core.client.onedrive
 
 import feign.Feign
 import feign.slf4j.Slf4jLogger
-import io.github.driveindex.Application
 import io.github.driveindex.Application.Companion.Bean
-import io.github.driveindex.configuration.FeignClientConfig
+import io.github.driveindex.core.configuration.FeignClientConfig
 import kotlin.getValue
 
 /**

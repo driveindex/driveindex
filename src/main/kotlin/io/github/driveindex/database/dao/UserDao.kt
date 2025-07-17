@@ -13,7 +13,7 @@ fun UserEntity.new(
     uPasswordHash: String,
     uPasswordSalt: String,
     uRole: UserRole,
-    uPermission: List<UserPermission>,
+    uPermission: Set<UserPermission>,
     uAttribute: UserAttribute,
 ) = insert {
     it[username] = uUsername
@@ -27,7 +27,7 @@ fun UserEntity.new(
 fun UserEntity.update(
     uUsername: String,
     uRole: UserRole,
-    uPermission: List<UserPermission>,
+    uPermission: Set<UserPermission>,
     uAttribute: UserAttribute,
 ) = insert {
     it[username] = uUsername

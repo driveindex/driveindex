@@ -1,8 +1,7 @@
 package io.github.driveindex.controller
 
 import com.vaadin.hilla.BrowserCallable
-import io.github.driveindex.annotation.AllOpen
-import io.github.driveindex.dto.resp.Resp
+import io.github.driveindex.core.annotation.AllOpen
 import jakarta.annotation.security.PermitAll
 
 /**

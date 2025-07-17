@@ -1,10 +1,7 @@
 package io.github.driveindex.controller
 
 import com.vaadin.hilla.BrowserCallable
-import io.github.driveindex.annotation.AllOpen
-import io.github.driveindex.client.ClientType
-import io.github.driveindex.database.entity.file.FileEntity
-import io.github.driveindex.database.entity.file.attributes.RemoteFileAttribute
+import io.github.driveindex.core.annotation.AllOpen
 import io.github.driveindex.dto.req.user.CreateDirReqDto
 import io.github.driveindex.dto.req.user.DeleteDirReqDto
 import io.github.driveindex.dto.req.user.ListDirReqDto
@@ -12,14 +9,12 @@ import io.github.driveindex.dto.req.user.RenameDirReqDto
 import io.github.driveindex.dto.resp.FileListRespDto
 import io.github.driveindex.dto.resp.ObjResp
 import io.github.driveindex.dto.resp.Resp
-import io.github.driveindex.exception.FailedResult
 import io.github.driveindex.module.Current
 import io.github.driveindex.module.file.FileModel
 import io.github.driveindex.security.SecurityConfig
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.annotation.security.RolesAllowed
-import org.springframework.web.bind.annotation.*
-import java.util.*
+import org.springframework.security.access.prepost.PreAuthorize
 import kotlin.uuid.ExperimentalUuidApi
 
 /**
@@ -30,6 +25,7 @@ import kotlin.uuid.ExperimentalUuidApi
 @OptIn(ExperimentalUuidApi::class)
 @BrowserCallable
 @Tag(name = "用户文件接口")
+@PreAuthorize(SecurityConfig.ROLE_USER)
 class FileController(
     private val current: Current,
     private val fileModel: FileModel,

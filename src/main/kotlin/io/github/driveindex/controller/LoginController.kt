@@ -1,9 +1,8 @@
 package io.github.driveindex.controller
 
 import com.vaadin.hilla.BrowserCallable
-import io.github.driveindex.annotation.AllOpen
+import io.github.driveindex.core.annotation.AllOpen
 import io.github.driveindex.dto.resp.Resp
-import io.github.driveindex.dto.resp.SampleRespResult
 import io.github.driveindex.security.SecurityConfig
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

@@ -1,10 +1,9 @@
 package io.github.driveindex.database.dao.attributes
 
-import io.github.driveindex.client.onedrive.OneDriveEndpoint
+import io.github.driveindex.core.client.onedrive.OneDriveEndpoint
 import io.github.driveindex.database.entity.account.AccountEntity
 import io.github.driveindex.database.entity.client.ClientEntity
 import io.github.driveindex.database.entity.file.FileEntity
-import org.springframework.stereotype.Repository
 import java.util.*
 
 interface OneDriveAccountAttributeDao: AccountAttributeDao {

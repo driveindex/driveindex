@@ -1,6 +1,6 @@
 package io.github.driveindex.dto.resp
 
-import io.github.driveindex.client.ClientType
+import io.github.driveindex.core.client.ClientType
 import io.github.driveindex.dto.resp.file.FileDetail
 
 /**
