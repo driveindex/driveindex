@@ -5,17 +5,17 @@ import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 
 /**
  * @author sgpublic
  * @Date 8/5/23 1:42 PM
  */
-object SharedLinkEntity: IntIdTable("${Application.BASE_NAME_LOWER}_shared_link"),
+object SharedLinkEntity: UUIDTable("${Application.BASE_NAME_LOWER}_shared_link"),
     EnabledEntity, VersionControlEntity, AttributeEntity<SharedLinkEntity.Attribute> {
-    val target = integer(name = "target")
+    val target = uuid(name = "target")
     val needPassword = bool(name = "need_pwd").default(false)
-    val expireTime = long(name = "expired_time").default(-1)
+    val expireAt = long(name = "expired_at").nullable()
     override val enabled = enabled()
     override val createAt = createAt()
     override val createBy = createBy()

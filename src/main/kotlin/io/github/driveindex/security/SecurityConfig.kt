@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import javax.crypto.spec.SecretKeySpec
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -46,6 +47,10 @@ class SecurityConfig(
             Application.GROUP,
             Config.token.expired,
         )
+
+        http.csrf {
+            it.disable()
+        }
     }
 
     companion object {

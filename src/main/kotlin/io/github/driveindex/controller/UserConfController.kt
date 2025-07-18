@@ -49,9 +49,7 @@ class UserConfController(
     }
 
     @Operation(summary = "常规设置")
-    fun setCommonSettings(
-        dto: CommonSettingsReqDto
-    ) = Resp {
+    fun setCommonSettings(dto: CommonSettingsReqDto) = Resp {
         userModel.updateUser(dto)
     }
 

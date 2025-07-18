@@ -232,13 +232,49 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: root_target
-                  type: longtext
+                  name: target
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: need_pwd
+                  type: boolean
+                  defaultValue: '0'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expired_at
+                  type: datetime
+                  constraints:
+                    nullable: true
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValue: '1'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_by
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_by
+                  type: int
                   constraints:
                     nullable: false
