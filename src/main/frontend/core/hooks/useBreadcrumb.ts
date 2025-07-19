@@ -1,12 +1,12 @@
 import {TFunction} from "i18next";
 import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 
-const useBreadcrumb = (t: TFunction<"translation", undefined>, pathStr: string | null) => {
+const useBreadcrumb = (t: TFunction<"translation", undefined>, pathStr?: string) => {
     const data: (BreadcrumbDataItem & { path: string })[] = [{
         title: t("home_file_root"),
         path: "/",
     }]
-    if (pathStr == null) {
+    if (pathStr == undefined) {
         return data
     }
     const names = getAbsolutePath(pathStr)

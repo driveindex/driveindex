@@ -1,10 +1,8 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, message, Modal, Row, Scrollbar} from "@hi-ui/hiui";
+import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, Modal, Row, Scrollbar} from "@hi-ui/hiui";
 import {PlusOutlined, LinkOutlined} from "@hi-ui/icons"
 import {BreadcrumbContainer, FileList} from "Frontend/views/_component/home/FileList";
-import {useQuery} from "Frontend/core/hooks/useQuery";
 import useBreadcrumb from "Frontend/core/hooks/useBreadcrumb";
 import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
 import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
@@ -13,20 +11,25 @@ import "./@index.css"
 import {FileController} from "Frontend/generated/endpoints";
 import GetDirReqSort from "Frontend/generated/io/github/driveindex/dto/req/user/GetDirReqSort";
 import FileListRespDto from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto";
+import {useQueryLocation} from "Frontend/core/util/_Router";
 
 export const config: ViewConfig = {
     loginRequired: true,
 };
 
+interface MainViewQueryParams {
+    path?: string;
+    pageIndex?: number;
+    pageSize?: number;
+}
+
 export default function MainView() {
-    const navigate = useNavigate()
-    const navigateToPath = (path: string) => {
-        navigate(`/?path=${encodeURIComponent(path)}`);
-    }
+    const queryLocation = useQueryLocation<MainViewQueryParams>()
     const { t } = useTranslation()
 
-    const query = useQuery()
-    const path = query.get("path")
+    const path = queryLocation.path
+    const pageIndex = Number(queryLocation.pageIndex ?? 0)
+    const pageSize = Number(queryLocation.pageSize ?? 15)
 
     const [ fileList, setFileList ] = useState<FileListRespDto | undefined>(undefined)
     const updateFileList = (path: string) => {
@@ -34,8 +37,8 @@ export default function MainView() {
             path: path,
             sortBy: GetDirReqSort.NAME,
             asc: false,
-            pageIndex: 0,
-            pageSize: 15,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
         }).then((result) => {
             if (result.code === 200) {
                 setFileList(result.data)
@@ -44,8 +47,10 @@ export default function MainView() {
         })
     }
     useEffect(() => {
-        if (path == null) {
-            navigateToPath("/")
+        if (path == undefined) {
+            queryLocation.set({
+                path: "/"
+            })
         } else {
             updateFileList(path)
         }
@@ -65,7 +70,9 @@ export default function MainView() {
                 if (targetPath == path) {
                     return
                 }
-                navigateToPath(targetPath)
+                queryLocation.set({
+                    path: targetPath
+                })
             }}
             style={{
                 margin: "0 20px",
