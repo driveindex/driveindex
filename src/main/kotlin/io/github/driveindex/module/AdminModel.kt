@@ -6,8 +6,6 @@ import io.github.driveindex.core.util.CanonicalPath
 import io.github.driveindex.core.util.MD5_FULL
 import io.github.driveindex.core.util.SHA_256
 import io.github.driveindex.database.dao.findByUsername
-import io.github.driveindex.database.dao.insertRootForUser
-import io.github.driveindex.database.dao.new
 import io.github.driveindex.database.entity.UserAttribute
 import io.github.driveindex.database.entity.UserEntity
 import io.github.driveindex.database.entity.file.FileEntity
@@ -31,17 +29,24 @@ class AdminModel(
             }
 
             val pwdSalt = UUID.randomUUID().toString().MD5_FULL
-            val newUser = UserEntity.new(
-                uUsername = dto.username.checkUsername(),
-                uPasswordHash = "${dto.password}${pwdSalt}".SHA_256,
-                uPasswordSalt = pwdSalt,
-                uRole = dto.role,
-                uPermission = dto.permission,
-                uAttribute = UserAttribute(
+            val newUser = UserEntity.insert {
+                it[username] = dto.username.checkUsername()
+                it[passwordHash] = "${dto.password}${pwdSalt}".SHA_256
+                it[passwordSalt] = pwdSalt
+                it[role] = dto.role
+                it[permission] = dto.permission
+                it[attribute] = UserAttribute(
                     nickname = dto.nickname
                 )
-            )
-            FileEntity.insertRootForUser(newUser[UserEntity.id].value)
+            }
+            FileEntity.insert {
+                it[name] = CanonicalPath.ROOT_PATH
+                it[parentId] = null
+                it[isRoot] = true
+                it[isDir] = true
+                it.createBy(newUser[UserEntity.id].value)
+                it[attribute] = LocalDirAttribute()
+            }
         }
     }
 

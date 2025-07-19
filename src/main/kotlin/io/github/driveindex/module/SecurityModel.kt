@@ -16,14 +16,16 @@ import kotlin.text.toIntOrNull
 
 @Component
 class Current {
-    val User: DriveIndexToken? get() {
+    val user: DriveIndexToken? get() {
         val auth = SecurityContextHolder.getContext()
             .authentication as JwtAuthenticationToken
         val userId = auth.name
         return cache.get(userId)
     }
 
-    val AuthedUser: DriveIndexToken get() = User!!
+    val authedUser: DriveIndexToken get() = user!!
+
+    val userId: Int get() = authedUser[UserEntity.id].value
 
     private val cache: LoadingCache<String, DriveIndexToken?> = Caffeine.newBuilder()
         .refreshAfterWrite(Duration.ofMinutes(1))

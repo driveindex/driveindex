@@ -31,7 +31,7 @@
 
   "home_file_root": "我的网盘",
   "home_file_create_dir": "新建文件夹",
-  "home_file_create_link": "创建软连接",
+  "home_file_create_link": "创建挂载点",
   "home_file_create_action": "创建",
   "home_file_create_empty": "名称不能为空！",
   "home_file_create_name": "名称",

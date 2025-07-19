@@ -89,6 +89,5 @@ spring-boot-data-exposed = [
     "exposed-jdbc",
     "exposed-json",
     "exposed-kotlin-datetime",
-    "exposed-pagination",
 ]
 jdbc = [ "jdbc-postgresql" ]

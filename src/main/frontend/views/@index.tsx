@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, message, Modal, Row, Scrollbar} from "@hi-ui/hiui";
@@ -7,12 +7,12 @@ import {BreadcrumbContainer, FileList} from "Frontend/views/_component/home/File
 import {useQuery} from "Frontend/core/hooks/useQuery";
 import useBreadcrumb from "Frontend/core/hooks/useBreadcrumb";
 import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
-import {DriveIndexAPI} from "Frontend/core/axios";
-import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLoginExpiredDialog";
-import {TFunction} from "i18next";
 import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
 import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
 import "./@index.css"
+import {FileController} from "Frontend/generated/endpoints";
+import GetDirReqSort from "Frontend/generated/io/github/driveindex/dto/req/user/GetDirReqSort";
+import FileListRespDto from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -20,25 +20,36 @@ export const config: ViewConfig = {
 
 export default function MainView() {
     const navigate = useNavigate()
-    // useEffect(() => {
-    //     if (!UserPref.Login) {
-    //         navigate("/login")
-    //     }
-    // }, [navigate]);
+    const navigateToPath = (path: string) => {
+        navigate(`/?path=${encodeURIComponent(path)}`);
+    }
     const { t } = useTranslation()
 
     const query = useQuery()
     const path = query.get("path")
 
-    const showLoginExpiredDialog = useLoginExpiredDialog()
-    const [ fileList, setFileList ] = useState<{}[] | undefined>(undefined)
-    // useEffect(() => {
-    //     if (path == null) {
-    //         navigate("/?path=%2F")
-    //     } else {
-    //         getFileListByPath(path, setFileList, showLoginExpiredDialog, t)
-    //     }
-    // }, [path])
+    const [ fileList, setFileList ] = useState<FileListRespDto | undefined>(undefined)
+    const updateFileList = (path: string) => {
+        FileController.listFile({
+            path: path,
+            sortBy: GetDirReqSort.NAME,
+            asc: false,
+            pageIndex: 0,
+            pageSize: 15,
+        }).then((result) => {
+            if (result.code === 200) {
+                setFileList(result.data)
+                return
+            }
+        })
+    }
+    useEffect(() => {
+        if (path == null) {
+            navigateToPath("/")
+        } else {
+            updateFileList(path)
+        }
+    }, [path])
 
     const isMdUp = useBreakpointUp("md")
     const showAsMobile = useBreakpointDown("sm")
@@ -50,7 +61,11 @@ export default function MainView() {
         <Breadcrumb
             data={breadcrumbData}
             onClick={(e, i, index) => {
-                navigate(breadcrumbData[index].link)
+                const targetPath = breadcrumbData[index].path
+                if (targetPath == path) {
+                    return
+                }
+                navigateToPath(targetPath)
             }}
             style={{
                 margin: "0 20px",
@@ -107,7 +122,7 @@ export default function MainView() {
                             isMdUp={isMdUp}
                             showAsMobile={showAsMobile}
                             breadcrumb={breadcrumb}
-                            list={fileList}/>
+                            list={fileList?.content}/>
                     </Scrollbar>
                 </Col>
             </Col>
@@ -150,41 +165,4 @@ export default function MainView() {
             </Modal>
         </>
     )
-}
-
-function getFileListByPath(
-    path: string,
-    setFileList: Dispatch<SetStateAction<{}[] | undefined>>,
-    showLoginExpiredDialog: () => void,
-    t: TFunction<"translation", undefined>,
-) {
-    setFileList(undefined)
-    DriveIndexAPI.get("/api/user/file/list", {
-        params: {
-            path: path
-        },
-        headers: {
-            Authorization: true
-        },
-    }).then((resp) => {
-        if (!checkLoginStatus(resp, showLoginExpiredDialog)) {
-            return
-        }
-        if (resp.data["code"] !== 200) {
-            message.open({
-                title: t("home_list_error") + resp.data["message"],
-                type: "error",
-            })
-        } else {
-            setFileList(resp.data["data"]["content"])
-        }
-    })
-}
-
-function createDir(
-    path: string,
-    showLoginExpiredDialog: () => void,
-    t: TFunction<"translation", undefined>,
-) {
-
 }

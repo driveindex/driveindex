@@ -8,22 +8,6 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
 
-fun UserEntity.new(
-    uUsername: String,
-    uPasswordHash: String,
-    uPasswordSalt: String,
-    uRole: UserRole,
-    uPermission: Set<UserPermission>,
-    uAttribute: UserAttribute,
-) = insert {
-    it[username] = uUsername
-    it[passwordHash] = uPasswordHash
-    it[passwordSalt] = uPasswordSalt
-    it[role] = uRole
-    it[permission] = uPermission
-    it[attribute] = uAttribute
-}
-
 fun UserEntity.update(
     uUsername: String,
     uRole: UserRole,

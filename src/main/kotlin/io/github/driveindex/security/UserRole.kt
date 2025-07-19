@@ -7,17 +7,12 @@ enum class UserRole(
     val roleName: String,
     val authorities: Collection<GrantedAuthority>,
 ) {
-    GUEST(SecurityConfig.ROLE_GUEST, listOf(
-        SimpleGrantedAuthority(SecurityConfig.ROLE_GUEST),
-    )),
     USER(SecurityConfig.ROLE_USER, listOf(
         SimpleGrantedAuthority(SecurityConfig.ROLE_USER),
-        SimpleGrantedAuthority(SecurityConfig.ROLE_GUEST),
     )),
     ADMIN(SecurityConfig.ROLE_ADMIN, listOf(
         SimpleGrantedAuthority(SecurityConfig.ROLE_ADMIN),
         SimpleGrantedAuthority(SecurityConfig.ROLE_USER),
-        SimpleGrantedAuthority(SecurityConfig.ROLE_GUEST),
     )),
     ;
 }

@@ -7,8 +7,8 @@ import kotlin.uuid.ExperimentalUuidApi
 
 @OptIn(ExperimentalUuidApi::class)
 @Serializable
-@SerialName("local_link")
-data class LocalLinkAttribute(
-    @SerialName("link_target")
-    val linkTarget: UuidKt
+@SerialName("local_mount")
+data class LocalMountAttribute(
+    @SerialName("mount_target")
+    val mountTarget: UuidKt
 ): LocalFileAttribute

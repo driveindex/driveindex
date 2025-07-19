@@ -21,6 +21,7 @@ object FileEntity: UUIDTable("${Application.BASE_NAME_LOWER}_file"),
     val isRemote = bool("is_remote").default(false)
     val isMount = bool("is_mount").default(false)
     val isRoot = bool("is_root").default(false)
+    val isDir = bool("is_dir").default(false)
     override val createAt = createAt()
     override val createBy = createBy()
     override val modifyAt = modifyAt()

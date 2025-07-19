@@ -2,9 +2,9 @@ import {TFunction} from "i18next";
 import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 
 const useBreadcrumb = (t: TFunction<"translation", undefined>, pathStr: string | null) => {
-    const data: (BreadcrumbDataItem & { link: string })[] = [{
+    const data: (BreadcrumbDataItem & { path: string })[] = [{
         title: t("home_file_root"),
-        link: "/home?path=%2F",
+        path: "/",
     }]
     if (pathStr == null) {
         return data
@@ -18,7 +18,7 @@ const useBreadcrumb = (t: TFunction<"translation", undefined>, pathStr: string |
         currentPath += name
         data.push({
             title: name,
-            link: "/home?path=" + encodeURIComponent(currentPath),
+            path: currentPath,
         })
     }
     return data

@@ -2,13 +2,14 @@ import React, {FC} from "react";
 import {useTranslation} from "react-i18next";
 import {Col, EmptyState, Loading, Row} from "@hi-ui/hiui";
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
+import FileItem from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto/FileItem";
 
 export enum FileListSortBy {
     NAME, SIZE, CREATE_TIME, MODIFIED_TIME
 }
 
 export interface FileListProps  {
-    list?: {}[]
+    list?: Array<FileItem>
 }
 
 export const FileList: FC<FileListProps & FileListHeaderProps & RespLayoutProps> = (props) => {

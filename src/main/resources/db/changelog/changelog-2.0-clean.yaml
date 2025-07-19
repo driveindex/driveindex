@@ -180,7 +180,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: parent_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: true
               - column:
@@ -197,6 +197,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: is_root
+                  type: boolean
+                  defaultValue: '0'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_dir
                   type: boolean
                   defaultValue: '0'
                   constraints:

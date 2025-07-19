@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
+import org.springframework.format.Formatter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.io.File
 import java.security.MessageDigest
@@ -195,7 +197,7 @@ class CanonicalPath : Cloneable, Iterable<String> {
         }
     }
 
-    object Formatter: org.springframework.format.Formatter<CanonicalPath> {
+    object CanonicalPathFormatter: Formatter<CanonicalPath> {
         override fun print(target: CanonicalPath, locale: Locale): String {
             return target.path
         }
@@ -205,10 +207,10 @@ class CanonicalPath : Cloneable, Iterable<String> {
         }
     }
 
-    @org.springframework.context.annotation.Configuration
-    class Configuration: WebMvcConfigurer {
+    @Configuration
+    class CanonicalPathConfiguration: WebMvcConfigurer {
         override fun addFormatters(registry: FormatterRegistry) {
-            registry.addFormatter(Formatter)
+            registry.addFormatter(CanonicalPathFormatter)
         }
     }
 }
@@ -222,4 +224,8 @@ object CanonicalPathDeserializer: JsonDeserializer<CanonicalPath>() {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CanonicalPath {
         return CanonicalPath.of(p.text)
     }
+}
+
+fun String.asPath(): CanonicalPath {
+    return CanonicalPath.of(this)
 }

@@ -39,6 +39,6 @@ data class ConfigDto(
     @Serializable
     data class TokenConfig(
         val jwtSecurity: String = UUID.randomUUID().toString().MD5_FULL,
-        val expired: Long = 3600,
+        val expired: Long = 3600 * 24,
     )
 }

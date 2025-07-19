@@ -33,7 +33,7 @@ class UserModel(
     }
 
     fun getUser(): UserInfoRespDto {
-        val user = current.AuthedUser
+        val user = current.authedUser
         return UserInfoRespDto(
             username = user[UserEntity.username],
             nickname = user[UserEntity.attribute].nickname,
@@ -45,10 +45,10 @@ class UserModel(
     fun updateUser(dto: CommonSettingsReqDto) {
         transaction {
             UserEntity.update(
-                dto.username ?: current.AuthedUser[UserEntity.username],
-                current.AuthedUser[UserEntity.role],
-                current.AuthedUser[UserEntity.permission],
-                current.AuthedUser[UserEntity.attribute].also { attribute ->
+                dto.username ?: current.authedUser[UserEntity.username],
+                current.authedUser[UserEntity.role],
+                current.authedUser[UserEntity.permission],
+                current.authedUser[UserEntity.attribute].also { attribute ->
                     attribute.nickname = dto.nickname
                 },
             )
