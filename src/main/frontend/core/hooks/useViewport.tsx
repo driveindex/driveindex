@@ -1,4 +1,4 @@
-import React, {createContext, FC, useContext, useEffect, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 
 // https://mui.com/material-ui/customization/breakpoints/#default-breakpoints
 type BreakpointEnum = "xs" | "sm" | "md" | "lg" | "xl"
@@ -25,7 +25,7 @@ const ViewportContext: React.Context<{
     width: window.innerWidth
 })
 
-export const ViewportProvider: FC<{ children: React.ReactNode }> = (props) => {
+export const ViewportProvider = (props: { children: React.ReactNode }) => {
     const [ width, setWidth ] = useState(window.innerWidth)
 
     const handleWindowResize = () => {

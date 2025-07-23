@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React from "react";
 import {key, translate} from '@vaadin/hilla-react-i18n';
 import {Modal} from "@hi-ui/hiui";
 
@@ -20,7 +20,8 @@ const AccountCreationDialog = (props: {
     )
 }
 
-const AccountCreationContent: Map<string, FC> = new Map<string, React.FC<any>>([
+// TODO: Using object-oriented
+const AccountCreationContent: Map<string, any> = new Map<string, React.FC<any>>([
     ["OneDrive", (props) => {
         return (
             <>

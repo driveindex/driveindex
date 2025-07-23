@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
 import {useBreakpointDown} from "Frontend/core/hooks/useViewport";
 import {Outlet, useLocation, useNavigate} from "react-router-dom"
@@ -9,7 +9,7 @@ import "./@layout.css"
 import Logo from "Frontend/views/_component/Logo";
 import {translate, key} from "@vaadin/hilla-react-i18n";
 
-const ProfilePage: FC = () => {
+const ProfilePage = () => {
     const showAsMobile = useBreakpointDown("sm")
 
     const [ drawer, openDrawer ] = useState(false)
@@ -83,9 +83,9 @@ const ProfilePage: FC = () => {
     )
 }
 
-const ProfileDrawer: FC<{
+const ProfileDrawer = (props: {
     onItemClicked?: () => void
-}> = (props) => {
+}) => {
     const navigate = useNavigate()
     const data: MenuDataItem[] = [
         {

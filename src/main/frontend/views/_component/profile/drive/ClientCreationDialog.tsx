@@ -155,8 +155,9 @@ export interface ClientCreationContentProp {
     loading: boolean,
     isEdit: boolean,
 }
+// TODO: Using object-oriented
 export const ClientCreationContent = () => {
-    return new Map<ClientType, React.FC<ClientCreationContentProp>>([
+    return new Map<ClientType, any>([
         [ClientType.OneDrive, OneDriveClientCreationContent],
     ])
 }

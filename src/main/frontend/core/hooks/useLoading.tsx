@@ -1,4 +1,4 @@
-import React, {Context, createContext, FC, useContext, useState} from "react";
+import React, {Context, createContext, useContext, useState} from "react";
 import {Loading} from "@hi-ui/hiui";
 
 const LoadingContext: Context<{
@@ -7,9 +7,9 @@ const LoadingContext: Context<{
 }> = createContext({})
 
 
-export const LoadingCover: FC<{
+export const LoadingCover = (props: {
     children: React.ReactNode[] | React.ReactNode,
-}> = (props) => {
+}) => {
     const [ loading, setLoading ] = useState(false)
     return (
         <LoadingContext.Provider value={{isLoading: loading, setLoading: (loading) => setLoading(loading)}}>
