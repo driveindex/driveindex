@@ -1,5 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Form,
@@ -7,27 +6,20 @@ import {
     FormItem,
     FormSubmit,
     Input,
-    message,
     Modal,
     Row,
-    Select,
-    useModal
+    Select
 } from "@hi-ui/hiui";
 import {FormRuleModel} from "@hi-ui/form";
-import {TFunction} from "i18next";
-import {ClientCreationForm, OneDriveClientCreationContent} from "./client/OneDriveCreation";
-import {DriveIndexAPI} from "Frontend/core/axios";
+import {useClientCreationForm, OneDriveClientCreationContent} from "./client/OneDriveCreation";
+import {i18n, key, translate} from "@vaadin/hilla-react-i18n";
+import ClientType from "Frontend/generated/io/github/driveindex/core/client/ClientType";
 
-
-export type ClientType = "OneDrive"
-
-const ClientCreationDialog: FC<{
+const ClientCreationDialog = (props: {
     visible: boolean,
     requestClose: (created: boolean) => void,
     initValue?: any,
-}> = (props) => {
-    const { t } = useTranslation()
-
+}) => {
     const isEdit = props.initValue !== undefined
 
     const [ loading, setLoading ] = useState(false)
@@ -36,8 +28,23 @@ const ClientCreationDialog: FC<{
     const ClientCreationContentImpl = ClientCreationContent()
     const CreationContent = type === undefined ? undefined : ClientCreationContentImpl.get(type)
 
-    const CreationFormOther = ClientCreationForm(t)
-    const CreationFormBase = CommonClientCreationForm(t)
+    const CreationFormOther = useClientCreationForm()
+    const CreationFormBase = {
+        "name": [
+            {
+                required: true,
+                type: "string",
+                message: translate(key`profile.drive.add.client.name.error.empty`)
+            }
+        ],
+        "type": [
+            {
+                required: true,
+                type: "string",
+                message: translate(key`profile.drive.add.client.type.error.empty`)
+            }
+        ],
+    }
     const CreationForm = { ...(type === undefined ? {} : CreationFormOther.get(type)), ...CreationFormBase} as Record<string, FormRuleModel[]>
 
     const formRef = React.useRef<FormHelpers>(null)
@@ -65,7 +72,7 @@ const ClientCreationDialog: FC<{
         <>
             <Modal
                 visible={props.visible}
-                title={t("profile_drive_add_client")}
+                title={translate(key`profile.drive.add.client`)}
                 closeable={false}
                 confirmText={null}
                 cancelText={null}
@@ -89,20 +96,20 @@ const ClientCreationDialog: FC<{
                     <FormItem
                         required={true}
                         field={"name"}
-                        label={t("profile_drive_creation_name")}>
+                        label={translate(key`profile.drive.add.client.name`)}>
                         <Input disabled={loading} />
                     </FormItem>
                     <FormItem
                         required={true}
                         field={"type"}
-                        label={t("profile_drive_creation_type")}>
+                        label={translate(key`profile.drive.add.client.type`)}>
                         <Select
                             clearable={false}
                             disabled={isEdit || loading}
-                            data={Array.from(ClientCreationContentImpl).map(([key, _]) => {
+                            data={Array.from(ClientCreationContentImpl).map(([name, _]) => {
                                 return {
-                                    title: t("profile_drive_creation_" + key),
-                                    id: key,
+                                    title: i18n.translateDynamic(`profile.drive.add.client.OneDrive.${name}`),
+                                    id: name,
                                 }
                             })}/>
                     </FormItem>
@@ -119,20 +126,23 @@ const ClientCreationDialog: FC<{
                                 requestClose(false)
                             }}
                             disabled={loading}>
-                            {t("cancel")}
+                            {translate(key`common.cancel`)}
                         </Button>
                         <FormSubmit
                             onClick={(value, err) => {
                                 if (err !== null) {
                                     return
                                 }
-                                submit(value, t, setLoading, () => {
-                                    requestClose(true)
-                                })
+                                setLoading(true)
+                                submit(value)
+                                    .then(() => {
+
+                                    })
+                                    .finally(() => setLoading(false))
                             }}
                             disabled={loading}
                             loading={loading}>
-                            {isEdit ? t("save") : t("profile_drive_creation_action")}
+                            {isEdit ? translate(key`save`) : translate(key`profile.drive.add.client.action`)}
                         </FormSubmit>
                     </Row>
                 </Form>
@@ -141,64 +151,30 @@ const ClientCreationDialog: FC<{
     )
 }
 
-const CommonClientCreationForm = (t: TFunction<"translate", undefined>) => {
-    return {
-        "name": [
-            {
-                required: true,
-                type: "string",
-                message: t("profile_drive_creation_name_empty")
-            }
-        ],
-        "type": [
-            {
-                required: true,
-                type: "string",
-                message: t("profile_drive_creation_type_empty")
-            }
-        ],
-    } as Record<string, FormRuleModel[]>
-}
 export interface ClientCreationContentProp {
     loading: boolean,
     isEdit: boolean,
 }
 export const ClientCreationContent = () => {
     return new Map<ClientType, React.FC<ClientCreationContentProp>>([
-        ["OneDrive", OneDriveClientCreationContent],
+        [ClientType.OneDrive, OneDriveClientCreationContent],
     ])
 }
 
-function submit(
+async function submit(
     data: any,
-    t: TFunction<"translation", undefined>,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-    requestSuccess: () => void,
 ) {
-    setLoading(true)
-    setTimeout(() => {
-        DriveIndexAPI.post("/api/user/client", data).then(value => {
-            if (value.data["code"] !== 200) {
-                message.open({
-                    title: t("profile_drive_creation_failed") + value.data["message"],
-                    type: "error",
-                })
-            } else {
-                message.open({
-                    title: t("profile_drive_creation_success") + value.data["message"],
-                    type: "success",
-                })
-                requestSuccess()
-            }
-        }).catch((error) => {
-            message.open({
-                title: t("profile_drive_creation_failed") + error.message,
-                type: "error",
-            })
-        }).finally(() => {
-            setLoading(false)
-        })
-    }, 500)
+    // DriveIndexAPI.post("/api/user/client", data).then(value => {
+    //     if (value.data["code"] !== 200) {
+    //         requestFailed(value.data["message"])
+    //     } else {
+    //         requestSuccess(value.data["message"])
+    //     }
+    // }).catch((error) => {
+    //     requestFailed(error.message)
+    // }).finally(() => {
+    //     setLoading(false)
+    // })
 }
 
 

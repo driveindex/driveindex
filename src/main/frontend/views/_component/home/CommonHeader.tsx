@@ -1,12 +1,13 @@
 import {Avatar, Button, Popover} from "@hi-ui/hiui";
-import React, {FC} from "react";
+import React from "react";
 import {NavigateFunction} from "react-router";
 import {UserPref} from "Frontend/core/prefs/UserPref";
-import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {MoveOutlined} from "@hi-ui/icons"
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
 import {asInitials} from "Frontend/core/util/_String";
+import Logo from "Frontend/views/_component/Logo";
+import {key, translate} from "@vaadin/hilla-react-i18n";
 
 export interface CommonHeaderProps {
     isShowInProfile: boolean
@@ -14,10 +15,7 @@ export interface CommonHeaderProps {
     switchShowDrawer?: () => void
 }
 
-export const CommonHeader: FC<CommonHeaderProps & RespLayoutProps> = (props) => {
-    const { t } = useTranslation()
-    const navigate = useNavigate()
-
+export const CommonHeader = (props: CommonHeaderProps & RespLayoutProps) => {
     return (
         <div style={{
             display: "flex",
@@ -36,8 +34,7 @@ export const CommonHeader: FC<CommonHeaderProps & RespLayoutProps> = (props) => 
                     </Button>
                 )
             }
-            <img style={{ width: 34, height: 34 }} src={"/drawable/logo.svg"} alt={"logo"} onClick={() => navigate("/")}/>
-            <div style={{ marginLeft: 10, color: "#1f2733" }}><strong>{t("title")}</strong></div>
+            <Logo />
             <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
                 {
                     (props.showAvatar === undefined || props.showAvatar) && (
@@ -53,8 +50,7 @@ export const CommonHeader: FC<CommonHeaderProps & RespLayoutProps> = (props) => 
     )
 }
 
-export const UserMenu: FC<CommonHeaderProps> = (props) => {
-    const { t } = useTranslation()
+export const UserMenu = (props: CommonHeaderProps) => {
     const navigate = useNavigate()
 
     return (
@@ -66,7 +62,7 @@ export const UserMenu: FC<CommonHeaderProps> = (props) => {
                             type="default" appearance="link"
                             style={{ width: 80 }}
                             onClick={() => goToProfile(navigate)}>{
-                            t("home_go_to_profile")
+                            translate(key`home.profile`)
                         }</Button>
                         <div style={{ height: 1, width: "100%", backgroundColor: "lightgray", marginTop: 10, marginBottom: 10 }} />
                     </>
@@ -76,7 +72,7 @@ export const UserMenu: FC<CommonHeaderProps> = (props) => {
                 type="danger" appearance="link"
                 style={{ width: 80 }}
                 onClick={() => doLogout(navigate)}>{
-                t("home_logout")
+                translate(key`home.logout`)
             }</Button>
         </div>
     )

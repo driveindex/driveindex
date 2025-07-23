@@ -4,7 +4,7 @@ export const config: ViewConfig = {
     loginRequired: true,
 };
 
-export default function ProfilePage() {
+const ProfileCommon = () => {
     return (
         <>
             <div>
@@ -13,3 +13,5 @@ export default function ProfilePage() {
         </>
     )
 }
+
+export default ProfileCommon

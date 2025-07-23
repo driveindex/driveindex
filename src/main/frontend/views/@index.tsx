@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
+import React, {useMemo, useState} from "react";
 import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, Modal, Row, Scrollbar} from "@hi-ui/hiui";
 import {PlusOutlined, LinkOutlined} from "@hi-ui/icons"
 import {BreadcrumbContainer, FileList} from "Frontend/views/_component/home/FileList";
@@ -12,6 +11,7 @@ import {FileController} from "Frontend/generated/endpoints";
 import GetDirReqSort from "Frontend/generated/io/github/driveindex/dto/req/user/GetDirReqSort";
 import FileListRespDto from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto";
 import {useQueryLocation} from "Frontend/core/util/_Router";
+import {key, translate} from "@vaadin/hilla-react-i18n";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -23,13 +23,8 @@ interface MainViewQueryParams {
     pageSize?: number;
 }
 
-export default function MainView() {
+const MainView = () => {
     const queryLocation = useQueryLocation<MainViewQueryParams>()
-    const { t } = useTranslation()
-
-    const path = queryLocation.path
-    const pageIndex = Number(queryLocation.pageIndex ?? 0)
-    const pageSize = Number(queryLocation.pageSize ?? 15)
 
     const [ fileList, setFileList ] = useState<FileListRespDto | undefined>(undefined)
     const updateFileList = (path: string) => {
@@ -37,8 +32,8 @@ export default function MainView() {
             path: path,
             sortBy: GetDirReqSort.NAME,
             asc: false,
-            pageIndex: pageIndex,
-            pageSize: pageSize,
+            pageIndex: queryLocation.pageIndex ?? 0,
+            pageSize: queryLocation.pageSize ?? 15,
         }).then((result) => {
             if (result.code === 200) {
                 setFileList(result.data)
@@ -46,28 +41,28 @@ export default function MainView() {
             }
         })
     }
-    useEffect(() => {
-        if (path == undefined) {
+    useMemo(() => {
+        if (queryLocation.path == undefined) {
             queryLocation.set({
                 path: "/"
             })
         } else {
-            updateFileList(path)
+            updateFileList(queryLocation.path)
         }
-    }, [path])
+    }, [queryLocation.path])
 
     const isMdUp = useBreakpointUp("md")
     const showAsMobile = useBreakpointDown("sm")
     const contentWidth = isMdUp ? 740 : "100%"
 
-    const breadcrumbData = useBreadcrumb(t, path)
+    const breadcrumbData = useBreadcrumb(queryLocation.path)
 
     const breadcrumb = (
         <Breadcrumb
             data={breadcrumbData}
             onClick={(e, i, index) => {
                 const targetPath = breadcrumbData[index].path
-                if (targetPath == path) {
+                if (targetPath == queryLocation.path) {
                     return
                 }
                 queryLocation.set({
@@ -102,14 +97,14 @@ export default function MainView() {
                             icon={<PlusOutlined />}
                             size={"lg"}
                             onClick={() => showCreateDir(true)}>
-                            {t("home_file_create_dir")}
+                            {translate(key`home.file.create.dir`)}
                         </Button>
                         <Button
                             type={"secondary"}
                             icon={<LinkOutlined />}
                             size={"lg"}
                             onClick={() => showCreateLink(true)}>
-                            {t("home_file_create_link")}
+                            {translate(key`home.file.create.mount`)}
                         </Button>
                     </Row>
                     {
@@ -135,7 +130,7 @@ export default function MainView() {
             </Col>
             <Modal
                 visible={createDirShow}
-                title={t("home_file_create_dir")}
+                title={translate(key`home.file.create.dir`)}
                 onClose={() => showCreateDir(false)}
                 onConfirm={() => {
                     setCreateLoading(true)
@@ -150,14 +145,14 @@ export default function MainView() {
                             {
                                 required: true,
                                 type: "string",
-                                message: t("home_file_create_empty"),
+                                message: translate(key`home.file.create.name.error.empty`),
                             },
                         ]
                     }}>
                     <FormItem
                         field={"name"}
                         labelPlacement={"top"}
-                        label={t("home_file_create_name")}>
+                        label={translate(key`home.file.create.name`)}>
                         <Input />
                     </FormItem>
                     <FormSubmit
@@ -166,10 +161,12 @@ export default function MainView() {
                                 return
                             }
                         }}>
-                        {t("home_file_create_action")}
+                        {translate(key`home.file.create.action`)}
                     </FormSubmit>
                 </Form>
             </Modal>
         </>
     )
 }
+
+export default MainView

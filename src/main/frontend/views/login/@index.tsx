@@ -1,18 +1,17 @@
 import {useRef, useState} from "react";
-import {useTranslation} from "react-i18next";
 import {Form, Card, FormItem, Input, FormSubmit, FormHelpers, Alert} from "@hi-ui/hiui";
 import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
 import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
 import {useAuth} from "Frontend/core/security/auth"
 import {asSha256} from "Frontend/core/util/_String";
+import {key, translate} from "@vaadin/hilla-react-i18n";
 
 export const config: ViewConfig = {
 
 };
 
-export default function LoginPage() {
-    const { t } = useTranslation()
+const LoginPage = () => {
     const navigate = useNavigate()
 
     const formRef = useRef<FormHelpers>(null)
@@ -29,7 +28,7 @@ export default function LoginPage() {
         })
         if (result.error) {
             const errorMsg = result.errorTitle!.replaceAll(".", "").replaceAll(" ", "_").toLowerCase()
-            setAlert(t("login_failed") + t(`login_failed_${errorMsg}`))
+            setAlert(translate(key`login.error`) + translate(key([`login.failed.${errorMsg}`])))
         }
     }
 
@@ -51,7 +50,7 @@ export default function LoginPage() {
                 }}/>
             <div style={{
                 fontSize: 20,
-            }}>{t("login_title")}</div>
+            }}>{translate(key`login.title`)}</div>
             {
                 alert !== null && (
                     <Alert
@@ -78,28 +77,28 @@ export default function LoginPage() {
                             {
                                 required: true,
                                 type: "string",
-                                message: t("login_username_empty"),
+                                message: translate(key`login.username.error.empty`),
                             },
                         ],
                         password: [
                             {
                                 required: true,
                                 type: "string",
-                                message: t("login_password_empty"),
+                                message: translate(key`login.password.error.empty`),
                             },
                         ],
                     }}
                     innerRef={formRef}>
                     <FormItem
                         field={"username"}
-                        label={t("login_username")}
+                        label={translate(key`login.username`)}
                         labelPlacement={"top"}
                         showColon={false}>
                         <Input disabled={loginDoing}/>
                     </FormItem>
                     <FormItem
                         field={"password"}
-                        label={t("login_password")}
+                        label={translate(key`login.password`)}
                         labelPlacement={"top"}
                         showColon={false}>
                         <Input type={"password"} disabled={loginDoing}/>
@@ -118,7 +117,7 @@ export default function LoginPage() {
                             }}
                             loading={loginDoing}
                             disabled={loginDoing}>{
-                            t("login_action")
+                            translate(key`login.action`)
                         }</FormSubmit>
                     </FormItem>
                 </Form>
@@ -126,3 +125,5 @@ export default function LoginPage() {
         </div>
     )
 }
+
+export default LoginPage

@@ -1,20 +1,18 @@
 import React, {FC} from "react";
-import {useTranslation} from "react-i18next";
+import {key, translate} from '@vaadin/hilla-react-i18n';
 import {Modal} from "@hi-ui/hiui";
 
 
-const AccountCreationDialog: FC<{
+const AccountCreationDialog = (props: {
     visible: boolean,
     type: string,
     requestClose: () => void,
-}> = (props) => {
-    const { t } = useTranslation()
-
+}) => {
     const Content = AccountCreationContent.get(props.type)
     return (
         <Modal
             visible={props.visible}
-            title={t("profile_drive_add_account")}
+            title={translate(key`profile.drive.add.account`)}
             onCancel={() => props.requestClose()}
             closeable={false}>
             {Content != undefined && <Content />}

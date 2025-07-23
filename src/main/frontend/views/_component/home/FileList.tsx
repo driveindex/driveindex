@@ -1,8 +1,8 @@
-import React, {FC} from "react";
-import {useTranslation} from "react-i18next";
+import React from "react";
 import {Col, EmptyState, Loading, Row} from "@hi-ui/hiui";
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
 import FileItem from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto/FileItem";
+import {translate, key} from "@vaadin/hilla-react-i18n";
 
 export enum FileListSortBy {
     NAME, SIZE, CREATE_TIME, MODIFIED_TIME
@@ -12,7 +12,7 @@ export interface FileListProps  {
     list?: Array<FileItem>
 }
 
-export const FileList: FC<FileListProps & FileListHeaderProps & RespLayoutProps> = (props) => {
+export const FileList = (props: FileListProps & FileListHeaderProps & RespLayoutProps) => {
     const realList = <RealList {...props} />
     return (
         <div
@@ -33,7 +33,7 @@ export interface BreadcrumbContainerProps {
     marginTop?: number
 }
 
-export const BreadcrumbContainer: FC<BreadcrumbContainerProps & RespLayoutProps> = (props) => {
+export const BreadcrumbContainer = (props: BreadcrumbContainerProps & RespLayoutProps) => {
     return <div
         style={{
             borderRadius: props.isMdUp ? 10 : 0,
@@ -46,9 +46,8 @@ export const BreadcrumbContainer: FC<BreadcrumbContainerProps & RespLayoutProps>
     }</div>
 }
 
-const RealList: FC<RespLayoutProps & FileListProps> = (props) => {
-    const { t } = useTranslation()
-    let listContent: JSX.Element[] | JSX.Element | undefined
+const RealList = (props: RespLayoutProps & FileListProps) => {
+    let listContent: React.JSX.Element[] | React.JSX.Element | undefined
     if (props.list === undefined) {
         listContent = undefined
     } else if (props.list.length > 0) {
@@ -74,7 +73,7 @@ const RealList: FC<RespLayoutProps & FileListProps> = (props) => {
                         style={{
                             height: 200,
                         }}
-                        content={t("loading")} />
+                        content={translate(key`common.loading`)} />
             }
         </div>
     )
@@ -89,8 +88,7 @@ interface FileListHeaderProps {
     breadcrumb?: React.ReactNode
 }
 
-const FileListHeader: FC<FileListHeaderProps & RespLayoutProps> = (props) => {
-    const { t } = useTranslation()
+const FileListHeader = (props: FileListHeaderProps & RespLayoutProps) => {
     return (
         <>
             {
@@ -118,13 +116,13 @@ const FileListHeader: FC<FileListHeaderProps & RespLayoutProps> = (props) => {
                             }}
                             columns={props.isMdUp ? 7 : 4}>
                             <Col span={4}>
-                                <div>{t("home_file_list_head_name")}</div>
+                                <div>{translate(key`home.file.listHead.name`)}</div>
                             </Col>
                             <Col span={2} style={{ display: props.isMdUp ? "block" : "none" }}>
-                                <div>{t("home_file_list_head_modify")}</div>
+                                <div>{translate(key`home.file.listHead.modify`)}</div>
                             </Col>
                             <Col span={1} style={{ display: props.isMdUp ? "block" : "none" }}>
-                                <div>{t("home_file_list_head_size")}</div>
+                                <div>{translate(key`home.file.listHead.size`)}</div>
                             </Col>
                         </Row>
                         {
@@ -143,8 +141,7 @@ interface FileListItemProps {
 
 }
 
-export const FileListItem: FC<FileListItemProps & RespLayoutProps> = (props) => {
-    const { t } = useTranslation()
+export const FileListItem = (props: FileListItemProps & RespLayoutProps) => {
     return (
         <div
             style={{
@@ -164,13 +161,13 @@ export const FileListItem: FC<FileListItemProps & RespLayoutProps> = (props) => 
                 }}
                 columns={props.showAsMobile ? 4 : props.isMdUp ? 7 : 6}>
                 <Col span={4}>
-                    <div>{t("home_file_list_head_name")}</div>
+                    <div>{translate(key`home.file.listHead.name`)}</div>
                 </Col>
                 <Col span={2} style={{ display: props.showAsMobile ? "none" : "block" }}>
-                    <div>{t("home_file_list_head_modify")}</div>
+                    <div>{translate(key`home.file.listHead.modify`)}</div>
                 </Col>
                 <Col span={1} style={{ display: props.isMdUp ? "block" : "none" }}>
-                    <div>{t("home_file_list_head_size")}</div>
+                    <div>{translate(key`home.file.listHead.size`)}</div>
                 </Col>
             </Row>
             {

@@ -11,7 +11,7 @@ effect(() => {
     document.title = vaadin.documentTitleSignal.value;
 });
 
-export default function MainLayout() {
+const MainLayout = () => {
     const currentTitle = useViewConfig()?.title ?? '';
 
     useEffect(() => {
@@ -22,3 +22,5 @@ export default function MainLayout() {
         <Outlet/>
     );
 }
+
+export default MainLayout;

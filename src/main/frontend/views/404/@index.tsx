@@ -1,9 +1,8 @@
 import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
 import {EmptyState} from "@hi-ui/hiui";
-import {useTranslation} from "react-i18next";
+import {key, translate} from "@vaadin/hilla-react-i18n";
 
 const NotFoundPage = () => {
-    const { t } = useTranslation()
     return (
         <div>
             <CommonHeader isShowInProfile={false} showAvatar={false} />
@@ -12,7 +11,7 @@ const NotFoundPage = () => {
                     marginTop: 100,
                 }}
                 size={"lg"}
-                title={t("not_found")} />
+                title={translate(key`common.error.notFound`)} />
         </div>
     )
 }

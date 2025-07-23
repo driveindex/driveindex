@@ -1,17 +1,26 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
 import {useBreakpointDown} from "Frontend/core/hooks/useViewport";
 import {Outlet, useLocation, useNavigate} from "react-router-dom"
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import {Menu, MenuDataItem} from "@hi-ui/hiui";
-import {useTranslation} from "react-i18next";
 import "./@layout.css"
+import Logo from "Frontend/views/_component/Logo";
+import {translate, key} from "@vaadin/hilla-react-i18n";
 
 const ProfilePage: FC = () => {
     const showAsMobile = useBreakpointDown("sm")
 
     const [ drawer, openDrawer ] = useState(false)
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (location.pathname === "/profile") {
+            navigate("/profile/common");
+        }
+    }, [location]);
 
     return (
         <div
@@ -46,6 +55,9 @@ const ProfilePage: FC = () => {
                             size={300}
                             duration={300}
                             onClose={() => openDrawer(false)}>
+                            <Logo style={{
+                                padding: "15px 24px",
+                            }} />
                             <ProfileDrawer onItemClicked={() => openDrawer(false)} />
                         </Drawer>
                     ) : (
@@ -74,23 +86,18 @@ const ProfilePage: FC = () => {
 const ProfileDrawer: FC<{
     onItemClicked?: () => void
 }> = (props) => {
-    const { t } = useTranslation()
     const navigate = useNavigate()
     const data: MenuDataItem[] = [
         {
-            title: t("profile_common"),
+            title: translate(key`profile.common`),
             id: "/profile/common",
         },
         {
-            title: t("profile_account"),
-            id: "/profile/account",
-        },
-        {
-            title: t("profile_drive"),
+            title: translate(key`profile.drive`),
             id: "/profile/drive",
         },
         {
-            title: t("profile_password"),
+            title: translate(key`profile.password`),
             id: "/profile/password",
         },
     ]
@@ -101,7 +108,6 @@ const ProfileDrawer: FC<{
             style={{
                 width: "100%",
                 height: "100%",
-                paddingTop: 20,
                 backgroundColor: "transparent",
             }}
             activeId={useLocation().pathname}

@@ -1,9 +1,9 @@
-import {TFunction} from "i18next";
 import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
+import {translate, key} from "@vaadin/hilla-react-i18n";
 
-const useBreadcrumb = (t: TFunction<"translation", undefined>, pathStr?: string) => {
+const useBreadcrumb = (pathStr?: string) => {
     const data: (BreadcrumbDataItem & { path: string })[] = [{
-        title: t("home_file_root"),
+        title: translate(key`home.file.root`),
         path: "/",
     }]
     if (pathStr == undefined) {

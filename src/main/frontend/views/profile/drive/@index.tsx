@@ -1,5 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
+import React, {useEffect, useState} from "react";
 import {
     Avatar,
     Breadcrumb,
@@ -13,7 +12,6 @@ import List, {ListDataItem} from "@hi-ui/list";
 import {LoadingCover, useLoading} from "Frontend/core/hooks/useLoading";
 import {DriveIndexAPI, DriveType} from "Frontend/core/axios";
 import {AxiosResponse} from "axios";
-import {checkLoginStatus, useLoginExpiredDialog} from "Frontend/core/hooks/useLoginExpiredDialog";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import "./@index.css"
 import {BarsOutlined, PlusOutlined} from "@hi-ui/icons"
@@ -25,15 +23,14 @@ import {asInitials} from "Frontend/core/util/_String";
 import ClientCreationDialog from "Frontend/views/_component/profile/drive/ClientCreationDialog";
 import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 import message from "@hi-ui/message";
+import {key, translate} from "@vaadin/hilla-react-i18n";
 
 
 type ClientBreadcrumbDataItem = BreadcrumbDataItem & {
     targetClient?: string
 }
 
-const Index: FC = () => {
-    const { t } = useTranslation()
-
+const ProfileDrive = () => {
     const { state } = useLocation()
 
     const isMdUp = useBreakpointUp("md")
@@ -47,8 +44,8 @@ const Index: FC = () => {
                 flexDirection: "column",
                 height: "100%"
             }}>
-            <h2>{t("profile_drive_title")}</h2>
-            <p>{t("profile_drive_text")}</p>
+            <h2>{translate(key`profile.drive.title`)}</h2>
+            <p>{translate(key`profile.drive.desc`)}</p>
             <LoadingCover>
                 <DriveList client={state} isMdUp={isMdUp} showAsMobile={showAsMobile} />
             </LoadingCover>
@@ -64,9 +61,7 @@ interface ClientState {
 interface DriveListProps {
     client: ClientState | null
 }
-const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
-    const { t } = useTranslation()
-
+const DriveList = (props: DriveListProps & RespLayoutProps) => {
     const [ clientCreating, showClientCreating ] = useState<boolean>(false)
     const [ clientTarget, setClientTarget ] = useState<any | undefined>()
     const [ clientList, setClientList ] = useState<any[]>([])
@@ -78,7 +73,6 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
 
     const navigate = useNavigate()
     const { setLoading } = useLoading()
-    const showLoginExpiredDialog = useLoginExpiredDialog()
 
     const [
         breadcrumbData,
@@ -98,12 +92,9 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                 })
             }
             request.then((resp) => {
-                if (!checkLoginStatus(resp, showLoginExpiredDialog)) {
-                    return
-                }
                 if (resp.data["code"] !== 200) {
                     message.open({
-                        title: t("profile_drive_failed") + resp.data["message"],
+                        title: translate(key`profile.drive.add.client.error.create`) + resp.data["message"],
                         type: "error",
                     })
                     return
@@ -130,12 +121,9 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                     redirect_uri: "http://localhost:8009/redirect/drive/onedrive",
                 }
             }).then((resp) => {
-                if (!checkLoginStatus(resp, showLoginExpiredDialog)) {
-                    return
-                }
                 if (resp.data["code"] !== 200) {
                     message.open({
-                        title: t("profile_drive_account_failed") + resp.data["message"],
+                        title: translate(key`profile.drive.add.account.error`) + resp.data["message"],
                         type: "error",
                     })
                     return
@@ -145,7 +133,7 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
         } else {
             showAccountCreating(false)
             message.open({
-                title: t("internal_error") + t("profile_drive_account_internal_unknown_type"),
+                title: translate(key`common.error.internalError`) + translate(key`profile.drive.add.account.internalUnknownType`),
                 type: "error",
             })
         }
@@ -154,7 +142,7 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
         showAccountCreating(false)
         const base: ClientBreadcrumbDataItem[] = [
             {
-                title: t("profile_drive_breadcrumb"),
+                title: translate(key`profile.drive.breadcrumb`),
             }
         ]
         if (clientId === undefined) {
@@ -172,12 +160,9 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
         }
         setLoading(true)
         DriveIndexAPI.get("/api/user/client").then((resp) => {
-            if (!checkLoginStatus(resp, showLoginExpiredDialog)) {
-                return
-            }
             if (resp.data["code"] !== 200) {
                 message.open({
-                    title: t("profile_drive_failed") + resp.data["message"],
+                    title: translate(key`profile.drive.add.client.error.create`) + resp.data["message"],
                     type: "error",
                 })
                 setLoading(false)
@@ -231,7 +216,7 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                                     icon={<PlusOutlined />}
                                     onClick={() => {
                                         showClientCreating(true)
-                                    }}>{t("profile_drive_add_client")}</Button> :
+                                    }}>{translate(key`profile.drive.add.client`)}</Button> :
                                 <Button
                                     type={"primary"}
                                     icon={<PlusOutlined />}
@@ -239,7 +224,7 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                                     disabled={accountCreating}
                                     onClick={() => {
                                         creatingAccount()
-                                    }}>{t("profile_drive_add_account")}</Button>
+                                    }}>{translate(key`profile.drive.add.account`)}</Button>
                         }
                     </Row>
                 }
@@ -254,15 +239,6 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                         }}
                         bordered={false}
                         data={(props.client === null ? clientList : accountList).map((item) => {
-                            const options: Intl.DateTimeFormatOptions = {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                second: "2-digit"
-                            }
-
                             if (props.client === null) {
                                 let icon: string
                                 const type = item["type"]
@@ -273,9 +249,9 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                                 }
                                 return {
                                     title: item["name"],
-                                    description: t("profile_drive_last_modify") + Intl.DateTimeFormat(
-                                        navigator.language, options
-                                    ).format(item["modify_at"]),
+                                    description: translate(key`profile.drive.lastModify`, {
+                                        "datetime": item["modify_at"]
+                                    }),
                                     avatar: icon,
                                     onClick: () => {
                                         navigate("/profile/drive/"+item["id"], {
@@ -293,9 +269,9 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                             } else {
                                 return {
                                     title: item["display_name"] + " (" + item["user_principal_name"] + ")",
-                                    description: t("profile_drive_last_modify") + Intl.DateTimeFormat(
-                                        navigator.language, options
-                                    ).format(item["modify_at"]),
+                                    description: translate(key`profile.drive.lastModify`, {
+                                        "datetime": item["modify_at"]
+                                    }),
                                     avatar: asInitials(item["display_name"]),
                                     onEdit: () => {
 
@@ -317,7 +293,7 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
                                 <AccountItem {...dataItem} />
                             )
                         }}
-                        emptyContent={t("not_found")}
+                        emptyContent={translate(key`common.error.notFound`)}
                     />
                 </Scrollbar>
             </Card>
@@ -332,11 +308,13 @@ const DriveList: FC<DriveListProps & RespLayoutProps> = (props) => {
     )
 }
 
-const ClientItem: FC<ListDataItem & {
+interface ItemProps {
     onClick?: () => void
-    onDelete?: () => void,
-    onEdit?: () => void,
-}> = (props) => {
+    onDelete?: () => void
+    onEdit?: () => void
+}
+
+const ClientItem = (props: ListDataItem & ItemProps) => {
     const [ isShowDesktopAction, setShowDesktopAction ] = useState(false)
     useEffect(() => {
         console.log("isShowDesktopAction: {}", isShowDesktopAction)
@@ -363,11 +341,7 @@ const ClientItem: FC<ListDataItem & {
     )
 }
 
-const AccountItem: FC<ListDataItem & {
-    onClick?: () => void
-    onDelete?: () => void,
-    onEdit?: () => void,
-}> = (props) => {
+const AccountItem = (props: ListDataItem & ItemProps) => {
     return (
         <div
             className={"dirveindex-profile-drive-account"}
@@ -393,11 +367,7 @@ const AccountItem: FC<ListDataItem & {
     )
 }
 
-const ItemMenu: FC<{
-    onDelete?: () => void,
-    onEdit?: () => void,
-}> = (props) => {
-    const { t } = useTranslation()
+const ItemMenu = (props: ItemProps) => {
     const [ show, setShow ] = useState(false)
     return (
         <Popover placement={"left"} content={
@@ -411,7 +381,7 @@ const ItemMenu: FC<{
                                 setShow(false)
                                 props.onEdit!()
                             }}>{
-                            t("profile_drive_creation_detail")
+                            translate(key`profile.drive.add.client.detail`)
                         }</Button>
                     )
                 }
@@ -424,7 +394,7 @@ const ItemMenu: FC<{
                                 setShow(false)
                                 props.onDelete!()
                             }}>{
-                            t("delete")
+                            translate(key`common.delete`)
                         }</Button>
                     )
                 }
@@ -438,4 +408,4 @@ const ItemMenu: FC<{
     )
 }
 
-export default Index
+export default ProfileDrive
