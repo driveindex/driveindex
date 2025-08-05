@@ -27,3 +27,9 @@ dependencyResolutionManagement {
 
 
 rootProject.name = "DriveIndex"
+
+include(":driveindex-core")
+include(":driveindex-server")
+
+include(":driveindex-drives")
+include(":driveindex-drives:onedrive")

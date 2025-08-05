@@ -1,0 +1,10 @@
+src/main/frontend/generated/
+src/main/bundles/
+src/main/frontend/themes/hilla-react-app/theme-editor.css
+
+node/
+package-lock.json
+
+# DriveInde
+/config.yaml
+/logs

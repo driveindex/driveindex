@@ -11,6 +11,8 @@ autoservice = "1.1.1"
 jjwt = "0.12.3"
 openfeign = "4.3.0"
 caffeine = "3.2.1"
+jackson = "2.19.2"
+classgraph = "4.8.181"
 
 exposed = "1.0.0-beta-4"
 exposed-pagination = "1.0.11"
@@ -41,6 +43,8 @@ kotlinx-serialization-yaml = { group = "com.charleskorn.kaml", name = "kaml", ve
 autoservice = { group = "com.google.auto.service", name = "auto-service", version.ref = "autoservice" }
 openfeign = { group = "org.springframework.cloud", name = "spring-cloud-starter-openfeign", version.ref = "openfeign" }
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
+liquibase = { group = "org.liquibase", name = "liquibase-core" }
+classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref = "classgraph" }
 
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
@@ -68,11 +72,11 @@ jdbc-postgresql-ng = { group = "com.impossibl.pgjdbc-ng", name = "pgjdbc-ng" }
 
 vaadin-spring-boot-starter = { group = "com.vaadin", name = "vaadin-spring-boot-starter", version.ref = "vaadin" }
 jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
+jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
 
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
 jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
 
-liquibase = { group = "org.liquibase", name = "liquibase-core" }
 
 [bundles]
 jjwt = [ "jjwt-api", "jjwt-impl" ]
