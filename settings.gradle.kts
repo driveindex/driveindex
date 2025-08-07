@@ -31,5 +31,9 @@ rootProject.name = "DriveIndex"
 include(":driveindex-core")
 include(":driveindex-server")
 
-include(":driveindex-drives")
-include(":driveindex-drives:onedrive")
+include(":driveindex-drivers")
+File(rootDir, "driveindex-drivers")
+    .listFiles { file -> file.isDirectory && File(file, "build.gradle.kts").exists() }
+    ?.forEach {
+        include(":driveindex-drivers:${it.name}")
+    }

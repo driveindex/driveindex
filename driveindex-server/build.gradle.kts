@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.yaml)
 
     implementation(libs.caffeine)
+    implementation(libs.openfeign)
 
     runtimeOnly(libs.spring.boot.devtools)
 
@@ -25,7 +26,6 @@ dependencies {
     runtimeOnly(libs.bundles.jdbc)
 
     implementation(project(":driveindex-core"))
-    implementation(project(":driveindex-drives:onedrive"))
 
     testImplementation(libs.spring.boot.starter.test)
 }

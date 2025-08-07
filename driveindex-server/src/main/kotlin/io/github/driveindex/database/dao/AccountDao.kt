@@ -1,6 +1,6 @@
 package io.github.driveindex.database.dao
 
-import io.github.driveindex.database.entity.account.AccountEntity
+import io.github.driveindex.database.entity.AccountEntity
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll

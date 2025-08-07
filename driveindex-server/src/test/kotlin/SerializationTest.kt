@@ -1,5 +1,5 @@
-import io.github.driveindex.core.util.JsonGlobal
-import io.github.driveindex.core.util.encodeWithoutClassDiscriminator
+import io.github.driveindex.core.utils.JsonGlobal
+import io.github.driveindex.core.utils.encodeWithoutClassDiscriminator
 import io.github.driveindex.dto.resp.AccountDto
 import org.junit.jupiter.api.Test
 import java.util.*

@@ -1,14 +1,15 @@
 package io.github.driveindex.database.entity
 
 import io.github.driveindex.utils.JsonKt
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.statements.InsertStatement
 import org.jetbrains.exposed.v1.datetime.CurrentTimestamp
 import org.jetbrains.exposed.v1.datetime.timestamp
 import org.jetbrains.exposed.v1.json.jsonb
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 interface IdEntity<IdT: Any> {
     val id: IdT
@@ -27,6 +28,7 @@ interface AttributeEntity<T: Any> {
     }
 }
 
+@OptIn(ExperimentalTime::class)
 interface VersionControlEntity {
     val createAt: Column<Instant>
     fun Table.createAt() = timestamp("create_at").defaultExpression(CurrentTimestamp)

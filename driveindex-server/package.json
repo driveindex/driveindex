@@ -3,8 +3,9 @@
   "license": "GPL-3.0",
   "type": "module",
   "dependencies": {
-    "@hi-ui/core": "^4.0.9",
-    "@hi-ui/hiui": "^4.14.0",
+    "@hi-ui/breadcrumb": "^4.1.0",
+    "@hi-ui/empty-state": "^4.1.1",
+    "@hi-ui/loading": "^4.3.0",
     "@polymer/polymer": "3.5.2",
     "@vaadin-component-factory/vcf-nav": "1.1.0",
     "@vaadin/bundles": "24.8.4",
@@ -75,8 +76,6 @@
   "overrides": {
     "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
     "classnames": "$classnames",
-    "@hi-ui/core": "$@hi-ui/core",
-    "@hi-ui/hiui": "$@hi-ui/hiui",
     "react-modern-drawer": "$react-modern-drawer",
     "@vaadin/a11y-base": "24.8.4",
     "@vaadin/accordion": "24.8.4",

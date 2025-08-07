@@ -2,7 +2,7 @@ package io.github.driveindex.dto.req.user
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.core.client.ClientType
+import io.github.driveindex.drivers.api.ClientType
 import java.util.UUID
 
 data class ClientCreateReqDto(

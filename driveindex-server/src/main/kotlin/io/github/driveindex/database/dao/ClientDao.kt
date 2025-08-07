@@ -1,7 +1,7 @@
 package io.github.driveindex.database.dao
 
-import io.github.driveindex.core.client.ClientType
-import io.github.driveindex.database.entity.client.ClientEntity
+import io.github.driveindex.database.entity.ClientEntity
+import io.github.driveindex.drivers.api.ClientType
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll

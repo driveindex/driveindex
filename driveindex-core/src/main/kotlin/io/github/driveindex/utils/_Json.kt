@@ -1,6 +1,6 @@
 package io.github.driveindex.utils
 
-import io.github.driveindex.drives.DriveClientLoader
+import io.github.driveindex.drivers.DriverRegistry
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -12,22 +12,35 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.SerializersModuleBuilder
 import kotlinx.serialization.modules.plus
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import java.util.*
 import kotlin.reflect.KClass
 
-val JsonKt: Json by lazy {
-    Json {
-        encodeDefaults = true
-        prettyPrint = false
-        explicitNulls = true
-        ignoreUnknownKeys = true
-        classDiscriminator = "@type"
+private lateinit var json: Json
+val JsonKt: Json get() = json
 
-        serializersModule += SerializersModule {
-            for ((name, service) in DriveClientLoader) {
-                service.registerAttrJsonModule(this)
+@Configuration
+class JsonKtConfiguration(
+    private val clientLoader: DriverRegistry
+) {
+    @Bean
+    fun json(): Json {
+        val jsonKy = Json {
+            encodeDefaults = true
+            prettyPrint = false
+            explicitNulls = true
+            ignoreUnknownKeys = true
+            classDiscriminator = "@type"
+
+            serializersModule += SerializersModule {
+                for ((_, service) in clientLoader) {
+                    service.registerAttrJsonModule(this)
+                }
             }
         }
+        json = jsonKy
+        return jsonKy
     }
 }
 

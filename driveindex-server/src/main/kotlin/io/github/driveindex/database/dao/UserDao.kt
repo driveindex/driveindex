@@ -26,9 +26,10 @@ fun UserEntity.findByUsername(uUsername: String) = selectAll()
     }
     .singleOrNull()
 
-fun UserEntity.updatePassword(userId: Int, newPassword: String) =
+fun UserEntity.updatePassword(userId: Int, newPassword: String, newSalt: String) =
     update({
         id.eq(userId)
     }) {
         it[passwordHash] = newPassword
+        it[passwordSalt] = newSalt
     }

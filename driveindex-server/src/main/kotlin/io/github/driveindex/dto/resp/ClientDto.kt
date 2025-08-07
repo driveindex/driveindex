@@ -1,8 +1,7 @@
 package io.github.driveindex.dto.resp
 
-import io.github.driveindex.core.client.ClientType
 import io.github.driveindex.database.entity.IdEntity
-import io.github.driveindex.dto.resp.client.ClientDetail
+import io.github.driveindex.drivers.api.ClientType
 
 data class ClientDto(
     override val id: Int,
@@ -10,5 +9,4 @@ data class ClientDto(
     val type: ClientType,
     val createAt: Long,
     val modifyAt: Long?,
-    val detail: ClientDetail,
 ): IdEntity<Int>

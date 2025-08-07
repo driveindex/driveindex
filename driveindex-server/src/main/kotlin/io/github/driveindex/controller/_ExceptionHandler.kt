@@ -1,10 +1,10 @@
 package io.github.driveindex.controller
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
-import io.github.driveindex.core.util.log
+import io.github.driveindex.utils.log
 import io.github.driveindex.dto.resp.SampleRespResult
-import io.github.driveindex.core.exception.AzureDecodeException
 import io.github.driveindex.core.exception.FailedResult
+import io.github.driveindex.drivers.feign.DriverRemoteApiException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -22,16 +22,16 @@ class _ExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(FailedResult::class)
     fun handleFailedResult(e: FailedResult): SampleRespResult {
-        log.debug("响应错误信息", e)
+        log.debug("Failed result response", e)
         return e.resp()
     }
 
     @ResponseStatus(HttpStatus.BAD_GATEWAY)
-    @ExceptionHandler(AzureDecodeException::class)
-    fun handleAzureDecodeException(
-        exception: AzureDecodeException,
+    @ExceptionHandler(DriverRemoteApiException::class)
+    fun handleDriverRemoteApiDecodeException(
+        exception: DriverRemoteApiException,
     ): SampleRespResult {
-        log.warn("未捕获的 Azure 接口解析错误", exception)
+        log.warn("Uncaught driver remote api error!", exception)
         return FailedResult.BadGateway(exception.message).resp()
     }
 
@@ -50,14 +50,14 @@ class _ExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MismatchedInputException::class)
     fun handleMismatchedInputException(e: MismatchedInputException): SampleRespResult {
-        log.trace("参数缺失", e)
+        log.trace("Args missing", e)
         return FailedResult.MissingBody.resp()
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): SampleRespResult {
-        log.warn("未处理的错误", e)
+        log.warn("Uncaught error", e)
         return FailedResult.InternalServerError.resp()
     }
 }

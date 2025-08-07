@@ -4,11 +4,12 @@ import io.github.driveindex.Application
 import io.github.driveindex.database.entity.AttributeEntity.Companion.attribute
 import io.github.driveindex.security.UserPermission
 import io.github.driveindex.security.UserRole
+import io.github.driveindex.utils.MD5_FULL
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.EnumerationNameColumnType
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import java.util.UUID
 
 object UserEntity: IntIdTable("${Application.BASE_NAME_LOWER}_user"),
     EnabledEntity, AttributeEntity<UserAttribute> {
@@ -19,6 +20,8 @@ object UserEntity: IntIdTable("${Application.BASE_NAME_LOWER}_user"),
     override val enabled = enabled()
     val permission: Column<Set<UserPermission>> = jsonb("permission")
     override val attribute: Column<UserAttribute> = attribute()
+
+    fun newHash() = UUID.randomUUID().toString().MD5_FULL
 }
 
 @Serializable

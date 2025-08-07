@@ -2,7 +2,7 @@ package io.github.driveindex.core.exception
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.Application
-import io.github.driveindex.utils.Json
+import io.github.driveindex.core.utils.Json
 import io.github.driveindex.dto.resp.SampleRespResult
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
@@ -46,8 +46,9 @@ class FailedResult private constructor(
 
     object UserSettings {
         val PasswordNotMatched get() = FailedResult(-100101, "密码不匹配")
-        val PasswordMatched get() = FailedResult(-100102, "新旧密码不能一致")
-        val PasswordFormat get() = FailedResult(-100103, "密码需为 8 至 16 位且包含数字和字母的组合")
+        val PasswordNotRepeated get() = FailedResult(-100102, "两次输入密码不一致")
+        val PasswordMatched get() = FailedResult(-100103, "新旧密码不能一致")
+        val PasswordFormat get() = FailedResult(-100104, "密码需为 8 至 16 位且包含数字和字母的组合")
         val DeltaTrackDuration get() = FailedResult(-100201, "文件同步间隔时间只能为正整数")
     }
 

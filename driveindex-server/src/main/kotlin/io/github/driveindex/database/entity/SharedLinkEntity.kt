@@ -6,11 +6,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import kotlin.time.ExperimentalTime
 
 /**
  * @author sgpublic
  * @Date 8/5/23 1:42 PM
  */
+@OptIn(ExperimentalTime::class)
 object SharedLinkEntity: UUIDTable("${Application.BASE_NAME_LOWER}_shared_link"),
     EnabledEntity, VersionControlEntity, AttributeEntity<SharedLinkEntity.Attribute> {
     val target = uuid(name = "target")

@@ -3,7 +3,7 @@ package io.github.driveindex.module.file
 import io.github.driveindex.core.exception.FailedResult
 import io.github.driveindex.utils.CanonicalPath
 import io.github.driveindex.utils.asPath
-import io.github.driveindex.core.util.castOrNull
+import io.github.driveindex.core.utils.castOrNull
 import io.github.driveindex.database.dao.findById
 import io.github.driveindex.database.dao.findByNameAndParentId
 import io.github.driveindex.database.dao.findRootByUserId
@@ -26,6 +26,7 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -33,7 +34,7 @@ import kotlin.uuid.Uuid
  * @author sgpublic
  * @Date 8/5/23 1:03 PM
  */
-@OptIn(ExperimentalUuidApi::class)
+@OptIn(ExperimentalUuidApi::class, ExperimentalTime::class)
 @Component
 class FileModel(
     private val current: Current,

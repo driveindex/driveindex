@@ -1,8 +1,8 @@
 package io.github.driveindex.database.dao.attributes
 
-import io.github.driveindex.database.entity.account.attributes.AccountAttribute
-import io.github.driveindex.database.entity.client.ClientEntity
+import io.github.driveindex.database.entity.ClientEntity
 import io.github.driveindex.database.entity.file.FileEntity
+import io.github.driveindex.drivers.attributes.AccountAttribute
 
 sealed interface AttributeDao<AttT>
 

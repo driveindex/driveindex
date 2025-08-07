@@ -28,7 +28,7 @@ class AdminModel(
                 throw FailedResult.User.UserExist
             }
 
-            val pwdSalt = UUID.randomUUID().toString().MD5_FULL
+            val pwdSalt = UserEntity.newHash()
             val newUser = UserEntity.insert {
                 it[username] = dto.username.checkUsername()
                 it[passwordHash] = "${dto.password}${pwdSalt}".SHA_256

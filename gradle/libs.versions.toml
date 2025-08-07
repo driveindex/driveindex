@@ -14,8 +14,7 @@ caffeine = "3.2.1"
 jackson = "2.19.2"
 classgraph = "4.8.181"
 
-exposed = "1.0.0-beta-4"
-exposed-pagination = "1.0.11"
+exposed = "1.0.0-beta-5"
 
 kotlinx-serialization-json = "1.9.0"
 kotlinx-serialization-yaml = "0.83.0"
@@ -61,7 +60,6 @@ exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.r
 exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
 exposed-kotlin-datetime = { group = "org.jetbrains.exposed", name = "exposed-kotlin-datetime", version.ref = "exposed" }
 exposed-json = { group = "org.jetbrains.exposed", name = "exposed-json", version.ref = "exposed" }
-exposed-pagination = { group = "io.github.perracodex", name = "exposed-pagination", version.ref = "exposed-pagination" }
 exposed-migration = { group = "org.jetbrains.exposed", name = "exposed-migration", version.ref = "exposed" }
 
 jdbc-mariadb = { group = "org.mariadb.jdbc", name = "mariadb-java-client" }
@@ -71,6 +69,8 @@ jdbc-postgresql = { group = "org.postgresql", name = "postgresql" }
 jdbc-postgresql-ng = { group = "com.impossibl.pgjdbc-ng", name = "pgjdbc-ng" }
 
 vaadin-spring-boot-starter = { group = "com.vaadin", name = "vaadin-spring-boot-starter", version.ref = "vaadin" }
+vaadin-component = { group = "com.vaadin", name = "vaadin-core-components", version.ref = "vaadin" }
+
 jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
 jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
 

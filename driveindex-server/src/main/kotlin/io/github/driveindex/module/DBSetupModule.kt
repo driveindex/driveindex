@@ -2,7 +2,7 @@ package io.github.driveindex.module
 
 import io.github.driveindex.Application.Companion.Config
 import io.github.driveindex.utils.SHA_256
-import io.github.driveindex.core.util.log
+import io.github.driveindex.utils.log
 import io.github.driveindex.database.entity.UserEntity
 import io.github.driveindex.dto.req.admin.UserCreateRequestDto
 import io.github.driveindex.security.UserPermission

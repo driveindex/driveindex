@@ -1,11 +1,14 @@
 package io.github.driveindex.module
 
 import io.github.driveindex.core.exception.FailedResult
+import io.github.driveindex.core.utils.transaction
 import io.github.driveindex.utils.SHA_256
 import io.github.driveindex.database.dao.findByUsername
 import io.github.driveindex.database.dao.update
+import io.github.driveindex.database.dao.updatePassword
 import io.github.driveindex.database.entity.UserEntity
 import io.github.driveindex.dto.req.user.CommonSettingsReqDto
+import io.github.driveindex.dto.req.user.SetPwdReqDto
 import io.github.driveindex.dto.resp.UserInfoRespDto
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -51,6 +54,27 @@ class UserModel(
                 current.authedUser[UserEntity.attribute].also { attribute ->
                     attribute.nickname = dto.nickname
                 },
+            )
+        }
+    }
+
+    fun setPassword(dto: SetPwdReqDto) {
+        if (dto.oldPwd != dto.oldPwdRepeat) {
+            throw FailedResult.UserSettings.PasswordNotRepeated
+        }
+        val config = current.authedUser
+        if (config[UserEntity.passwordHash] != "${dto.oldPwd}${config[UserEntity.passwordSalt]}".SHA_256) {
+            throw FailedResult.UserSettings.PasswordNotMatched
+        }
+        if (config[UserEntity.passwordHash] == "${dto.newPwd}${config[UserEntity.passwordSalt]}".SHA_256) {
+            throw FailedResult.UserSettings.PasswordMatched
+        }
+        transaction {
+            val newSalt = UserEntity.newHash()
+            UserEntity.updatePassword(
+                userId = current.userId,
+                newPassword = "${dto.newPwd}${newSalt}".SHA_256,
+                newSalt = newSalt
             )
         }
     }

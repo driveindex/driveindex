@@ -3,15 +3,15 @@ package io.github.driveindex.controller
 import com.vaadin.hilla.BrowserCallable
 import io.github.driveindex.core.annotation.AllOpen
 import io.github.driveindex.core.exception.FailedResult
+import io.github.driveindex.drivers.DriverRegistry
 import io.github.driveindex.dto.req.user.*
 import io.github.driveindex.dto.resp.*
+import io.github.driveindex.module.Current
 import io.github.driveindex.module.UserModel
-import io.github.driveindex.module.file.FileModel
 import io.github.driveindex.security.SecurityConfig
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.annotation.security.RolesAllowed
-import org.springframework.web.bind.annotation.RequestBody
 
 /**
  * @author sgpublic
@@ -23,24 +23,12 @@ import org.springframework.web.bind.annotation.RequestBody
 @RolesAllowed(SecurityConfig.ROLE_USER)
 class UserConfController(
     private val userModel: UserModel,
-    private val fileModel: FileModel,
+    private val clientLoader: DriverRegistry,
+    private val current: Current,
 ) {
     @Operation(summary = "修改密码")
     fun setPassword(dto: SetPwdReqDto) = Resp {
-        TODO()
-//        val config = current.User
-//        if (config.passwordHash != "${dto.oldPwd}${config.passwordSalt}".SHA_256) {
-//            throw FailedResult.UserSettings.PasswordNotMatched
-//        }
-//        if (config.password == dto.newPwd.SHA1) {
-//            throw FailedResult.UserSettings.PasswordMatched
-//        }
-//        if (!passwordRegex.matches(dto.newPwd)) {
-//            throw FailedResult.UserSettings.PasswordFormat
-//        }
-//        current.User = config.also {
-//            it.password = dto.newPwd.SHA1
-//        }
+        userModel.setPassword(dto)
     }
 
     @Operation(summary = "常规设置")
@@ -52,7 +40,6 @@ class UserConfController(
     fun setCommonSettings(dto: CommonSettingsReqDto) = Resp {
         userModel.updateUser(dto)
     }
-
 
     @Operation(summary = "枚举 Client 配置")
     fun listClients() = ListResp<ClientDto> {
@@ -110,19 +97,6 @@ class UserConfController(
     fun deleteAccount(dto: AccountDeleteReqDto) = Resp {
         TODO()
 //        fileModel.doAccountDeleteAction(dto.accountId)
-    }
-
-    @Operation(summary = "创建 Client")
-    fun createClient(@RequestBody dto: ClientCreateReqDto) = Resp {
-        if (dto.name.isBlank()) {
-            throw FailedResult.MissingBody("name", "String")
-        }
-        dto.type.create(dto.name, dto.data)
-    }
-
-    @Operation(summary = "修改 Client")
-    fun editClient(@RequestBody dto: ClientEditReqDto) = Resp {
-//        dto.clientType.edit(dto.data, dto.clientId)
     }
 
     @Operation(summary = "删除 Client")
