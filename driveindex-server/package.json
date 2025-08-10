@@ -162,7 +162,10 @@
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
     "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
     "crypto-js": "$crypto-js",
-    "query-string": "$query-string"
+    "query-string": "$query-string",
+    "@hi-ui/breadcrumb": "$@hi-ui/breadcrumb",
+    "@hi-ui/empty-state": "$@hi-ui/empty-state",
+    "@hi-ui/loading": "$@hi-ui/loading"
   },
   "vaadin": {
     "dependencies": {
@@ -224,6 +227,6 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "fe504c1b1dd29bf825c188c3e6aa6e9972fc5488f17078b2423741c148da38a4"
+    "hash": "24b3ad26f94906f07188095871b341d3a0f490136a267161237c625368a14a5b"
   }
 }

@@ -1,13 +1,19 @@
-import {Avatar, Button, Popover} from "@hi-ui/hiui";
-import React from "react";
+import React, {HTMLAttributes} from "react";
 import {NavigateFunction} from "react-router";
 import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
-import {MoveOutlined} from "@hi-ui/icons"
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
-import {asInitials} from "Frontend/core/util/_String";
 import Logo from "Frontend/views/_component/Logo";
 import {key, translate} from "@vaadin/hilla-react-i18n";
+import {
+    Avatar,
+    Button,
+    DrawerToggle,
+    HorizontalLayout,
+    HorizontalLayoutElement,
+    Icon,
+    Popover
+} from "@vaadin/react-components";
 
 export interface CommonHeaderProps {
     isShowInProfile: boolean
@@ -15,38 +21,24 @@ export interface CommonHeaderProps {
     switchShowDrawer?: () => void
 }
 
-export const CommonHeader = (props: CommonHeaderProps & RespLayoutProps) => {
+export const CommonHeader = (props: CommonHeaderProps & RespLayoutProps & HTMLAttributes<HorizontalLayoutElement>) => {
     return (
-        <div style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "15px 24px",
-        }}>
+        <HorizontalLayout theme={"spacing padding"} style={{width: "100%"}} {...props}>
             {
                 (props.isShowInProfile && props.showAsMobile) && (
-                    <Button
-                        style={{
-                            marginRight: 20,
-                        }}
-                        appearance={"link"}
-                        onClick={props.switchShowDrawer}>
-                        <MoveOutlined size={20} />
-                    </Button>
+                    <DrawerToggle />
                 )
             }
             <Logo />
-            <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-                {
-                    (props.showAvatar === undefined || props.showAvatar) && (
-                        <Popover placement={"bottom-end"} content={<UserMenu {...props} />}>
-                            <Avatar
-                                initials={asInitials(UserPref.Username)}
-                                name={UserPref.Username}/>
-                        </Popover>
-                    )
-                }
-            </div>
-        </div>
+            {
+                (props.showAvatar === undefined || props.showAvatar) && (
+                    <Avatar slot={"end"} id={"home-avatar"} />
+                )
+            }
+            <Popover for={"home-avatar"} position={"bottom-end"}>
+                <UserMenu {...props} />
+            </Popover>
+        </HorizontalLayout>
     )
 }
 
@@ -59,7 +51,7 @@ export const UserMenu = (props: CommonHeaderProps) => {
                 props.isShowInProfile || (
                     <>
                         <Button
-                            type="default" appearance="link"
+                            theme={"tertiary"}
                             style={{ width: 80 }}
                             onClick={() => goToProfile(navigate)}>{
                             translate(key`home.profile`)
@@ -69,7 +61,7 @@ export const UserMenu = (props: CommonHeaderProps) => {
                 )
             }
             <Button
-                type="danger" appearance="link"
+                theme={"tertiary error"}
                 style={{ width: 80 }}
                 onClick={() => doLogout(navigate)}>{
                 translate(key`home.logout`)

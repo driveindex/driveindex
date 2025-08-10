@@ -19,7 +19,7 @@ const MainLayout = () => {
     });
 
     return (
-        <Outlet/>
+        <Outlet />
     );
 }
 

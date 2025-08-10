@@ -1,7 +1,7 @@
 package io.github.driveindex.dto.resp
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import io.github.driveindex.core.utils.Json
+import io.github.driveindex.core.utils.Jackson
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -15,27 +15,29 @@ import java.nio.charset.StandardCharsets
 sealed interface BaseRespResult<T: Any> {
     val code: Int
     val message: String
-    val params: ObjectNode? get() = null
     val data: T? get() = null
 }
 
 data class SampleRespResult(
     override val code: Int = 200,
     override val message: String = "success.",
-    override val params: ObjectNode? = null,
+): BaseRespResult<Unit>
+
+data class FailedRespResult(
+    override val code: Int = 200,
+    override val message: String = "success.",
+    val params: ObjectNode? = null,
 ): BaseRespResult<Unit>
 
 data class ObjRespResult<T: Any>(
     override val code: Int = 200,
     override val message: String = "success.",
-    override val params: ObjectNode? = null,
     override val data: T?
 ): BaseRespResult<T>
 
 data class ListRespResult<T: Any>(
     override val code: Int = 200,
     override val message: String = "success.",
-    override val params: ObjectNode? = null,
     override val data: Collection<T>?
 ): BaseRespResult<Collection<T>>
 
@@ -79,7 +81,7 @@ inline fun <reified T: Any> HttpServletResponse.write(result: T) {
     characterEncoding = StandardCharsets.UTF_8.name()
     addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     writer.use {
-        it.write(Json.writeValueAsString(ObjRespResult(data = result)))
+        it.write(Jackson.writeValueAsString(ObjRespResult(data = result)))
         it.flush()
     }
 }

@@ -1,7 +1,6 @@
 import React, {useMemo, useState} from "react";
-import {Breadcrumb, Button, Col, Form, FormItem, FormSubmit, Input, Modal, Row, Scrollbar} from "@hi-ui/hiui";
-import {PlusOutlined, LinkOutlined} from "@hi-ui/icons"
-import {BreadcrumbContainer, FileList} from "Frontend/views/_component/home/FileList";
+import {Breadcrumb} from "@hi-ui/breadcrumb";
+import {FileList} from "Frontend/views/_component/home/FileList";
 import useBreadcrumb from "Frontend/core/hooks/useBreadcrumb";
 import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
 import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
@@ -12,6 +11,8 @@ import GetDirReqSort from "Frontend/generated/io/github/driveindex/dto/req/user/
 import FileListRespDto from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto";
 import {useQueryLocation} from "Frontend/core/util/_Router";
 import {key, translate} from "@vaadin/hilla-react-i18n";
+import {Button, HorizontalLayout, Icon, VerticalLayout} from "@vaadin/react-components";
+import CreateDirDialog from "Frontend/views/_component/home/CreateDirDialog";
 
 export const config: ViewConfig = {
     loginRequired: true,
@@ -25,15 +26,20 @@ interface MainViewQueryParams {
 
 const MainView = () => {
     const queryLocation = useQueryLocation<MainViewQueryParams>()
+    const pageIndex = queryLocation.pageIndex ?? 0
+    const pageSize = queryLocation.pageSize ?? 15
 
     const [ fileList, setFileList ] = useState<FileListRespDto | undefined>(undefined)
-    const updateFileList = (path: string) => {
+    const updateFileList = (path?: string) => {
+        if (path === undefined) {
+            path = queryLocation.path
+        }
         FileController.listFile({
-            path: path,
+            path: path!,
             sortBy: GetDirReqSort.NAME,
             asc: false,
-            pageIndex: queryLocation.pageIndex ?? 0,
-            pageSize: queryLocation.pageSize ?? 15,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
         }).then((result) => {
             if (result.code === 200) {
                 setFileList(result.data)
@@ -81,90 +87,80 @@ const MainView = () => {
     return (
         <>
             <CommonHeader isShowInProfile={false} />
-            <Col
+            <VerticalLayout
                 style={{
                     display: "flex",
                     alignItems: "center",
                     flexDirection: "column",
                 }}>
-                <Col style={{width: contentWidth}}>
-                    <Row
+                <VerticalLayout style={{width: contentWidth}}>
+                    <HorizontalLayout
                         style={{
                             padding: "0 " + (isMdUp ? 0 : 20) + "px",
                         }}>
                         <Button
-                            type={"primary"}
-                            icon={<PlusOutlined />}
-                            size={"lg"}
+                            theme={"primary large"}
                             onClick={() => showCreateDir(true)}>
+                            <Icon icon={"vaadin:plus"} />
                             {translate(key`home.file.create.dir`)}
                         </Button>
                         <Button
-                            type={"secondary"}
-                            icon={<LinkOutlined />}
-                            size={"lg"}
+                            theme={"secondary large"}
                             onClick={() => showCreateLink(true)}>
+                            <Icon icon={"vaadin:link"} />
                             {translate(key`home.file.create.mount`)}
                         </Button>
-                    </Row>
+                    </HorizontalLayout>
                     {
-                        showAsMobile || (
-                            <BreadcrumbContainer marginTop={20} isMdUp={isMdUp}>
+                        showAsMobile ? (
+                            breadcrumb
+                        ) : (
+                            <VerticalLayout
+                                style={{
+                                    borderRadius: isMdUp ? 10 : 0,
+                                    backgroundVerticalLayoutor: "#FFFFFF",
+                                    paddingTop: 6,
+                                    paddingBottom: 6,
+                                    marginTop: 20
+                                }}>
                                 {breadcrumb}
-                            </BreadcrumbContainer>
+                                {
+                                    isMdUp && (
+                                        <div style={{width: 40}} />
+                                    )
+                                }
+                            </VerticalLayout>
                         )
                     }
-                    <Scrollbar
-                        style={{
-                            marginTop: 20,
-                            display: "flex",
-                            height: "calc(100vh - 194px)"
-                        }}>
-                        <FileList
-                            isMdUp={isMdUp}
-                            showAsMobile={showAsMobile}
-                            breadcrumb={breadcrumb}
-                            list={fileList?.content}/>
-                    </Scrollbar>
-                </Col>
-            </Col>
-            <Modal
-                visible={createDirShow}
-                title={translate(key`home.file.create.dir`)}
-                onClose={() => showCreateDir(false)}
-                onConfirm={() => {
-                    setCreateLoading(true)
-                }}
-                confirmText={null}
-                cancelText={null}
-                disabledPortal={createDirLoading}>
-                <Form
-                    initialValues={{ name: "" }}
-                    rules={{
-                        name: [
-                            {
-                                required: true,
-                                type: "string",
-                                message: translate(key`home.file.create.name.error.empty`),
-                            },
-                        ]
-                    }}>
-                    <FormItem
-                        field={"name"}
-                        labelPlacement={"top"}
-                        label={translate(key`home.file.create.name`)}>
-                        <Input />
-                    </FormItem>
-                    <FormSubmit
-                        onClick={(value, _) => {
-                            if (value === null) {
-                                return
-                            }
-                        }}>
-                        {translate(key`home.file.create.action`)}
-                    </FormSubmit>
-                </Form>
-            </Modal>
+                    <FileList
+                        isMdUp={isMdUp}
+                        showAsMobile={showAsMobile}
+                        data={fileList}
+                        pageIndex={pageIndex}
+                        pageSize={pageSize}
+                        onCurrentPageChanged={(pageIndex: number) => queryLocation.set({
+                            pageIndex: pageIndex - 1
+                        })}
+                        onPageSizeChanged={(pageSize: number) => queryLocation.set({
+                            pageSize: pageSize
+                        })}/>
+                </VerticalLayout>
+            </VerticalLayout>
+            {
+                queryLocation.path && (
+                    <>
+                        <CreateDirDialog
+                            visible={createDirShow}
+                            currentPath={queryLocation.path}
+                            onClose={(created: boolean) => {
+                                showCreateDir(false)
+                                if (created) {
+                                    updateFileList()
+                                }
+                            }} />
+                    </>
+                )
+            }
         </>
     )
 }

@@ -29,6 +29,7 @@ class DriveIndexAuthenticationProvider(
     }
 
     override fun supports(authentication: Class<*>): Boolean {
-        return UsernamePasswordAuthenticationToken::class.java.isAssignableFrom(authentication)
+        return UsernamePasswordAuthenticationToken::class.java
+            .isAssignableFrom(authentication)
     }
 }

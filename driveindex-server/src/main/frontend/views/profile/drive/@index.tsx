@@ -1,29 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {
-    Avatar,
-    Breadcrumb,
-    Button,
-    Card,
-    Popover,
-    Scrollbar
-} from "@hi-ui/hiui";
-import {Row} from "@hi-ui/grid";
-import List, {ListDataItem} from "@hi-ui/list";
 import {LoadingCover, useLoading} from "Frontend/core/hooks/useLoading";
 import {DriveIndexAPI, DriveType} from "Frontend/core/axios";
 import {AxiosResponse} from "axios";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import "./@index.css"
-import {BarsOutlined, PlusOutlined} from "@hi-ui/icons"
-import Ic_OneDrive from "../../../../resources/META-INF/resources/drawable/drive/onedrive.svg"
-import Ic_Unknown from "../../../../resources/META-INF/resources/drawable/drive/unknown.svg"
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
 import {useBreakpointDown, useBreakpointUp} from "Frontend/core/hooks/useViewport";
-import {asInitials} from "Frontend/core/util/_String";
-import ClientCreationDialog from "Frontend/views/_component/profile/drive/ClientCreationDialog";
-import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
-import message from "@hi-ui/message";
+import {Breadcrumb, BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 import {key, translate} from "@vaadin/hilla-react-i18n";
+import {Notification} from "@vaadin/notification";
+import {Button, Card, HorizontalLayout, Icon, Scroller, VerticalLayout} from "@vaadin/react-components";
 
 
 type ClientBreadcrumbDataItem = BreadcrumbDataItem & {
@@ -37,19 +23,13 @@ const ProfileDrive = () => {
     const showAsMobile = useBreakpointDown("sm")
 
     return (
-        <div
-            className={"dirveindex-profile-drive"}
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%"
-            }}>
+        <VerticalLayout theme={"spacing padding"}>
             <h2>{translate(key`profile.drive.title`)}</h2>
             <p>{translate(key`profile.drive.desc`)}</p>
             <LoadingCover>
                 <DriveList client={state} isMdUp={isMdUp} showAsMobile={showAsMobile} />
             </LoadingCover>
-        </div>
+        </VerticalLayout>
     )
 }
 
@@ -93,9 +73,11 @@ const DriveList = (props: DriveListProps & RespLayoutProps) => {
             }
             request.then((resp) => {
                 if (resp.data["code"] !== 200) {
-                    message.open({
-                        title: translate(key`profile.drive.add.client.error.create`) + resp.data["message"],
-                        type: "error",
+                    Notification.show(translate(key`profile.drive.add.client.error.create`, {
+                        message: resp.data["message"]
+                    }), {
+                        position: "top-end",
+                        theme: "error",
                     })
                     return
                 }
@@ -122,9 +104,11 @@ const DriveList = (props: DriveListProps & RespLayoutProps) => {
                 }
             }).then((resp) => {
                 if (resp.data["code"] !== 200) {
-                    message.open({
-                        title: translate(key`profile.drive.add.account.error`) + resp.data["message"],
-                        type: "error",
+                    Notification.show(translate(key`profile.drive.add.account.error.create`, {
+                        message: resp.data["message"]
+                    }), {
+                        position: "top-end",
+                        theme: "error",
                     })
                     return
                 }
@@ -132,9 +116,11 @@ const DriveList = (props: DriveListProps & RespLayoutProps) => {
             })
         } else {
             showAccountCreating(false)
-            message.open({
-                title: translate(key`common.error.internalError`) + translate(key`profile.drive.add.account.internalUnknownType`),
-                type: "error",
+            Notification.show(translate(key`common.error.internalError`, {
+                message: translate(key`profile.drive.add.account.internalUnknownType`)
+            }), {
+                position: "top-end",
+                theme: "error",
             })
         }
     }
@@ -161,9 +147,11 @@ const DriveList = (props: DriveListProps & RespLayoutProps) => {
         setLoading(true)
         DriveIndexAPI.get("/api/user/client").then((resp) => {
             if (resp.data["code"] !== 200) {
-                message.open({
-                    title: translate(key`profile.drive.add.client.error.create`) + resp.data["message"],
-                    type: "error",
+                Notification.show(translate(key`profile.drive.add.client.error.create`, {
+                    message: resp.data["message"]
+                }), {
+                    position: "top-end",
+                    theme: "error",
                 })
                 setLoading(false)
                 return
@@ -191,119 +179,45 @@ const DriveList = (props: DriveListProps & RespLayoutProps) => {
 
     return (
         <>
-            <Card
-                title={
-                    <Row style={{padding: "0 6px"}}>
-                        <Breadcrumb
-                            data={breadcrumbData}
-                            onClick={(e, i, index) => {
-                                if (index === 0) {
-                                    navigate("/profile/drive", {
-                                        state: null
-                                    })
-                                }
-                            }}
-                            size={"md"}
-                            style={{
-                                marginBottom: 0,
-                                display: "flex",
-                                flex: 1,
-                            }}/>
-                        {
-                            props.client === null ?
-                                <Button
-                                    type={"primary"}
-                                    icon={<PlusOutlined />}
-                                    onClick={() => {
-                                        showClientCreating(true)
-                                    }}>{translate(key`profile.drive.add.client`)}</Button> :
-                                <Button
-                                    type={"primary"}
-                                    icon={<PlusOutlined />}
-                                    loading={accountCreating}
-                                    disabled={accountCreating}
-                                    onClick={() => {
-                                        creatingAccount()
-                                    }}>{translate(key`profile.drive.add.account`)}</Button>
-                        }
-                    </Row>
-                }
-                style={{
-                    height: "100%",
-                }}
-                showHeaderDivider={true}>
-                <Scrollbar>
-                    <List
-                        style={{
-                            padding: "0 16px",
-                        }}
-                        bordered={false}
-                        data={(props.client === null ? clientList : accountList).map((item) => {
-                            if (props.client === null) {
-                                let icon: string
-                                const type = item["type"]
-                                if (type === "OneDrive") {
-                                    icon = Ic_OneDrive
-                                } else {
-                                    icon = Ic_Unknown
-                                }
-                                return {
-                                    title: item["name"],
-                                    description: translate(key`profile.drive.lastModify`, {
-                                        "datetime": item["modify_at"]
-                                    }),
-                                    avatar: icon,
-                                    onClick: () => {
-                                        navigate("/profile/drive/"+item["id"], {
-                                            state: item as ClientState
-                                        })
-                                    },
-                                    onEdit: () => {
-                                        showClientCreating(true)
-                                        setClientTarget(item)
-                                    },
-                                    onDelete: () => {
-
-                                    },
-                                } as ListDataItem
-                            } else {
-                                return {
-                                    title: item["display_name"] + " (" + item["user_principal_name"] + ")",
-                                    description: translate(key`profile.drive.lastModify`, {
-                                        "datetime": item["modify_at"]
-                                    }),
-                                    avatar: asInitials(item["display_name"]),
-                                    onEdit: () => {
-
-                                    },
-                                    onDelete: () => {
-
-                                    },
-                                }
+            <Card>
+                <HorizontalLayout slot={"title"} style={{padding: "0 6px"}}>
+                    <Breadcrumb
+                        data={breadcrumbData}
+                        onClick={(e, i, index) => {
+                            if (index === 0) {
+                                navigate("/profile/drive", {
+                                    state: null
+                                })
                             }
-                        })}
-                        render={(dataItem: ListDataItem & {
-                            onClick?: () => void,
-                            onDelete?: () => void,
-                            onEdit?: () => void,
-                        }) => {
-                            return props.client === null ? (
-                                <ClientItem {...dataItem} />
-                            ) : (
-                                <AccountItem {...dataItem} />
-                            )
                         }}
-                        emptyContent={translate(key`common.error.notFound`)}
-                    />
-                </Scrollbar>
+                        size={"md"}
+                        style={{
+                            marginBottom: 0,
+                            display: "flex",
+                            flex: 1,
+                        }}/>
+                    {
+                        props.client === null ?
+                            <Button
+                                theme={"primary"}
+                                onClick={() => {
+                                    showClientCreating(true)
+                                }}>
+                                <Icon icon={"vaadin:plus"} />
+                                {translate(key`profile.drive.add.client`)}
+                            </Button> :
+                            <Button
+                                theme={"primary"}
+                                disabled={accountCreating}
+                                onClick={() => {
+                                    creatingAccount()
+                                }}>
+                                <Icon icon={"vaadin:plus"} />
+                                {translate(key`profile.drive.add.account`)}
+                            </Button>
+                    }
+                </HorizontalLayout>
             </Card>
-            <ClientCreationDialog
-                visible={clientCreating}
-                requestClose={() => {
-                    showClientCreating(false)
-                    setClientTarget(undefined)
-                }}
-                initValue={clientTarget}/>
         </>
     )
 }
@@ -312,100 +226,6 @@ interface ItemProps {
     onClick?: () => void
     onDelete?: () => void
     onEdit?: () => void
-}
-
-const ClientItem = (props: ListDataItem & ItemProps) => {
-    const [ isShowDesktopAction, setShowDesktopAction ] = useState(false)
-    useEffect(() => {
-        console.log("isShowDesktopAction: {}", isShowDesktopAction)
-    }, [isShowDesktopAction]);
-    return (
-        <div
-            style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
-            }}>
-            <div style={{
-                flex: 1
-            }} onClick={() => {
-                console.log("client item clicked!")
-                props.onClick!()
-            }}>
-                <List.Item {...props}/>
-            </div>
-            <ItemMenu
-                onDelete={props.onDelete}
-                onEdit={props.onEdit}/>
-        </div>
-    )
-}
-
-const AccountItem = (props: ListDataItem & ItemProps) => {
-    return (
-        <div
-            className={"dirveindex-profile-drive-account"}
-            style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
-            }}>
-            <Avatar
-                size={54}
-                style={{
-                    marginRight: 16,
-                }}
-                initials={asInitials(props.avatar)} />
-            <List.Item
-                title={props.title}
-                description={props.description}
-                action={props.action}/>
-            <ItemMenu
-                onDelete={props.onDelete}
-                onEdit={props.onEdit}/>
-        </div>
-    )
-}
-
-const ItemMenu = (props: ItemProps) => {
-    const [ show, setShow ] = useState(false)
-    return (
-        <Popover placement={"left"} content={
-            <div>
-                {
-                    props.onEdit !== undefined && (
-                        <Button
-                            type="default" appearance="link"
-                            style={{ width: 80 }}
-                            onClick={() => {
-                                setShow(false)
-                                props.onEdit!()
-                            }}>{
-                            translate(key`profile.drive.add.client.detail`)
-                        }</Button>
-                    )
-                }
-                {
-                    props.onDelete !== undefined && (
-                        <Button
-                            type="danger" appearance="link"
-                            style={{ width: 80 }}
-                            onClick={() => {
-                                setShow(false)
-                                props.onDelete!()
-                            }}>{
-                            translate(key`common.delete`)
-                        }</Button>
-                    )
-                }
-            </div>
-        } visible={show}>
-            <BarsOutlined
-                size={22}
-                style={{ padding: 6 }}
-                onClick={() => setShow(true)}/>
-        </Popover>
-    )
 }
 
 export default ProfileDrive

@@ -6,7 +6,7 @@ import com.vaadin.flow.server.AppShellSettings
 import com.vaadin.flow.server.PWA
 import com.vaadin.flow.theme.Theme
 import io.github.driveindex.utils.RemoteHttpClientFactory
-import io.github.driveindex.core.ConfigDto
+import io.github.driveindex.core.DriveIndexConfig
 import jakarta.annotation.PostConstruct
 import org.jetbrains.exposed.v1.spring.boot.autoconfigure.ExposedAutoConfiguration
 import org.springframework.boot.SpringApplication
@@ -18,7 +18,6 @@ import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 import java.io.File
 import java.util.*
-import kotlin.reflect.KClass
 
 @EnableFeignClients(defaultConfiguration = [RemoteHttpClientFactory::class])
 @EnableScheduling
@@ -42,18 +41,15 @@ class Application: AppShellConfigurator {
         const val BASE_NAME_LOWER = "driveindex"
         const val GROUP = "io.github.${BASE_NAME_LOWER}"
 
-        private lateinit var context: ApplicationContext
-        private val Context: ApplicationContext get() = context
-
         private var configPath: String = "./config.yaml"
-        val Config: ConfigDto by lazy {
-            Yaml.default.decodeFromString(ConfigDto.serializer(), File(configPath).readText())
+        val Config: DriveIndexConfig by lazy {
+            Yaml.default.decodeFromString(DriveIndexConfig.serializer(), File(configPath).readText())
         }
 
         @JvmStatic
         fun main(args: Array<String>) {
             setupConfig(args)
-            context = Bootstrap(Application::class.java)
+            Bootstrap(Application::class.java)
                 .setPort(Config.system.port)
                 .setDatasource(
                     Config.sql.host,
@@ -76,10 +72,6 @@ class Application: AppShellConfigurator {
             System.getenv("DRIVEINDEX_CONFIG")
                     ?.takeIf { it.isNotBlank() }
                     ?.let { configPath = it }
-        }
-
-        val <T: Any> KClass<T>.Bean: T get() {
-            return Context.getBean(java)
         }
     }
 }

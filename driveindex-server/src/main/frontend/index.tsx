@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {RouterProvider} from 'react-router';
 import {router} from 'Frontend/generated/routes.js';
 import {ViewportProvider} from './core/hooks/useViewport';
-import {Loading} from "@hi-ui/hiui";
+import {Loading} from "@hi-ui/loading";
 import {LoadingCover} from "Frontend/core/hooks/useLoading";
 import {AuthProvider} from "Frontend/core/security/auth"
 

@@ -6,7 +6,6 @@ import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import io.github.driveindex.Application
 import io.github.driveindex.Application.Companion.Config
-import io.github.driveindex.core.ConfigDto
 
 /**
  * @author sgpublic

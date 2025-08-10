@@ -10,7 +10,7 @@ import java.util.*
  * @Date 2022/8/5 11:41
  */
 @Serializable
-data class ConfigDto(
+data class DriveIndexConfig(
     val system: SystemConfig = SystemConfig(),
     val sql: SqlConfig = SqlConfig(),
     val app: AppConfig = AppConfig(),

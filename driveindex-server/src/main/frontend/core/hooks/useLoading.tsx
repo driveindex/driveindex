@@ -1,5 +1,5 @@
 import React, {Context, createContext, useContext, useState} from "react";
-import {Loading} from "@hi-ui/hiui";
+import {Loading} from "@hi-ui/loading";
 
 const LoadingContext: Context<{
     isLoading?: boolean

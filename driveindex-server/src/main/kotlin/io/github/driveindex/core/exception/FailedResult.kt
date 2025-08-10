@@ -2,7 +2,8 @@ package io.github.driveindex.core.exception
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.github.driveindex.Application
-import io.github.driveindex.core.utils.Json
+import io.github.driveindex.core.utils.Jackson
+import io.github.driveindex.dto.resp.FailedRespResult
 import io.github.driveindex.dto.resp.SampleRespResult
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
@@ -23,7 +24,7 @@ class FailedResult private constructor(
         val MissingBody get() = FailedResult(-4002, "参数缺失")
         fun MissingBody(name: String, type: String) =
             FailedResult(-4002, "参数缺失",
-                Json.newObjectNode("name" to name, "type" to type))
+                Jackson.newObjectNode("name" to name, "type" to type))
 
         val BadArgument get() = FailedResult(-4003, "参数格式错误")
         val AnonymousDenied get() = FailedResult(-4050, "请登陆后再试")
@@ -37,11 +38,11 @@ class FailedResult private constructor(
         val BadGateway get() = FailedResult(-5020, "上游服务器响应错误，请查阅日志")
         fun BadGateway(message: String) =
             FailedResult(-5020, "上游服务器响应错误，请查阅日志",
-                Json.newObjectNode("message" to message))
+                Jackson.newObjectNode("message" to message))
     }
 
-    fun resp(): SampleRespResult {
-        return SampleRespResult(code, message, params)
+    fun resp(): FailedRespResult {
+        return FailedRespResult(code, message, params)
     }
 
     object UserSettings {
@@ -71,11 +72,11 @@ class FailedResult private constructor(
         val DuplicateClientName get() = FailedResult(-120201, "Client 名称已存在")
         fun DuplicateClientInfo(name: String, id: Int) =
             FailedResult(-100301, "此 Client 信息与“$name”相同",
-                Json.newObjectNode("name" to name, "id" to id))
+                Jackson.newObjectNode("name" to name, "id" to id))
 
         fun DuplicateAccountName(name: String, id: Int) =
             FailedResult(-100301, "账号名称已存在：$name",
-                Json.newObjectNode("name" to name, "id" to id))
+                Jackson.newObjectNode("name" to name, "id" to id))
 
         val DeleteFailed get() = FailedResult(-120301, "Client 删除失败")
     }
@@ -108,7 +109,7 @@ fun HttpServletResponse.write(result: FailedResult) {
     characterEncoding = StandardCharsets.UTF_8.name()
     addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     writer.use {
-        it.write(Json.writeValueAsString(result.resp()))
+        it.write(Jackson.writeValueAsString(result.resp()))
         it.flush()
     }
 }
