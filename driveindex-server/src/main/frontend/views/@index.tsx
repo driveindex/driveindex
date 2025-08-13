@@ -9,7 +9,7 @@ import "./@index.css"
 import {FileController} from "Frontend/generated/endpoints";
 import GetDirReqSort from "Frontend/generated/io/github/driveindex/dto/req/user/GetDirReqSort";
 import FileListRespDto from "Frontend/generated/io/github/driveindex/dto/resp/FileListRespDto";
-import {useQueryLocation} from "Frontend/core/util/_Router";
+import {useUrlArgs} from "Frontend/core/utils/_Router";
 import {key, translate} from "@vaadin/hilla-react-i18n";
 import {Button, HorizontalLayout, Icon, VerticalLayout} from "@vaadin/react-components";
 import CreateDirDialog from "Frontend/views/_component/home/CreateDirDialog";
@@ -19,23 +19,20 @@ export const config: ViewConfig = {
 };
 
 interface MainViewQueryParams {
-    path?: string;
-    pageIndex?: number;
-    pageSize?: number;
+    path: string;
+    pageIndex: number;
+    pageSize: number;
 }
 
 const MainView = () => {
-    const queryLocation = useQueryLocation<MainViewQueryParams>()
-    const pageIndex = queryLocation.pageIndex ?? 0
-    const pageSize = queryLocation.pageSize ?? 15
+    const urlArgs = useUrlArgs<MainViewQueryParams>()
+    const pageIndex = urlArgs.query.pageIndex ?? 0
+    const pageSize = urlArgs.query.pageSize ?? 15
 
     const [ fileList, setFileList ] = useState<FileListRespDto | undefined>(undefined)
-    const updateFileList = (path?: string) => {
-        if (path === undefined) {
-            path = queryLocation.path
-        }
+    const updateFileList = (path: string) => {
         FileController.listFile({
-            path: path!,
+            path: path,
             sortBy: GetDirReqSort.NAME,
             asc: false,
             pageIndex: pageIndex,
@@ -48,30 +45,30 @@ const MainView = () => {
         })
     }
     useMemo(() => {
-        if (queryLocation.path == undefined) {
-            queryLocation.set({
+        if (urlArgs.query.path == undefined) {
+            urlArgs.setQuery({
                 path: "/"
             })
         } else {
-            updateFileList(queryLocation.path)
+            updateFileList(urlArgs.query.path)
         }
-    }, [queryLocation.path])
+    }, [urlArgs.query.path])
 
     const isMdUp = useBreakpointUp("md")
     const showAsMobile = useBreakpointDown("sm")
     const contentWidth = isMdUp ? 740 : "100%"
 
-    const breadcrumbData = useBreadcrumb(queryLocation.path)
+    const breadcrumbData = useBreadcrumb(urlArgs.query.path)
 
     const breadcrumb = (
         <Breadcrumb
             data={breadcrumbData}
             onClick={(e, i, index) => {
                 const targetPath = breadcrumbData[index].path
-                if (targetPath == queryLocation.path) {
+                if (targetPath == urlArgs.query.path) {
                     return
                 }
-                queryLocation.set({
+                urlArgs.setQuery({
                     path: targetPath
                 })
             }}
@@ -97,7 +94,9 @@ const MainView = () => {
                     <HorizontalLayout
                         style={{
                             padding: "0 " + (isMdUp ? 0 : 20) + "px",
-                        }}>
+                            width: "100%",
+                        }}
+                        theme={"spacing"}>
                         <Button
                             theme={"primary large"}
                             onClick={() => showCreateDir(true)}>
@@ -115,21 +114,22 @@ const MainView = () => {
                         showAsMobile ? (
                             breadcrumb
                         ) : (
-                            <VerticalLayout
+                            <div
                                 style={{
                                     borderRadius: isMdUp ? 10 : 0,
-                                    backgroundVerticalLayoutor: "#FFFFFF",
+                                    backgroundColor: "#FFFFFF",
                                     paddingTop: 6,
                                     paddingBottom: 6,
-                                    marginTop: 20
+                                    marginTop: 20,
+                                    width: "100%",
                                 }}>
                                 {breadcrumb}
-                                {
-                                    isMdUp && (
-                                        <div style={{width: 40}} />
-                                    )
-                                }
-                            </VerticalLayout>
+                            </div>
+                        )
+                    }
+                    {
+                        isMdUp && (
+                            <div style={{width: 40}} />
                         )
                     }
                     <FileList
@@ -138,24 +138,24 @@ const MainView = () => {
                         data={fileList}
                         pageIndex={pageIndex}
                         pageSize={pageSize}
-                        onCurrentPageChanged={(pageIndex: number) => queryLocation.set({
+                        onCurrentPageChanged={(pageIndex: number) => urlArgs.setQuery({
                             pageIndex: pageIndex - 1
                         })}
-                        onPageSizeChanged={(pageSize: number) => queryLocation.set({
+                        onPageSizeChanged={(pageSize: number) => urlArgs.setQuery({
                             pageSize: pageSize
                         })}/>
                 </VerticalLayout>
             </VerticalLayout>
             {
-                queryLocation.path && (
+                urlArgs.query.path && (
                     <>
                         <CreateDirDialog
                             visible={createDirShow}
-                            currentPath={queryLocation.path}
+                            currentPath={urlArgs.query.path}
                             onClose={(created: boolean) => {
                                 showCreateDir(false)
                                 if (created) {
-                                    updateFileList()
+                                    updateFileList(urlArgs.query.path!)
                                 }
                             }} />
                     </>

@@ -28,13 +28,14 @@ export const FileList = (props: FileListProps & RespLayoutProps) => {
         <div
             style={{
                 borderRadius: props.isMdUp ? 10 : 0,
-                backgroundVerticalLayoutor: "#FFFFFF",
+                backgroundColor: "#FFFFFF",
                 paddingTop: 16,
                 paddingBottom: 16,
                 marginBottom: 20,
+                width: "100%",
             }}>
             <VerticalLayout>
-                <Grid items={props.data?.content} theme={"no-row-borders no-borders"}>
+                <Grid items={props.data?.content} theme={"no-borders no-row-borders"}>
                     <GridSortColumn path={"name"} header={translate(key`home.file.listHead.name`)} />
                     <GridSortColumn path={"modifyAt"} header={translate(key`home.file.listHead.modify`)} />
                     <GridColumn path={"size"} header={translate(key`home.file.listHead.size`)} />

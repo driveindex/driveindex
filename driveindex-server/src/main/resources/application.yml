@@ -8,6 +8,9 @@ spring:
       add-mappings: false
   datasource:
     driver-class-name: org.postgresql.Driver
+  threads:
+    virtual:
+      enabled: true
 vaadin:
   bun:
     enable: true

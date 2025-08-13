@@ -3,9 +3,9 @@ import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
 import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
 import {useAuth} from "Frontend/core/security/auth"
-import {asSha256} from "Frontend/core/util/_String";
+import {asSha256} from "Frontend/core/utils/_String";
 import {key, translate} from "@vaadin/hilla-react-i18n";
-import {LoginForm, LoginFormLoginEvent, Notification} from "@vaadin/react-components";
+import {HorizontalLayout, LoginForm, LoginFormLoginEvent, Notification, VerticalLayout} from "@vaadin/react-components";
 import {LoginFormErrorChangedEvent} from "@vaadin/login/src/vaadin-login-form";
 
 export const config: ViewConfig = {
@@ -40,6 +40,7 @@ const LoginPage = () => {
             height: "100vh",
         }}>
             <LoginForm
+                slot={"center"}
                 noAutofocus={true}
                 noForgotPassword={true}
                 style={{marginTop: 64}}

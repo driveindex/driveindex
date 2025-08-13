@@ -8,6 +8,7 @@ import {LoadingCover} from "Frontend/core/hooks/useLoading";
 import {AuthProvider} from "Frontend/core/security/auth"
 
 import {i18n} from '@vaadin/hilla-react-i18n';
+import log from "loglevel";
 
 const RealApp = () => {
     return (
@@ -36,6 +37,13 @@ const App = () => {
         i18nLoaded ? <RealApp /> : <Loading />
     );
 }
+
+if (DRIVEINDEX_DEBUG) {
+    log.setLevel("DEBUG");
+} else {
+    log.setLevel("WARN");
+}
+
 
 const outlet = document.getElementById('outlet')!;
 let root = (outlet as any)._root ?? createRoot(outlet);
