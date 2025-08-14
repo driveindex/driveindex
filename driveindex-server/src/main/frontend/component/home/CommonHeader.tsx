@@ -3,7 +3,7 @@ import {NavigateFunction} from "react-router";
 import {UserPref} from "Frontend/core/prefs/UserPref";
 import {useNavigate} from "react-router-dom";
 import RespLayoutProps from "Frontend/core/props/RespLayoutProps";
-import Logo from "Frontend/views/_component/Logo";
+import Logo from "Frontend/component/Logo";
 import {key, translate} from "@vaadin/hilla-react-i18n";
 import {
     Avatar,
@@ -14,6 +14,7 @@ import {
     Icon,
     Popover
 } from "@vaadin/react-components";
+import ThemeSwitcher from "Frontend/component/home/ThemeSwitcher";
 
 export interface CommonHeaderProps {
     isShowInProfile: boolean
@@ -35,6 +36,7 @@ export const CommonHeader = (props: CommonHeaderProps & RespLayoutProps & HTMLAt
                     <Avatar slot={"end"} id={"home-avatar"} />
                 )
             }
+            <ThemeSwitcher />
             <Popover for={"home-avatar"} position={"bottom-end"}>
                 <UserMenu {...props} />
             </Popover>

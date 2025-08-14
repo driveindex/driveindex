@@ -1,4 +1,11 @@
 export class UserPref {
+    static get DarkTheme(): boolean {
+        return UserPref.getBoolOrDef("DarkTheme", true)
+    }
+    static set DarkTheme(value: boolean) {
+        localStorage["DarkTheme"] = value
+    }
+
     static get Login(): boolean {
         return UserPref.getBoolOrDef("Login", false)
     }

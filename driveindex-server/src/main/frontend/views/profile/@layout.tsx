@@ -1,5 +1,5 @@
 import React, {HTMLAttributes, useEffect, useState} from "react";
-import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
+import {CommonHeader} from "Frontend/component/home/CommonHeader";
 import {useBreakpointDown} from "Frontend/core/hooks/useViewport";
 import {Outlet, useLocation, useNavigate} from "react-router-dom"
 import "./@layout.css"

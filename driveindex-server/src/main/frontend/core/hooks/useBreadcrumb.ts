@@ -1,8 +1,10 @@
 import {BreadcrumbDataItem} from "@hi-ui/breadcrumb";
 import {translate, key} from "@vaadin/hilla-react-i18n";
 
+export type BreadcrumbItem = BreadcrumbDataItem & { path: string }
+
 const useBreadcrumb = (pathStr?: string) => {
-    const data: (BreadcrumbDataItem & { path: string })[] = [{
+    const data: BreadcrumbItem[] = [{
         title: translate(key`home.file.root`),
         path: "/",
     }]

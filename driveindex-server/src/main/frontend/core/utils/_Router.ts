@@ -1,10 +1,10 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {NavigateFunction, useSearchParams} from "react-router";
+import {NavigateFunction, NavigateOptions, useSearchParams} from "react-router";
 import queryString from 'query-string';
 import {useMemo} from "react";
 
 interface UrlArgsFunction<QT extends Record<string, any>, PT extends Record<string, any>> {
-    setQuery(val: Partial<QT>): void
+    setQuery(val: Partial<QT>, navOpt?: NavigateOptions): void
     setParams(val: Partial<PT>): void
     query: Readonly<Partial<QT>>
     param: Readonly<Partial<PT>>
@@ -28,17 +28,17 @@ export function useUrlArgs<QT extends Record<string, any> = EmptyQuery, PT exten
     return {
         query: query,
         param: param,
-        setQuery(val: Partial<QT>) {
+        setQuery(val: Partial<QT>, navOpt?: NavigateOptions) {
             const newParams = {
-                ...val,
+                ...query,
                 ...Object.fromEntries(
-                    Object.entries(val).filter(([_, value]) => value != null)
+                    Object.entries(val).filter(([_, value]) => value !== null)
                 )
             }
             navigate({
                 pathname: location.pathname,
                 search: queryString.stringify(newParams),
-            })
+            }, navOpt)
         },
         setParams(val: Partial<PT>) {
 

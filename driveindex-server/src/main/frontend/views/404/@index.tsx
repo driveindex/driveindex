@@ -1,4 +1,4 @@
-import {CommonHeader} from "Frontend/views/_component/home/CommonHeader";
+import {CommonHeader} from "Frontend/component/home/CommonHeader";
 import {EmptyState} from "@hi-ui/empty-state";
 import {key, translate} from "@vaadin/hilla-react-i18n";
 
