@@ -6,6 +6,7 @@ spring-deps = "1.1.6"
 
 vaadin = "24.8.6"
 node = "8.1.2"
+docker = "9.4.0"
 
 autoservice = "1.1.1"
 jjwt = "0.12.3"
@@ -13,6 +14,7 @@ openfeign = "4.3.0"
 caffeine = "3.2.1"
 jackson = "2.19.2"
 classgraph = "4.8.181"
+hoplite = "3.0.0.RC1"
 
 exposed = "1.0.0-beta-5"
 
@@ -30,6 +32,7 @@ spring-deps = { id = "io.spring.dependency-management", version.ref = "spring-de
 
 vaadin = { id = "com.vaadin", version.ref = "vaadin" }
 node = { id = "com.liferay.node", version.ref = "node" }
+docker = { id = "com.bmuschko.docker-remote-api", version.ref = "docker" }
 
 [libraries]
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -77,6 +80,9 @@ jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-an
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
 jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
 
+hoplite-core = { group = "com.sksamuel.hoplite", name = "hoplite-core", version.ref = "hoplite" }
+hoplite-yaml = { group = "com.sksamuel.hoplite", name = "hoplite-yaml", version.ref = "hoplite" }
+hoplite-toml = { group = "com.sksamuel.hoplite", name = "hoplite-toml", version.ref = "hoplite" }
 
 [bundles]
 jjwt = [ "jjwt-api", "jjwt-impl" ]
@@ -95,3 +101,8 @@ spring-boot-data-exposed = [
     "exposed-kotlin-datetime",
 ]
 jdbc = [ "jdbc-postgresql" ]
+hoplite = [
+    "hoplite-core",
+    "hoplite-yaml",
+    "hoplite-toml",
+]

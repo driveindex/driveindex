@@ -1,5 +1,7 @@
 # DriveIndex
 
+> 此项目正在开发中，暂无路线图以及时间表。
+
 DiveIndex 后端的 SpringBoot 实现。
 
 ## 使用
@@ -18,6 +20,6 @@ java -jar driveindex.jar --config="./config/driveindex.ini"
 
 ## 开发环境
 
-+ IDE：JetBrains IDEA Ultimate 2025.1
-+ Java：JDK 21.0.2
-+ Database：Postgresql 16
++ IDE：JetBrains IDEA Ultimate 2025.2
++ Java：JDK 21
++ Database：PostgreSQL 16

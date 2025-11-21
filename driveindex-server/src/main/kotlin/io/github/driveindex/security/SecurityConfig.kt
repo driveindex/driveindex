@@ -3,13 +3,12 @@ package io.github.driveindex.security
 import com.vaadin.flow.spring.security.VaadinWebSecurity
 import com.vaadin.hilla.route.RouteUtil
 import io.github.driveindex.Application
-import io.github.driveindex.Application.Companion.Config
+import io.github.driveindex.core.DriveIndexConfig
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import javax.crypto.spec.SecretKeySpec
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -20,7 +19,8 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 @EnableWebSecurity
 @Configuration
 class SecurityConfig(
-    private val route: RouteUtil
+    private val route: RouteUtil,
+    private val config: DriveIndexConfig,
 ): VaadinWebSecurity() {
     @OptIn(ExperimentalEncodingApi::class)
     override fun configure(http: HttpSecurity) {
@@ -43,9 +43,9 @@ class SecurityConfig(
 
         setStatelessAuthentication(
             http,
-            SecretKeySpec(Config.token.jwtSecurity.toByteArray(), JwsAlgorithms.HS256),
+            SecretKeySpec(config.token.jwtSecurity.toByteArray(), JwsAlgorithms.HS256),
             Application.GROUP,
-            Config.token.expired,
+            config.token.expired,
         )
 
         // use stateless auth, so disable csrf.

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProperty scope="context" name="log.path" source="driveindex.logging.path"/>
+    <springProperty scope="context" name="log.path" source="logbackConfiguration.logPath"/>
+    <springBean name="consoleFilter" class="io.github.driveindex.core.logback.filter.ConsoleFilter" />
 
     <contextName>driveindex</contextName>
     <!--自定义日志转换规则，添加颜色高亮支持-->

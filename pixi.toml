@@ -1,0 +1,18 @@
+[workspace]
+authors = ["Haven Madray <sgpublic2002@gmail.com>"]
+channels = ["conda-forge"]
+name = "driveindex-server"
+platforms = ["osx-64", "osx-arm64", "linux-64", "win-64"]
+version = "0.1.0"
+
+[tasks.gradlew]
+args = [{ "arg" = "taskName" }]
+cmd = "./gradlew {{ taskName }}"
+
+[target.win-64.tasks.gradlew]
+args = [{ "arg" = "taskName" }]
+cmd = ".\\gradlew.bat {{ taskName }}"
+
+[dependencies]
+openjdk = ">=21,<22"
+postgresql = ">=16,<17"

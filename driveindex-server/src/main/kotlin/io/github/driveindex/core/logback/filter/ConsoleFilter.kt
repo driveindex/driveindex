@@ -5,20 +5,22 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 import io.github.driveindex.Application
-import io.github.driveindex.Application.Companion.Config
+import io.github.driveindex.core.DriveIndexConfig
+import org.springframework.stereotype.Component
 
 /**
  * @author sgpublic
  * @Date 2022/8/5 18:38
  */
-class ConsoleFilter : Filter<ILoggingEvent>() {
+@Component
+class ConsoleFilter(config: DriveIndexConfig): Filter<ILoggingEvent>() {
     private val self: Level
     private val out: Level
 
     init {
-        val check = !Config.system.debug
-        self = if (check) Level.INFO else if (Config.system.trace) Level.TRACE else Level.DEBUG
-        out = if (check) Level.WARN else if (Config.system.trace) Level.DEBUG else Level.INFO
+        val check = !config.system.debug
+        self = if (check) Level.INFO else if (config.system.trace) Level.TRACE else Level.DEBUG
+        out = if (check) Level.WARN else if (config.system.trace) Level.DEBUG else Level.INFO
     }
 
     override fun decide(event: ILoggingEvent): FilterReply {

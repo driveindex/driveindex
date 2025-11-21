@@ -12,8 +12,9 @@ dependencies {
     implementation(libs.vaadin.spring.boot.starter)
     implementation(libs.bundles.spring.boot.security)
     implementation(libs.jackson.kotlin)
+    implementation(libs.bundles.hoplite)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.serialization.yaml)
+//    implementation(libs.kotlinx.serialization.yaml)
 
     implementation(libs.caffeine)
     implementation(libs.openfeign)
@@ -66,5 +67,9 @@ tasks {
     vaadinPrepareFrontend {
         mustRunAfter(downloadNode)
         dependsOn(downloadNode)
+    }
+    bootJar {
+        exclude("application-dev.yml")
+        exclude("application-test.yml")
     }
 }

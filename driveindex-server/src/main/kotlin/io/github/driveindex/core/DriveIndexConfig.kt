@@ -3,6 +3,9 @@ package io.github.driveindex.core
 import io.github.driveindex.Application
 import io.github.driveindex.utils.MD5_FULL
 import kotlinx.serialization.Serializable
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
+import org.springframework.stereotype.Component
 import java.util.*
 
 /**

@@ -1,6 +1,6 @@
 package io.github.driveindex.module
 
-import io.github.driveindex.Application.Companion.Config
+import io.github.driveindex.core.DriveIndexConfig
 import io.github.driveindex.utils.SHA_256
 import io.github.driveindex.utils.log
 import io.github.driveindex.database.entity.UserEntity
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component
 @Component
 class DBSetupModule(
     private val admin: AdminModel,
+    private val config: DriveIndexConfig,
 ) {
     @EventListener(ContextRefreshedEvent::class)
     fun onApplicationEvent() {
@@ -30,15 +31,15 @@ class DBSetupModule(
         if (userCount > 0) {
             return
         }
-        val newUsername = Config.app.defaultUsername
-        val pwd = Config.app.defaultPassword
+        val newUsername = config.app.defaultUsername
+        val pwd = config.app.defaultPassword
         log.info("create default user, username: $newUsername, password: $pwd")
         admin.createUser(UserCreateRequestDto(
             username = newUsername,
             password = pwd.SHA_256,
             nickname = null,
             role = UserRole.ADMIN,
-            permission = UserPermission.GROUP_ADMIN,
+            permission = UserPermission.DEFAULT_GROUP_ADMIN,
             enabled = true,
         ))
     }

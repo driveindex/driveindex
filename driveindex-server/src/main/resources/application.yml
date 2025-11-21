@@ -11,6 +11,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  profiles:
+    active: prod
 vaadin:
   bun:
     enable: true

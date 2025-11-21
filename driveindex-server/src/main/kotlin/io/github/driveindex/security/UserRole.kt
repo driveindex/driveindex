@@ -29,7 +29,7 @@ enum class UserPermission: GrantedAuthority {
     }
 
     companion object {
-        val GROUP_ADMIN = entries.toSet()
-        val GROUP_USER = setOf(PERMISSION_CREATE_MOUNT, PERMISSION_MANAGE_LOCAL_FILE)
+        val DEFAULT_GROUP_ADMIN = entries.toSet()
+        val DEFAULT_GROUP_USER = setOf(PERMISSION_CREATE_MOUNT, PERMISSION_MANAGE_LOCAL_FILE)
     }
 }

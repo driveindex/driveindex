@@ -15,6 +15,14 @@ inline fun <T: Any> T?.runIfNotNull(block: (T) -> Unit) {
 }
 
 @OptIn(ExperimentalContracts::class)
+inline fun <T: Any, R: Any> R.letIfNotNull(obj: T?, block: R.(T) -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (obj != null) block(obj) else this
+}
+
+@OptIn(ExperimentalContracts::class)
 inline fun <reified CastT: Any, OutT: Any> Any?.castOrNull(block: (CastT) -> OutT): OutT? {
     contract {
         callsInPlace(block, InvocationKind.AT_MOST_ONCE)
